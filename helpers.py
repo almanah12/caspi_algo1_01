@@ -14,7 +14,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 
 log_file_path = os.path.join(BASE_DIR, 'Logs/check.log')
 logger.add(sys.stderr, format="{time} {level} {message}", filter="my_module", level="INFO")
-logger.add(log_file_path, rotation="00:00", retention="30 days", encoding='utf-8')
+logger.add(log_file_path, rotation="00:00", retention="30 days", encoding='utf-8', level="INFO")
 
 
 def find_data_file(filename):
