@@ -89,17 +89,15 @@ class RunThread(QRunnable):
                 # Собрать данные в xml файл
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit('Запуск создание файла xml', 1)
-                    logger.info('Запуск записи xml файла в сервер')
+                    logger.info('Запуск создание файла xml')
                     create_xml(self.gui)
 
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit('Запуск записи xml файла в сервер', 1)
                     logger.info('Запуск записи xml файла в сервер')
-                    decrypt(resource_path(r'data_files/ServiceKey_GoogleCloud/alash-scrap-c4bc016b7411.json'), crypt_key)
                     run_autodownload_xml.upload_to_bucket_xml(self.gui.configuration.name_xml_file_lineEdit.text(),
                                                               resource_path(r"data_shop/alash.xml"),
                                                               self.gui.configuration.name_folder_lineEdit.text())
-                    encrypt(resource_path(r'data_files/ServiceKey_GoogleCloud/alash-scrap-c4bc016b7411.json'), crypt_key)
 
                 if not self.gui.check_stop:
                     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Нет':

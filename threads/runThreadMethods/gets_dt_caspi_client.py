@@ -9,6 +9,7 @@ from helpers import resource_path
 from webdriver_options import get_driver
 from sqlalchemy import MetaData
 from db_tables import temporary_table, permanent_table, engine, session
+from helpers import logger
 
 
 def gets_data(gui, signals):
@@ -52,18 +53,15 @@ def gets_data(gui, signals):
             enter_btn = driver.find_element_by_xpath('/html/body/div[4]/main/div[2]/div[4]/button')
             driver.implicitly_wait(10)
             enter_btn.click()
-            print('test1')
 
             if gui.check_stop:
                 break
 
             # Если стр. занова заходит на  логинацию
-            print('test2')
             # Время задержки для загрузки стр. и всплывающего окна
             time.sleep(3)
             # Если в стр. не загрузилась
             if driver.current_url != 'https://kaspi.kz/merchantcabinet/#/orders/tabs':
-                print('test2-1')
                 driver.close()
                 # открывает новую сессию
                 continue
@@ -89,7 +87,8 @@ def gets_data(gui, signals):
             #     break
         run_page(gui, driver)
 
-    except Exception:
+    except Exception as ex:
+        logger.error(ex)
         driver.quit()
 
     else:
@@ -105,8 +104,8 @@ def run_page(gui, driver):
     # Цикл проверяет будет ли работать по определенному списку товаров
     if gui.configuration.list_articulcomboBox.currentText() == 'Нет':
         # Цикл работает пока кнопка 'след' доступна
-        while True:
-        # for j in range(1):
+        # while True:
+        for j in range(1):
             if gui.check_stop:
                 break
             # Ждем пока стр загрузится
@@ -117,8 +116,8 @@ def run_page(gui, driver):
             print('count_shops: ', len(count_shops))
 
             # Цикл для записи данных товаров
-            for i in range(len(count_shops)):
-            # for i in range(2):
+            # for i in range(len(count_shops)):
+            for i in range(2):
                 gets_dt_good(gui, driver, i)
 
             # Берем значение кнопки след 'true' или 'false'
@@ -188,12 +187,10 @@ def gets_dt_good(gui, driver, i):
     try:
         price_goods = driver.find_elements_by_xpath('//td[3]/div/div')[i].text
         # Преобразование текста в число. напр '100 123 т' в 100123
+        if len(price_goods) > 10:
+            price_goods = price_goods.split('...')[1]
         word_list = price_goods.split()
-        num_list = []
-
-        for word in word_list:
-            if word.isnumeric():
-                num_list.append(word)
+        num_list = filter(lambda word: word.isnumeric(), word_list)
         price_goods = int(''.join(map(str, num_list)))
 
     except:
@@ -239,8 +236,8 @@ def gets_dt_good(gui, driver, i):
         sql_insert_permanent_table = permanent_table.insert().values(
             Артикул=vendor_code_goods, Модель=name_goods, Текущая_цена=price_goods, Город_1=sort_list_cities[0])
 
-        sql_insert_permanent_table_current_price = permanent_table.insert().values(
-            Текущая_цена=price_goods)
+        sql_insert_permanent_table_current_price = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+            .values(Текущая_цена=price_goods, Город_1=sort_list_cities[0])
 
     if count_cities == 2:
         sql_insert_temporary_table = temporary_table.insert().values(
@@ -251,6 +248,8 @@ def gets_dt_good(gui, driver, i):
         sql_insert_permanent_table = permanent_table.insert().values(
             Артикул=vendor_code_goods, Модель=name_goods, Текущая_цена=price_goods, Город_1=sort_list_cities[0],
             Город_2=sort_list_cities[1])
+        sql_insert_permanent_table_current_price = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+            .values(Текущая_цена=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
 
     if count_cities == 3:
         sql_insert_temporary_table = temporary_table.insert().values(
@@ -261,6 +260,8 @@ def gets_dt_good(gui, driver, i):
         sql_insert_permanent_table = permanent_table.insert().values(
             Артикул=vendor_code_goods, Модель=name_goods, Текущая_цена=price_goods, Город_1=sort_list_cities[0],
             Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
+        sql_insert_permanent_table_current_price = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+            .values(Текущая_цена=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
 
     condition_to_perm_table = session.query(permanent_table).filter(
         permanent_table.c.Артикул == vendor_code_goods).first()
@@ -272,7 +273,7 @@ def gets_dt_good(gui, driver, i):
         conn.execute(sql_insert_permanent_table)
         print('Goods adds')
     else:
-        # conn.execute(sql_insert_permanent_table_current_price)
+        conn.execute(sql_insert_permanent_table_current_price)
         print('Goods almost exist')
     conn.execute(sql_insert_temporary_table)
     conn.close()
