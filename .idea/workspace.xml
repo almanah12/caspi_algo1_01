@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="db59f83e-4df5-46f9-af79-da030dd67373" name="Default Changelist" comment="test gitigignore">
+      <change afterPath="$PROJECT_DIR$/.idea/caspi_algo.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Logs/check.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/ServiceKey_GoogleCloud/alash-scrap-c4bc016b7411.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_goods/alash.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_goods/dt_goods.sqlite" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_goods/rid.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_shops/100230173_Город_1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_shops/100257734_Город_1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_shops/100331551_Город_1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_shops/101518260_Город_1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_shops/101518296_Город_1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_shops/101518347_Город_1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_files/data_shops/101518378_Город_1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_shop/alash.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_shop/config.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_shop/dt_goods.sqlite" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_shop/list_stores.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/keys.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sert.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_script/sample.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_script/testLoging.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ignor_git.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/ignor_git.gitignore" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1zTioh6o468JfvwbuVeAwJVNDfD" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PyCharm\appAlashVersion\caspi_algo" />
+      <recent name="D:\PyCharm\appAlashVersion\caspi_algo\data_files" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="__main__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="caspi_algo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/__main__.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.__main__" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="db59f83e-4df5-46f9-af79-da030dd67373" name="Default Changelist" comment="" />
+      <created>1634178658382</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1634178658382</updated>
+    </task>
+    <task id="LOCAL-00001" summary="test gitigignore">
+      <created>1647066871412</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1647066871412</updated>
+    </task>
+    <task id="LOCAL-00002" summary="test gitigignore">
+      <created>1647067148751</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1647067148751</updated>
+    </task>
+    <task id="LOCAL-00003" summary="test gitigignore">
+      <created>1647067356179</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1647067356179</updated>
+    </task>
+    <task id="LOCAL-00004" summary="test gitigignore">
+      <created>1647068002891</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1647068002891</updated>
+    </task>
+    <task id="LOCAL-00005" summary="test gitigignore">
+      <created>1647068199617</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1647068199617</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
+    <MESSAGE value="test gitigignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="test gitigignore" />
+  </component>
+</project>
