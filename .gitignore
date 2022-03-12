@@ -1,6 +1,7 @@
-data_files/data_shops
-data_files/ServiceKey_GoogleCloud
+/data_files/data_shops/
+/data_files/ServiceKey_GoogleCloud/
 Logs
 .idea
-test_script
+/test_script/
 /data_files/data_goods/
+/data_shop/
