@@ -1,0 +1,9 @@
+/build
+/dist
+*.spec
+/Logs
+/test_script
+/data_files/ServiceKey_GoogleCloud
+/data_files/data_shops
+/data_files/.idea
+
