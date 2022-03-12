@@ -71,7 +71,7 @@ class Interface(QMainWindow):
 
         initiate_slots(app=app, gui=self)  # Initiating slots.
 
-        self.check_stop = False  # Для проверки нажался ли кнопка 'End simulition' , true - нажата
+        self.check_stop = False  # Для проверки нажался ли кнопка 'End simulition' , true - нажат
 
         if self.table_exists(engine, 'permanent_table'):
             add_to_data_table_view(self, model_perm, 'permanent_table', self.permanent_tableView)
