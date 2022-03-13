@@ -42,8 +42,6 @@ class ButtonEditorDelegate(QStyledItemDelegate):
             return True
         elif event.type() == QtCore.QEvent.MouseButtonRelease:
             if self._pressed == (index.row(), index.column()):
-                print("Button pressed at {} {}".format(index.row(), index.column()))
-                print('Current articul(delegats): ')
                 self.buttonClicked.emit(*self._pressed)
                 self.add_base_data = Add_Base_Data(self.parent, index.row())
                 self.add_base_data.show()
@@ -99,7 +97,6 @@ class ButtonDeleteDelegate(QStyledItemDelegate):
             return True
         elif event.type() == QtCore.QEvent.MouseButtonRelease:
             if self._pressed == (index.row(), index.column()):
-                print("Button pressed at {} {}".format(index.row(), index.column()))
                 self.buttonClicked.emit(*self._pressed)
                 reply = QMessageBox.question(self.parent, 'Message',
                                              "Вы уверены что хотите удалить строку данных?", QMessageBox.Yes |

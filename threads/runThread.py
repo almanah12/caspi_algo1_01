@@ -6,16 +6,17 @@ import random
 from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot, QThreadPool
 from sqlalchemy import select
 
-from threads.runThreadMethods import run_autodownload_xml
+from threads.runThreadMethods import run_autodownload_xml, auto_loading_xml
 from db_QSqlDatabase import model_perm
 from db_tables import temporary_table, engine
-from enums import filter_for_goods_with_data, filter_all_data, crypt_key
-from helpers import resource_path, decrypt, encrypt, get_current_version, logger
-from threads import auto_loading_xml_thread
+from enums import filter_for_goods_with_data, filter_all_data
+from helpers import resource_path, logger
 from threads.runThreadMethods.create_xml import create_xml
 from threads.runThreadMethods.gets_dt_caspi_client import gets_data
 from threads.runThreadMethods.parser_urls import Parser
 from threads.runThreadMethods.processing_data import ProcessingData
+from threads.runThreadMethods.auto_loading_xml import set_http_adress
+
 import time
 
 
@@ -52,9 +53,10 @@ class RunThread(QRunnable):
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit('Запуск сбора данных с "Кабинета продавца"', 4)
                     logger.info('Запуск сбора данных с "Кабинета продавца"')
-                    gets_data(self.gui, self.signals.activity_monitor)
+                    count_gds = gets_data(self.gui, self.signals.activity_monitor)
                     self.signals.activity_table.emit()
                 self.signals.restore.emit(True, 0)
+                logger.debug("Count goods: {}".format(count_gds))
 
                 # Парсинг товаров
                 if not self.gui.check_stop:
@@ -92,20 +94,22 @@ class RunThread(QRunnable):
                     logger.info('Запуск создание файла xml')
                     create_xml(self.gui)
 
+                self.signals.activity_monitor.emit('Запуск записи xml файла в сервер', 1)
+                logger.info('Запуск записи xml файла в сервер')
+
+                # запись xml файла в сервер google cloud storage
                 if not self.gui.check_stop:
-                    self.signals.activity_monitor.emit('Запуск записи xml файла в сервер', 1)
-                    logger.info('Запуск записи xml файла в сервер')
                     run_autodownload_xml.upload_to_bucket_xml(self.gui.configuration.name_xml_file_lineEdit.text(),
                                                               resource_path(r"data_shop/alash.xml"),
                                                               self.gui.configuration.name_folder_lineEdit.text())
 
-                if not self.gui.check_stop:
-                    if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Нет':
-                        self.gui.configuration.auto_downl_xml_comboBox.setCurrentText('Да')
-                        self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла', 1)
-                        logger.info('Поставлена автоматическая загрузка xml файла')
-                        self.worker_boss = auto_loading_xml_thread.RunThread(gui=self.gui.configuration)
-                        self.threadPool.start(self.worker_boss)
+                # запись xml файла в локальный http сервер через ngrok
+                # if not self.gui.check_stop:
+                #     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Нет':
+                #         self.gui.configuration.auto_downl_xml_comboBox.setCurrentText('Да')
+                #         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла', 1)
+                #         logger.info('Поставлена автоматическая загрузка xml файла')
+                #         auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
                 # Запуск программы через х время
                 if not self.gui.check_stop:
                     from_time_sec = self.gui.configuration.interval_from_spinBox.value() * 60

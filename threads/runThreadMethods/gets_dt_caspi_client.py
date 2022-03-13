@@ -85,7 +85,8 @@ def gets_data(gui, signals):
             #     continue
             # else:
             #     break
-        run_page(gui, driver)
+        count_gds = run_page(gui, driver)
+        return count_gds
 
     except Exception as ex:
         logger.error(ex)
@@ -97,9 +98,9 @@ def gets_data(gui, signals):
 
 
 def run_page(gui, driver):
+    count_gds = 0
     products_btn = driver.find_element_by_xpath('/html/body/div[4]/div[2]/div/nav/ul/li[2]/a')
     # products_btn = driver.find_element_by_class_name("main-nav__el-link")
-
     products_btn.click()
     # Цикл проверяет будет ли работать по определенному списку товаров
     if gui.configuration.list_articulcomboBox.currentText() == 'Нет':
@@ -113,7 +114,7 @@ def run_page(gui, driver):
 
             # Название магазов
             count_shops = driver.find_elements_by_xpath('//td[2]/div/div/div[2]/a')
-            print('count_shops: ', len(count_shops))
+            count_gds += len(count_shops)
 
             # Цикл для записи данных товаров
             # for i in range(len(count_shops)):
@@ -156,6 +157,7 @@ def run_page(gui, driver):
         driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[2]/div[1]/div/input').send_keys(
             'dt_chosen_list[1]')
         driver.implicitly_wait(10)
+        count_gds = len(dt_chosen_list)
         for i in range(len(dt_chosen_list)):
             driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[2]/div[1]/div/input').clear()
             driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[2]/div[1]/div/input').send_keys(
@@ -163,6 +165,8 @@ def run_page(gui, driver):
             driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[2]/div[1]/div/button').click()
             driver.implicitly_wait(10)
             gets_dt_good(gui, driver, 0)
+
+    return count_gds
 
 
 def gets_dt_good(gui, driver, i):

@@ -59,8 +59,6 @@ def getOpenFilesAndDirs(parent=None, caption='', directory='',
 
 def list_proxy_folder(gui, typeFile, widget):
     selected_files = QFileDialog.getOpenFileName(gui, 'Select files', '', typeFile)
-    print('selected:', selected_files)
-    print("[0]", selected_files[0])
     if selected_files[0]:
         path = selected_files[0]
         widget.setText(path)
@@ -75,7 +73,6 @@ def list_proxy_folder1(gui, typeFile, widget):
     dialog.setDirectory(resource_path(r'data_files/data_goods'))
     selected_files = QFileDialog.getOpenFileName(gui, 'Select files', '', typeFile)
 
-    print('selected:', selected_files)
     if selected_files[0]:
         path = selected_files[0]
         widget.setText(path)
@@ -123,29 +120,3 @@ def save_comboBox(file, comboBox):
 def delete_comboBox(file, comboBox):
     comboBox.removeItem(comboBox.currentIndex())
     save_comboBox(file, comboBox)
-
-
-
-
-
-
-# def restore(settings):
-#     finfo = QFileInfo(settings.fileName())
-#
-#     if finfo.exists() and finfo.isFile():
-#         for w in qApp.allWidgets():
-#             mo = w.metaObject()
-#             if w.objectName() != "":
-#                 for i in range(mo.propertyCount()):
-#                     name = mo.property(i).name()
-#                     val = settings.value("{}/{}".format(w.objectName(), name), w.property(name))
-#                     w.setProperty(name, val)
-#
-#
-# def save(settings):
-#     for w in qApp.allWidgets():
-#         mo = w.metaObject()
-#         if w.objectName() != "":
-#             for i in range(mo.propertyCount()):
-#                 name = mo.property(i).name()
-#                 settings.setValue("{}/{}".format(w.objectName(), name), w.property(name))

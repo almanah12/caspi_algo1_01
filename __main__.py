@@ -83,7 +83,6 @@ class Interface(QMainWindow):
         """
         """
         try:
-            print(self.configuration.condition_filled_data_in_settings())
             if self.configuration.condition_filled_data_in_settings():
                 self.check_stop = False  # Обновляет
                 self.disable_interface(True, count=0)
