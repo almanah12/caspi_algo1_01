@@ -98,18 +98,18 @@ class RunThread(QRunnable):
                 logger.info('Запуск записи xml файла в сервер')
 
                 # запись xml файла в сервер google cloud storage
-                if not self.gui.check_stop:
-                    run_autodownload_xml.upload_to_bucket_xml(self.gui.configuration.name_xml_file_lineEdit.text(),
-                                                              resource_path(r"data_shop/alash.xml"),
-                                                              self.gui.configuration.name_folder_lineEdit.text())
+                # if not self.gui.check_stop:
+                #     run_autodownload_xml.upload_to_bucket_xml(self.gui.configuration.name_xml_file_lineEdit.text(),
+                #                                               resource_path(r"data_shop/alash.xml"),
+                #                                               self.gui.configuration.name_folder_lineEdit.text())
 
                 # запись xml файла в локальный http сервер через ngrok
-                # if not self.gui.check_stop:
-                #     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Нет':
-                #         self.gui.configuration.auto_downl_xml_comboBox.setCurrentText('Да')
-                #         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла', 1)
-                #         logger.info('Поставлена автоматическая загрузка xml файла')
-                #         auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
+                if not self.gui.check_stop:
+                    if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Нет':
+                        self.gui.configuration.auto_downl_xml_comboBox.setCurrentText('Да')
+                        self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла', 1)
+                        logger.info('Поставлена автоматическая загрузка xml файла')
+                        auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
                 # Запуск программы через х время
                 if not self.gui.check_stop:
                     from_time_sec = self.gui.configuration.interval_from_spinBox.value() * 60
