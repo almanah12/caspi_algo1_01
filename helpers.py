@@ -7,7 +7,8 @@ import sys
 
 from cryptography.fernet import Fernet
 from loguru import logger
-
+from http.server import HTTPServer, CGIHTTPRequestHandler
+from pyngrok import ngrok
 
 BASE_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.dirname(BASE_DIR)
@@ -75,3 +76,19 @@ def decrypt(filename, key):
     # записать оригинальный файл
     with open(filename, 'wb') as file:
         file.write(decrypted_data)
+
+
+public_url = ngrok.connect(8000).public_url
+print("ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, 8000))
+
+
+def server_http_ngrok():
+    server_address = ("", 8000)
+    httpd = HTTPServer(server_address, CGIHTTPRequestHandler)
+    try:
+        # Block until CTRL-C or some other terminating event
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print(" Shutting down server.")
+
+        httpd.socket.close()

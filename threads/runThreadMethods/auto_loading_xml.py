@@ -9,7 +9,7 @@ from helpers import resource_path
 from webdriver_options import get_driver
 from sqlalchemy import MetaData
 from db_tables import temporary_table, permanent_table, engine, session
-from helpers import logger
+from helpers import logger, public_url
 
 
 def set_http_adress(gui, signals):
@@ -82,8 +82,22 @@ def set_http_adress(gui, signals):
         url_xml = driver.find_element_by_xpath(
             '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/div[1]/input')
         url_xml.clear()
-        url_xml.send_keys("https://storage.googleapis.com/alash/")
+        url_xml.send_keys(public_url+'/data_shop/alash.xml')
+
         time.sleep(3)
+
+        chesk_enter_btn_xml = driver.find_element_by_xpath(
+            '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[1]')
+        chesk_enter_btn_xml.click()
+
+        driver.implicitly_wait(40)
+        time.sleep(3)
+
+        save_enter_btn_xml = driver.find_element_by_xpath(
+            '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[2]')
+        save_enter_btn_xml.click()
+        time.sleep(3)
+
 
 
         logger.debug('end auto loading')
