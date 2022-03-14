@@ -17,7 +17,7 @@ from helpers import logger,ngrok_public_url
 
 
 def set_http_adress(gui, signals):
-    for _ in range(3):
+    for _ in range(5):
         try:
             driver = get_driver()
 
@@ -90,11 +90,11 @@ def set_http_adress(gui, signals):
 
         except Exception as ex:
             logger.error(ex)
-            driver.quit()
+            driver.close()
             continue
 
         else:
             # driver.close()
-            driver.quit()
+            driver.close()
             break
 

@@ -5,6 +5,10 @@ import pandas as pd
 
 from collections import OrderedDict
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from helpers import resource_path
 from webdriver_options import get_driver
 from sqlalchemy import MetaData
@@ -13,24 +17,23 @@ from helpers import logger
 
 
 def gets_data(gui, signals):
-    try:
-        meta = MetaData()
-        meta.create_all(engine)  # или books.create(engine), authors.create(engine)
+    for _ in range(3):
+        try:
+            meta = MetaData()
+            meta.create_all(engine)  # или books.create(engine), authors.create(engine)
 
-        # Удаляем врем.табл перед записем новых данных
-        session.query(temporary_table).delete()
-        session.commit()
+            # Удаляем врем.табл перед записем новых данных
+            session.query(temporary_table).delete()
+            session.commit()
 
-        # Удаляем папку с excel файлами
-        if os.path.exists(resource_path(r'data_files/data_shops')):
-            path = os.path.join(os.path.abspath(os.path.dirname(__file__)), resource_path(r'data_files/data_shops'))
-            shutil.rmtree(path)
+            # Удаляем папку с excel файлами
+            if os.path.exists(resource_path(r'data_files/data_shops')):
+                path = os.path.join(os.path.abspath(os.path.dirname(__file__)), resource_path(r'data_files/data_shops'))
+                shutil.rmtree(path)
 
-        #  Создаем папку занова для excel файлов
-        os.mkdir(resource_path(r'data_files/data_shops'))
+            #  Создаем папку занова для excel файлов
+            os.mkdir(resource_path(r'data_files/data_shops'))
 
-        # while count_check < 3:
-        for _ in range(3):
             driver = get_driver()
 
             url = 'https://kaspi.kz/merchantcabinet/login?logout=true'
@@ -56,17 +59,10 @@ def gets_data(gui, signals):
 
             if gui.check_stop:
                 break
+            # time.sleep(3)
 
             # Если стр. занова заходит на  логинацию
             # Время задержки для загрузки стр. и всплывающего окна
-            time.sleep(3)
-            # Если в стр. не загрузилась
-            if driver.current_url != 'https://kaspi.kz/merchantcabinet/#/orders/tabs':
-                driver.close()
-                # открывает новую сессию
-                continue
-            else:
-                break
             # Если нет текста 'Seller center' выводится ошибка и мы выходим из цикла(это значит что мы зашли в кабинет продавца)
             # try:
             #     """
@@ -85,22 +81,22 @@ def gets_data(gui, signals):
             #     continue
             # else:
             #     break
-        count_gds = run_page(gui, driver)
-        return count_gds
+            count_gds = run_page(gui, driver)
+            return count_gds
 
-    except Exception as ex:
-        logger.error(ex)
-        driver.quit()
-
-    else:
-        # driver.close()
-        driver.quit()
+        except Exception as ex:
+            logger.error(ex)
+            driver.close()
+            continue
+        else:
+            driver.close()
+            # driver.quit()
 
 
 def run_page(gui, driver):
     count_gds = 0
-    products_btn = driver.find_element_by_xpath('/html/body/div[4]/div[2]/div/nav/ul/li[2]/a')
-    # products_btn = driver.find_element_by_class_name("main-nav__el-link")
+    products_btn = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
     products_btn.click()
     # Цикл проверяет будет ли работать по определенному списку товаров
     if gui.configuration.list_articulcomboBox.currentText() == 'Нет':
