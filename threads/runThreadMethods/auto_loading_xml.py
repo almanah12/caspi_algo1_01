@@ -41,22 +41,11 @@ def set_http_adress(gui, signals):
             enter_btn = driver.find_element_by_xpath('/html/body/div[4]/main/div[2]/div[4]/button')
             driver.implicitly_wait(10)
             enter_btn.click()
-            time.sleep(3)
-
             if gui.check_stop:
                 break
 
-            # Если стр. занова заходит на  логинацию
-            # Время задержки для загрузки стр. и всплывающего окна
-            # time.sleep(2)
-            # Если в стр. не загрузилась
-            # if driver.current_url != 'https://kaspi.kz/merchantcabinet/#/orders/tabs':
-            #     driver.close()
-            #     # открывает новую сессию
-            #     continue
-            # else:
-            #     break
-            products_btn = WebDriverWait(driver, 4).until(
+
+            products_btn = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
             products_btn.click()
 
@@ -64,27 +53,37 @@ def set_http_adress(gui, signals):
                 EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, 'Загрузить прайс-лист')))
             products_btn2.click()
 
-            auto_loading_xml_btn = driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')
+            auto_loading_xml_btn = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')))
             auto_loading_xml_btn.click()
-            time.sleep(3)
+
+            # auto_loading_xml_btn = driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')
+            # auto_loading_xml_btn.click()
+
+            if gui.check_stop:
+                break
+            time.sleep(1)
 
             url_xml = driver.find_element_by_xpath(
                 '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/div[1]/input')
             url_xml.clear()
             url_xml.send_keys(ngrok_public_url()+'/alash.xml')
 
-            time.sleep(3)
+            time.sleep(1)
 
             chesk_enter_btn_xml = driver.find_element_by_xpath(
                 '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[1]')
             chesk_enter_btn_xml.click()
 
-            driver.implicitly_wait(40)
-            time.sleep(3)
-
-            save_enter_btn_xml = driver.find_element_by_xpath(
-                '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[2]')
+            save_enter_btn_xml = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[2]')))
             save_enter_btn_xml.click()
+
+            # save_enter_btn_xml = driver.find_element_by_xpath(
+            #     '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[2]')
+            # save_enter_btn_xml.click()
             time.sleep(3)
 
             logger.debug('end auto loading')

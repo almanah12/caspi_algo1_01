@@ -5,3 +5,6 @@ Logs
 /test_script/
 /data_files/data_goods/
 /data_shop/
+/__main__.spec
+/dist/
+/build/
