@@ -5,6 +5,7 @@ import pandas as pd
 
 from collections import OrderedDict
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -88,6 +89,10 @@ def set_http_adress(gui, signals):
 
             logger.debug('end auto loading')
 
+        except TimeoutException:
+            logger.error('Превышение ожидание загрузки страницы(30 сек.)')
+            driver.close()
+            continue
         except Exception as ex:
             logger.error(ex)
             driver.close()

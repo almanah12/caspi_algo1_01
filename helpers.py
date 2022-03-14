@@ -78,13 +78,10 @@ def decrypt(filename, key):
     with open(filename, 'wb') as file:
         file.write(decrypted_data)
 
-#
-# public_url = ngrok.connect('file:///'+resource_path('data_shop')).public_url
-# print("ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, 8000))
+
 def ngrok_public_url():
     public_url = ngrok.connect('file:///'+resource_path('data_shop')).public_url
-    print("ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, 8000))
-    print(public_url)
+    logger.debug("ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, 8000))
     return public_url
 
 
@@ -95,6 +92,4 @@ def server_http_ngrok():
         # Block until CTRL-C or some other terminating event
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print(" Shutting down server.")
-
         httpd.socket.close()

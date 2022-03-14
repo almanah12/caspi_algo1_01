@@ -5,7 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_options import get_driver
 from selenium.common.exceptions import TimeoutException
 from db_tables import temporary_table, session
-from helpers import resource_path
+from helpers import resource_path, logger
 
 
 class Parser:
@@ -16,158 +16,102 @@ class Parser:
 
     def parse(self):
         pool = ThreadPool(self.gui.configuration.number_thread_spinBox.value())
-        print('Multiply error 2')
         pool.map(self.parser, self.urls)
         pool.terminate()
         pool.restart()
 
-        # return results
-
     def parser(self, url):
-        if not self.gui.check_stop:
-            while True:
-                try:
-                    print('Multiply error 3')
+        for _ in range(3):
+            if self.gui.check_stop:
+                break
+            try:
+                articul = url.split('/')[5].split('-')[-1] + '_' +\
+                          self.gui.configuration.id_partner_lineEdit.text()
+                curr_row = session.query(temporary_table).filter(temporary_table.c.Ссылка == url).one()
+                curr_numb_city = curr_row.Колич_городов
+                curr_city = curr_row.Город_1
 
-                    # driver = get_driver()
-                    # Время для загрузки стр.
-                    # driver.set_page_load_timeout(40)
-                    articul = url.split('/')[5].split('-')[-1] + '_' + self.gui.configuration.id_partner_lineEdit.text()
+                driver = get_driver()
+                # еСЛИ стр. не загрузится выдаст ошибку и закроет стр.
+                driver.set_page_load_timeout(30)
 
-                    curr_row = session.query(temporary_table).filter(temporary_table.c.Ссылка == url).one()
+                if self.gui.check_stop:
+                    break
+                driver.get(url=url)
+                driver.implicitly_wait(10)
+                self.start_page_push_city(driver, curr_city)
+                driver.implicitly_wait(10)
 
-                    curr_numb_city = curr_row.Колич_городов
-                    curr_city = curr_row.Город_1
+                # Если колич. г. равно 1
+                if curr_numb_city == 1:
+                    # self.move_to_mouse(driver)
+                    self.gets_data_shops_i(driver, articul, count_cities=0)
 
-                    shops_result = []
-                    # Для перезагр. стр. когда входит в стр. логинации(Не знаю работает ли 11.07)
-                    count_check = 0
-                    while count_check < 3:
-                        driver = get_driver()
-                        print('Multiply error 4')
-                        driver.set_page_load_timeout(70)
-
-                        # еСЛИ стр. не загрузится выдаст ошибку и закроет стр.
+                # Если колич. г. больше 1
+                elif curr_numb_city > 1:
+                    if self.gui.check_stop:
+                        break
+                    # self.move_to_mouse(driver)
+                    self.gets_data_shops_i(driver, articul, count_cities=0)
+                    # Цикл для сбора данных с нескольких городов на одного товара
+                    for i in range(1, curr_numb_city):
                         if self.gui.check_stop:
                             break
-                        driver.get(url=url)
-                        driver.set_page_load_timeout(35)
-                        driver.implicitly_wait(10)
-                        print('Multiply error 5')
+                        # новый список для данных кажд. г.
+                        driver.find_element_by_xpath('//*[@id="citySelector"]').click()
 
-                        # Список для хранения данных о магазинах товара
-                        if driver.current_url.split('/')[3].split('?')[0] == 'entrance':
-                            print('Try connect before choose city ', count_check)
-                            # driver.close()
-                            # driver.start_session({})  # открывает новую сессию
-                            # count_check += 1
-                            count_check += 1
-                            continue
-                        elif driver.current_url.split(';')[0] == 'data':
-                            print('GLuk reconect', count_check)
-                            # driver.close()
-                            # driver.start_session({})  # открывает новую сессию
-                            # count_check += 1
-                            count_check += 1
-                            continue
+                        # Кликаем на след. город
+                        # РЕШИТЬ ВОПРОС В БУДУЩЕМ(9/15/21)
+                        # ПРЕОБРОЗОВАТЬ STR В ИМЯ ЭКЗЕМПЛЯРА(ИСПОЛЬЗОВАТЬ STR ПОСЛЕ ОПЕАТОРА ТОЧКИ)
+                        # (row.Город_2 -> row.Город_{i})
+                        if i == 1:
+                            driver.find_element_by_link_text(curr_row.Город_2).click()
+                        elif i == 2:
+                            driver.find_element_by_link_text(curr_row.Город_3).click()
+                        elif i == 3:
+                            driver.find_element_by_link_text(curr_row.Город_4).click()
+                        ##########
+                        # self.move_to_mouse(driver)
+                        # метод использует итерационный элемент i для создание новых ексел файлов для кажд. г.
+                        self.gets_data_shops_i(driver, articul, i)
+                        self.signals.emit('Запись данных '+str(i), 1)
 
-                        # else:
-                        driver.implicitly_wait(10)
-                        print("catch city choose error1")
-                        self.start_page_push_city(driver, curr_city)
-                        driver.implicitly_wait(10)
-                        if driver.current_url.split('/')[3].split('?')[0] == 'entrance':
-                            print('Try connect after choose city ', count_check)
-                            # driver.close()
-                            # driver.start_session({})  # открывает новую сессию
-                            count_check += 1
-                            continue
-                        # Если это усл. все норм
-                        else:
-                            print("catch city choose error end")
-                            break
-
-                    # driver.get(url=url)
-                    # driver.set_page_load_timeout(30)
-                    # driver.implicitly_wait(10)
-                    # self.start_page_push_city(driver, curr_city)
-
-                    if not self.gui.check_stop:
-                        # Если колич. г. равно 1
-                        if curr_numb_city == 1:
-                            print('Multiply error 6')
-
-                            # self.move_to_mouse(driver)
-                            print('Multiply error 7')
-
-                            self.gets_data_shops_i(driver, articul, count_cities=0)
-                            print('Multiply error 8')
-
-
-                        # Если колич. г. больше 1
-                        elif curr_numb_city > 1:
-                            shops_result = []
-                            # self.move_to_mouse(driver)
-                            self.gets_data_shops_i(driver, articul, count_cities=0)
-
-                            # Цикл для сбора данных с нескольких городов на одного товара
-
-                            for i in range(1, curr_numb_city):
-                                if not self.gui.check_stop:
-                                    # новый список для данных кажд. г.
-                                    driver.find_element_by_xpath('//*[@id="citySelector"]').click()
-
-                                    # Кликаем на след. город
-                                    ######### РЕШИТЬ ВОПРОС В БУДУЩЕМ(9/15/21)
-                                    # ПРЕОБРОЗОВАТЬ STR В ИМЯ ЭКЗЕМПЛЯРА(ИСПОЛЬЗОВАТЬ STR ПОСЛЕ ОПЕАТОРА ТОЧКИ)(row.Город_2 -> row.Город_{i})
-                                    if i == 1:
-                                        driver.find_element_by_link_text(curr_row.Город_2).click()
-                                    elif i == 2:
-                                        driver.find_element_by_link_text(curr_row.Город_3).click()
-                                    elif i == 3:
-                                        driver.find_element_by_link_text(curr_row.Город_4).click()
-                                    ##########
-                                    # self.move_to_mouse(driver)
-                                    # метод использует итерационный элемент i для создание новых ексел файлов для кажд. г.
-                                    self.gets_data_shops_i(driver, articul, i)
-                                    self.signals.emit('Запись данных '+str(i), 1)
-                                    # self.signals.emit('Файл ' + i + ' успешно обработан', 1)
-
-                        else:
-                            print('Число городов ОТСУСТВУЕТ')
-                # except Exception:
-                #     print('Попадает на стр. логинации')
-                #     continue
-                except TimeoutException:
-                    print('Превышение тайм-аута 35 сек')
-                    continue
                 else:
-                    driver.close()
-                    driver.quit()
-                    break
+                    logger.error('Число городов ОТСУСТВУЕТ')
+
+            # еСЛИ стр. не загрузится выдаст ошибку и закроет стр.
+            except TimeoutException:
+                self.signals.emit("Превышение ожидание загрузки страницы(30 сек.)", 3)
+                logger.error('Превышение ожидание загрузки страницы(30 сек.)')
+                driver.close()
+                continue
+
+            except Exception as ex:
+                self.signals.emit('{}'.format(ex), 3)
+                logger.error(ex)
+                driver.close()
+                continue
+
+            else:
+                driver.close()
+                break
 
     # Используется только раз. нужен чтобы убрать выбор города при первом загрузке
     def start_page_push_city(self, driver, current_city):
         driver.implicitly_wait(5)
-        print("catch city choose error2")
-
         city_button = driver.find_element_by_link_text(current_city)
-        print("catch city choose error3")
-
         driver.execute_script("arguments[0].click();", city_button)
 
-        print("catch city choose error4")
-
     # Движение стрелки по вкладкам для разблокировки подвкладок магазинов товара
-    def move_to_mouse(self, driver):
-        move1 = driver.find_element_by_link_text("ОБУВЬ")
-        action = ActionChains(driver)
-        action.move_to_element(move1).perform()
-
-        # Наведение на одну из нижних вкладок для доступности подстраниц магазов
-        move2 = driver.find_element_by_link_text("Смартфоны и гаджеты")
-        action = ActionChains(driver)
-        action.move_to_element(move2).perform()
+    # def move_to_mouse(self, driver):
+    #     move1 = driver.find_element_by_link_text("ОБУВЬ")
+    #     action = ActionChains(driver)
+    #     action.move_to_element(move1).perform()
+    #
+    #     # Наведение на одну из нижних вкладок для доступности подстраниц магазов
+    #     move2 = driver.find_element_by_link_text("Смартфоны и гаджеты")
+    #     action = ActionChains(driver)
+    #     action.move_to_element(move2).perform()
 
     # Собираеть данные магаза и нажимает на следующие подвкладки
     def gets_data_shops_i(self, driver, url, count_cities):

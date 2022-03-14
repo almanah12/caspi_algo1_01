@@ -50,14 +50,14 @@ class RunThread(QRunnable):
         try:
             while not self.gui.check_stop:
                 # сбор товаров с маг. клиента
-                # if not self.gui.check_stop:
-                #     self.signals.activity_monitor.emit('Запуск сбора данных с "Кабинета продавца"', 4)
-                #     logger.info('Запуск сбора данных с "Кабинета продавца"')
-                #     count_gds = gets_data(self.gui, self.signals.activity_monitor)
-                #     self.signals.activity_table.emit()
-                # self.signals.restore.emit(True, 0)
-                # logger.debug("Count goods: {}".format(count_gds))
-                #
+                if not self.gui.check_stop:
+                    self.signals.activity_monitor.emit('Запуск сбора данных с "Кабинета продавца"', 4)
+                    logger.info('Запуск сбора данных с "Кабинета продавца"')
+                    count_gds = gets_data(self.gui, self.signals.activity_monitor)
+                    self.signals.activity_table.emit()
+                self.signals.restore.emit(  True, 0)
+                logger.debug("Count goods: {}".format(count_gds))
+
                 # # Парсинг товаров
                 # if not self.gui.check_stop:
                 #     links = []
@@ -66,6 +66,7 @@ class RunThread(QRunnable):
                 #     res = conn.execute(s)
                 #     for row in res:
                 #         links.append(row.Ссылка)
+                #     logger.debug(links)
                 #     self.signals.activity_monitor.emit("Запуск парсинга данных с сайтов товара", 1)
                 #     logger.info('Запуск парсинга данных с сайтов товара')
                 #     parser_site = Parser(self.gui, links, self.signals.activity_monitor)
@@ -104,14 +105,14 @@ class RunThread(QRunnable):
                 #                                               self.gui.configuration.name_folder_lineEdit.text())
 
                 # запись xml файла в локальный http сервер через ngrok
-                if not self.gui.check_stop:
-                    # if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Нет':
-                    #     self.gui.configuration.auto_downl_xml_comboBox.setCurrentText('Да')
-                        self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла', 1)
-                        ngrok_thread = threading.Thread(target=server_http_ngrok)
-                        ngrok_thread.start()
-                        logger.info('Поставлена автоматическая загрузка xml файла')
-                        auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
+                # if not self.gui.check_stop:
+                #     # if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Нет':
+                #     #     self.gui.configuration.auto_downl_xml_comboBox.setCurrentText('Да')
+                #         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла', 1)
+                #         ngrok_thread = threading.Thread(target=server_http_ngrok)
+                #         ngrok_thread.start()
+                #         logger.info('Поставлена автоматическая загрузка xml файла')
+                #         auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
                 # Запуск программы через х время
                 if not self.gui.check_stop:
                     from_time_sec = self.gui.configuration.interval_from_spinBox.value() * 60
@@ -133,6 +134,7 @@ class RunThread(QRunnable):
             logger.error(ex)
             self.signals.activity_monitor.emit('Ошибка в потоке RunThread: ' + str(ex), 2)
             self.signals.restore.emit(False, 1)
+
         finally:
             self.signals.restore.emit(False, 1)
 
