@@ -155,29 +155,14 @@ class Parser:
             # Данные магазов
             df_data = pd.DataFrame(shops_result)
 
-            # Проверяет есть ли данный элемент в стр.
-            try:
-                # Кнопка Следующая, условие для разных xpath в разных стр. товаров
-                if driver.find_element_by_xpath('//*[@id="offers-list"]/div/div/div[2]/li[4]').text == 'Следующая':
-                    click_next = driver.find_element_by_xpath('//*[@id="offers-list"]/div/div/div[2]/li[4]')
-                elif driver.find_element_by_xpath(
-                        '//*[@id="offers-list"]/div/div/div[2]/li[5]').text == 'Следующая':
-                    click_next = driver.find_element_by_xpath('//*[@id="offers-list"]/div/div/div[2]/li[5]')
-                elif driver.find_element_by_xpath('//*[@id="offers-list"]/div/div/div[2]/li[6]').text == 'Следующая':
-                    click_next = driver.find_element_by_xpath('//*[@id="offers-list"]/div/div/div[2]/li[6]')
-                elif driver.find_element_by_xpath('//*[@id="offers-list"]/div/div/div[2]/li[7]').text == 'Следующая':
-                    click_next = driver.find_element_by_xpath('//*[@id="offers-list"]/div/div/div[2]/li[7]')
-
-                # Условие проверки доступности кнопки След.
-                if click_next.get_attribute("class") == 'pagination__el _disabled':  # Проверяет активна ли кнопка
-                    break
-
-                driver.execute_script('arguments[0].click();', click_next)
-                driver.implicitly_wait(3)
-            except:
+            click_next = driver.find_element_by_xpath('//li[contains(.,"Следующая")]')
+            # Условие проверки доступности кнопки След.
+            if click_next.get_attribute("class") == 'pagination__el _disabled':
                 break
 
-            # Время для загрузки подвкладок стр. магазов
+            driver.execute_script('arguments[0].click();', click_next)
+            driver.implicitly_wait(3)
+
 
         print("Данные взяты")
         # Запись данн.маг. в екселл с атрибутом и назв.города

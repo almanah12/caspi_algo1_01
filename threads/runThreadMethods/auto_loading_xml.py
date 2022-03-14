@@ -18,7 +18,7 @@ from helpers import logger,ngrok_public_url
 
 
 def set_http_adress(gui, signals):
-    for _ in range(5):
+    for _ in range(3):
         try:
             driver = get_driver()
 
@@ -58,9 +58,6 @@ def set_http_adress(gui, signals):
                 EC.element_to_be_clickable(
                     (By.XPATH, '/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')))
             auto_loading_xml_btn.click()
-
-            # auto_loading_xml_btn = driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')
-            # auto_loading_xml_btn.click()
 
             if gui.check_stop:
                 break

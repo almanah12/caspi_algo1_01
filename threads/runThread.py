@@ -50,28 +50,28 @@ class RunThread(QRunnable):
         try:
             while not self.gui.check_stop:
                 # сбор товаров с маг. клиента
-                if not self.gui.check_stop:
-                    self.signals.activity_monitor.emit('Запуск сбора данных с "Кабинета продавца"', 4)
-                    logger.info('Запуск сбора данных с "Кабинета продавца"')
-                    count_gds = gets_data(self.gui, self.signals.activity_monitor)
-                    self.signals.activity_table.emit()
-                self.signals.restore.emit(  True, 0)
-                logger.debug("Count goods: {}".format(count_gds))
-
-                # # Парсинг товаров
                 # if not self.gui.check_stop:
-                #     links = []
-                #     s = select(temporary_table)
-                #     conn = engine.connect()
-                #     res = conn.execute(s)
-                #     for row in res:
-                #         links.append(row.Ссылка)
-                #     logger.debug(links)
-                #     self.signals.activity_monitor.emit("Запуск парсинга данных с сайтов товара", 1)
-                #     logger.info('Запуск парсинга данных с сайтов товара')
-                #     parser_site = Parser(self.gui, links, self.signals.activity_monitor)
-                #     parser_site.parse()
-                # # Обработка данных товаров
+                #     self.signals.activity_monitor.emit('Запуск сбора данных с "Кабинета продавца"', 4)
+                #     logger.info('Запуск сбора данных с "Кабинета продавца"')
+                #     count_gds = gets_data(self.gui, self.signals.activity_monitor)
+                #     self.signals.activity_table.emit()
+                # self.signals.restore.emit(  True, 0)
+                # logger.debug("Count goods: {}".format(count_gds))
+
+                # Парсинг товаров
+                if not self.gui.check_stop:
+                    links = []
+                    s = select(temporary_table)
+                    conn = engine.connect()
+                    res = conn.execute(s)
+                    for row in res:
+                        links.append(row.Ссылка)
+                    logger.debug(links)
+                    self.signals.activity_monitor.emit("Запуск парсинга данных с сайтов товара", 1)
+                    logger.info('Запуск парсинга данных с сайтов товара')
+                    parser_site = Parser(self.gui, links, self.signals.activity_monitor)
+                    parser_site.parse()
+                # Обработка данных товаров
                 # if not self.gui.check_stop:
                 #     model_perm.setFilter(filter_for_goods_with_data)
                 #     count_goods_with_data = model_perm.rowCount()
