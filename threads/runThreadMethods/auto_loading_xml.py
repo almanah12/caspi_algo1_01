@@ -5,32 +5,20 @@ import pandas as pd
 
 from collections import OrderedDict
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from helpers import resource_path
 from webdriver_options import get_driver
 from sqlalchemy import MetaData
 from db_tables import temporary_table, permanent_table, engine, session
-from helpers import logger, public_url
+from helpers import logger,ngrok_public_url
 
 
 def set_http_adress(gui, signals):
-    try:
-        meta = MetaData()
-        meta.create_all(engine)  # или books.create(engine), authors.create(engine)
-
-        # Удаляем врем.табл перед записем новых данных
-        session.query(temporary_table).delete()
-        session.commit()
-
-        # Удаляем папку с excel файлами
-        if os.path.exists(resource_path(r'data_files/data_shops')):
-            path = os.path.join(os.path.abspath(os.path.dirname(__file__)), resource_path(r'data_files/data_shops'))
-            shutil.rmtree(path)
-
-        #  Создаем папку занова для excel файлов
-        os.mkdir(resource_path(r'data_files/data_shops'))
-
-        # while count_check < 3:
-        for _ in range(3):
+    for _ in range(3):
+        try:
             driver = get_driver()
 
             url = 'https://kaspi.kz/merchantcabinet/login?logout=true'
@@ -53,60 +41,61 @@ def set_http_adress(gui, signals):
             enter_btn = driver.find_element_by_xpath('/html/body/div[4]/main/div[2]/div[4]/button')
             driver.implicitly_wait(10)
             enter_btn.click()
+            time.sleep(3)
 
             if gui.check_stop:
                 break
 
             # Если стр. занова заходит на  логинацию
             # Время задержки для загрузки стр. и всплывающего окна
-            time.sleep(2)
+            # time.sleep(2)
             # Если в стр. не загрузилась
-            if driver.current_url != 'https://kaspi.kz/merchantcabinet/#/orders/tabs':
-                driver.close()
-                # открывает новую сессию
-                continue
-            else:
-                break
-        products_btn = driver.find_element_by_xpath('/html/body/div[4]/div[2]/div/nav/ul/li[2]/a')
-        # products_btn = driver.find_element_by_class_name("main-nav__el-link")
-        products_btn.click()
-        time.sleep(3)
+            # if driver.current_url != 'https://kaspi.kz/merchantcabinet/#/orders/tabs':
+            #     driver.close()
+            #     # открывает новую сессию
+            #     continue
+            # else:
+            #     break
+            products_btn = WebDriverWait(driver, 4).until(
+                EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
+            products_btn.click()
 
-        products_btn2 = driver.find_element_by_link_text('Загрузить прайс-лист')
-        products_btn2.click()
-        time.sleep(3)
-        auto_loading_xml_btn = driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')
-        auto_loading_xml_btn.click()
-        time.sleep(3)
+            products_btn2 = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, 'Загрузить прайс-лист')))
+            products_btn2.click()
 
-        url_xml = driver.find_element_by_xpath(
-            '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/div[1]/input')
-        url_xml.clear()
-        url_xml.send_keys(public_url+'/data_shop/alash.xml')
+            auto_loading_xml_btn = driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')
+            auto_loading_xml_btn.click()
+            time.sleep(3)
 
-        time.sleep(3)
+            url_xml = driver.find_element_by_xpath(
+                '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/div[1]/input')
+            url_xml.clear()
+            url_xml.send_keys(ngrok_public_url()+'/alash.xml')
 
-        chesk_enter_btn_xml = driver.find_element_by_xpath(
-            '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[1]')
-        chesk_enter_btn_xml.click()
+            time.sleep(3)
 
-        driver.implicitly_wait(40)
-        time.sleep(3)
+            chesk_enter_btn_xml = driver.find_element_by_xpath(
+                '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[1]')
+            chesk_enter_btn_xml.click()
 
-        save_enter_btn_xml = driver.find_element_by_xpath(
-            '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[2]')
-        save_enter_btn_xml.click()
-        time.sleep(3)
+            driver.implicitly_wait(40)
+            time.sleep(3)
 
+            save_enter_btn_xml = driver.find_element_by_xpath(
+                '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/button[2]')
+            save_enter_btn_xml.click()
+            time.sleep(3)
 
+            logger.debug('end auto loading')
 
-        logger.debug('end auto loading')
+        except Exception as ex:
+            logger.error(ex)
+            driver.quit()
+            continue
 
-    except Exception as ex:
-        logger.error(ex)
-        driver.quit()
-
-    else:
-        # driver.close()
-        driver.quit()
+        else:
+            # driver.close()
+            driver.quit()
+            break
 

@@ -9,6 +9,7 @@ from cryptography.fernet import Fernet
 from loguru import logger
 from http.server import HTTPServer, CGIHTTPRequestHandler
 from pyngrok import ngrok
+from pyngrok.conf import PyngrokConfig
 
 BASE_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.dirname(BASE_DIR)
@@ -77,9 +78,14 @@ def decrypt(filename, key):
     with open(filename, 'wb') as file:
         file.write(decrypted_data)
 
-
-public_url = ngrok.connect(8000).public_url
-print("ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, 8000))
+#
+# public_url = ngrok.connect('file:///'+resource_path('data_shop')).public_url
+# print("ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, 8000))
+def ngrok_public_url():
+    public_url = ngrok.connect('file:///'+resource_path('data_shop')).public_url
+    print("ngrok tunnel \"{}\" -> \"http://127.0.0.1:{}\"".format(public_url, 8000))
+    print(public_url)
+    return public_url
 
 
 def server_http_ngrok():
