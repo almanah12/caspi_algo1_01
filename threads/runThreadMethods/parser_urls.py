@@ -31,7 +31,7 @@ class Parser:
                 curr_numb_city = curr_row.Колич_городов
                 curr_city = curr_row.Город_1
 
-                driver = get_driver_proxy()
+                driver = get_driver()
                 # еСЛИ стр. не загрузится выдаст ошибку и закроет стр.
                 driver.set_page_load_timeout(30)
 
@@ -58,7 +58,7 @@ class Parser:
                         if self.gui.check_stop:
                             break
                         # новый список для данных кажд. г.
-                        driver.find_element_by_xpath('//*[@id="citySelector"]').click()
+                        driver.find_element_by_xpath('//a[@id="citySelector"]').click()
 
                         # Кликаем на след. город
                         # РЕШИТЬ ВОПРОС В БУДУЩЕМ(9/15/21)
@@ -130,12 +130,17 @@ class Parser:
                     name_shops = "Нет название магазина"
 
                 try:
-                    delivery_day = driver.find_elements_by_xpath('//div[1]/span/span[1]')[i].text
+                    delivery_day = driver.find_element_by_xpath(
+                        '//tr[{}]//span[@class="sellers-table__delivery-date"]'.format(i+1)).text
+
                 except:
                     delivery_day = "Только самовывоз"
 
+                logger.debug(delivery_day)
+
                 try:
-                    price_item = driver.find_elements_by_xpath('//td[4]/div')[i].text
+                    price_item = driver.find_elements_by_xpath(
+                        '//div[@class="sellers-table__price-cell-text"]')[i].text
                     # Преобразование текста в число. напр '100 123 т' в 100123
                     word_list = price_item.split()
                     num_list = []

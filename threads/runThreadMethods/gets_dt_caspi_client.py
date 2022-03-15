@@ -104,8 +104,8 @@ def run_page(gui, driver):
     # Цикл проверяет будет ли работать по определенному списку товаров
     if gui.configuration.list_articulcomboBox.currentText() == 'Нет':
         # Цикл работает пока кнопка 'след' доступна
-        while True:
-        # for j in range(1):
+        # while True:
+        for j in range(1):
             if gui.check_stop:
                 break
             # Ждем пока стр загрузится
@@ -117,7 +117,7 @@ def run_page(gui, driver):
 
             # Цикл для записи данных товаров
             # for i in range(len(count_shops)):
-            for i in range(2):
+            for i in range(1):
                 gets_dt_good(gui, driver, i)
 
             # Берем значение кнопки след 'true' или 'false'
