@@ -5,6 +5,7 @@ Miscellaneous helper functions and constants.
 import os
 import sys
 
+import requests
 from cryptography.fernet import Fernet
 from loguru import logger
 from http.server import HTTPServer, CGIHTTPRequestHandler
@@ -93,3 +94,16 @@ def server_http_ngrok():
         httpd.serve_forever()
     except KeyboardInterrupt:
         httpd.socket.close()
+
+
+def download_proxy_list():
+    image_url = "https://proxy.webshare.io/proxy/list/download/dxwiuynzkcbwocodmgfhpjaonpyyfysflavigcwe/-/http/username/direct/"
+
+    # URL of the image to be downloaded is defined as image_url
+    r = requests.get(image_url)  # create HTTP response object
+
+    # send a HTTP request to the server and save
+    # the HTTP response in a response object called r
+    with open("data_shop/proxy_list.txt", 'wb') as f:
+        # to a new file in binary mode.
+        f.write(r.content)

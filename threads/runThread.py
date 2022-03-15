@@ -10,7 +10,7 @@ from threads.runThreadMethods import run_autodownload_xml, auto_loading_xml
 from db_QSqlDatabase import model_perm
 from db_tables import temporary_table, engine
 from enums import filter_for_goods_with_data, filter_all_data
-from helpers import resource_path, logger, server_http_ngrok
+from helpers import resource_path, logger, server_http_ngrok, download_proxy_list
 from threads.runThreadMethods.create_xml import create_xml
 from threads.runThreadMethods.gets_dt_caspi_client import gets_data
 from threads.runThreadMethods.parser_urls import Parser
@@ -59,6 +59,7 @@ class RunThread(QRunnable):
                 # logger.debug("Count goods: {}".format(count_gds))
 
                 # Парсинг товаров
+                download_proxy_list()
                 if not self.gui.check_stop:
                     links = []
                     s = select(temporary_table)

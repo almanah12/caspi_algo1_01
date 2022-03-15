@@ -2,7 +2,7 @@ from pathos.pools import ThreadPool
 import pandas as pd
 
 from selenium.webdriver.common.action_chains import ActionChains
-from webdriver_options import get_driver
+from webdriver_options import get_driver, get_driver_proxy
 from selenium.common.exceptions import TimeoutException
 from db_tables import temporary_table, session
 from helpers import resource_path, logger
@@ -31,7 +31,7 @@ class Parser:
                 curr_numb_city = curr_row.Колич_городов
                 curr_city = curr_row.Город_1
 
-                driver = get_driver()
+                driver = get_driver_proxy()
                 # еСЛИ стр. не загрузится выдаст ошибку и закроет стр.
                 driver.set_page_load_timeout(30)
 
