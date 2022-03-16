@@ -12,7 +12,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import (QDialog, QMainWindow, QApplication)
 from py7zr import py7zr
 
-from helpers import resource_path
+from helpers import resource_path, logger
 
 app = QApplication(sys.argv)
 
@@ -46,7 +46,7 @@ class Update(QDialog):
 
     def download_app_exe(self):
         self.progressBar_download_app.setMaximum(0)
-        self.label_update_text.setText('Идет загрузка exe файла')
+        self.label_update_text.setText('Идет загрузка ...')
         self.pushButton_install_app.setEnabled(False)
 
         try:
@@ -60,11 +60,11 @@ class Update(QDialog):
 
             self.progressBar_download_app.setMaximum(100)
             # self.progressBar_download_app.setValue(100)
-            self.label_update_text.setText('Загрузка завершена. Нажмите на кнопку "Установить"')
+            self.label_update_text.setText('Загрука завершена. Для завершение установки нажмите на "Установить"')
             self.pushButton_install_app.setEnabled(True)
 
         except Exception as ex:
-            print(ex)
+            logger.error(ex)
             self.label_update_text.setText(f'{ex}')
 
         # with gdown.download(url, output) as r:

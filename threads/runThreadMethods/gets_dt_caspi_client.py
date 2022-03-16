@@ -98,14 +98,16 @@ def gets_data(gui, signals):
 
 def run_page(gui, driver):
     count_gds = 0
+    other_city = 0
+
     products_btn = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
     products_btn.click()
     # Цикл проверяет будет ли работать по определенному списку товаров
     if gui.configuration.list_articulcomboBox.currentText() == 'Нет':
         # Цикл работает пока кнопка 'след' доступна
-        # while True:
-        for j in range(1):
+        while True:
+        # for j in range(1):
             if gui.check_stop:
                 break
             # Ждем пока стр загрузится
@@ -116,9 +118,9 @@ def run_page(gui, driver):
             count_gds += len(count_shops)
 
             # Цикл для записи данных товаров
-            # for i in range(len(count_shops)):
-            for i in range(1):
-                gets_dt_good(gui, driver, i)
+            for i in range(len(count_shops)):
+            # for i in range(1):
+                other_city += gets_dt_good(gui, driver, i) - 1
 
             # Берем значение кнопки след 'true' или 'false'
             click_next = driver.find_element_by_xpath('//img[contains(@aria-label, "Next page")]').\
@@ -128,7 +130,6 @@ def run_page(gui, driver):
             # Если значение false то кликаем на кнопку след
             if click_next == 'false':  # Проверяет активна ли кнопка
                 driver.execute_script('arguments[0].click();', click_next1)
-                click_next1.click()
             # Если нет то выходим из цикла(значит мы дошли до конца списка товаров)
             else:
                 break
@@ -153,7 +154,7 @@ def run_page(gui, driver):
             driver.implicitly_wait(10)
             gets_dt_good(gui, driver, 0)
 
-    return count_gds
+    return str(count_gds)+':'+str(other_city)
 
 
 def gets_dt_good(gui, driver, i):
@@ -280,3 +281,5 @@ def gets_dt_good(gui, driver, i):
 
     conn.execute(sql_insert_temporary_table)
     conn.close()
+
+    return count_cities

@@ -1,7 +1,10 @@
 from pathos.pools import ThreadPool
 import pandas as pd
 
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from webdriver_options import get_driver, get_driver_proxy
 from selenium.common.exceptions import TimeoutException
 from db_tables import temporary_table, session
@@ -9,6 +12,8 @@ from helpers import resource_path, logger
 
 
 class Parser:
+    count_requests = 0
+
     def __init__(self, gui, urls, signals):
         self.gui = gui
         self.urls = urls
@@ -21,16 +26,16 @@ class Parser:
         pool.restart()
 
     def parser(self, url):
+        articul = url.split('/')[5].split('-')[-1] + '_' + \
+                  self.gui.configuration.id_partner_lineEdit.text()
+        curr_row = session.query(temporary_table).filter(temporary_table.c.Ссылка == url).one()
+        curr_numb_city = curr_row.Колич_городов
+        curr_city = curr_row.Город_1
+        self.signals.emit('Парсинг товара {}'.format(url.split('/')[5]), 1)
         for _ in range(3):
             if self.gui.check_stop:
                 break
             try:
-                articul = url.split('/')[5].split('-')[-1] + '_' +\
-                          self.gui.configuration.id_partner_lineEdit.text()
-                curr_row = session.query(temporary_table).filter(temporary_table.c.Ссылка == url).one()
-                curr_numb_city = curr_row.Колич_городов
-                curr_city = curr_row.Город_1
-
                 driver = get_driver()
                 # еСЛИ стр. не загрузится выдаст ошибку и закроет стр.
                 driver.set_page_load_timeout(30)
@@ -46,6 +51,7 @@ class Parser:
                 if curr_numb_city == 1:
                     # self.move_to_mouse(driver)
                     self.gets_data_shops_i(driver, articul, count_cities=0)
+                    Parser.count_requests += 1
 
                 # Если колич. г. больше 1
                 elif curr_numb_city > 1:
@@ -53,6 +59,7 @@ class Parser:
                         break
                     # self.move_to_mouse(driver)
                     self.gets_data_shops_i(driver, articul, count_cities=0)
+                    Parser.count_requests += 1
                     # Цикл для сбора данных с нескольких городов на одного товара
                     for i in range(1, curr_numb_city):
                         if self.gui.check_stop:
@@ -74,7 +81,8 @@ class Parser:
                         # self.move_to_mouse(driver)
                         # метод использует итерационный элемент i для создание новых ексел файлов для кажд. г.
                         self.gets_data_shops_i(driver, articul, i)
-                        self.signals.emit('Запись данных '+str(i), 1)
+                        Parser.count_requests += 1
+                        self.signals.emit('Парсинг товара {} для Город_{}'.format(url.split('/')[5], i+1), 1)
 
                 else:
                     logger.error('Число городов ОТСУСТВУЕТ')
@@ -95,6 +103,7 @@ class Parser:
             else:
                 driver.close()
                 break
+        logger.debug(Parser.count_requests)
 
     # Используется только раз. нужен чтобы убрать выбор города при первом загрузке
     def start_page_push_city(self, driver, current_city):
@@ -136,8 +145,6 @@ class Parser:
                 except:
                     delivery_day = "Только самовывоз"
 
-                logger.debug(delivery_day)
-
                 try:
                     price_item = driver.find_elements_by_xpath(
                         '//div[@class="sellers-table__price-cell-text"]')[i].text
@@ -154,13 +161,15 @@ class Parser:
                     price_item = "Нет цены за товар"
 
                 shops_result.append({'Name shops': name_shops,
-                                      'Delivery_day': delivery_day,  # mistake у редких нет достовки соответсвенно
-                                      'Price': price_item
-                                      })
+                                    'Delivery_day': delivery_day,  # mistake у редких нет достовки соответсвенно
+                                     'Price': price_item
+                                    })
             # Данные магазов
             df_data = pd.DataFrame(shops_result)
+            click_next = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//li[contains(.,"Следующая")]')))
 
-            click_next = driver.find_element_by_xpath('//li[contains(.,"Следующая")]')
+            # click_next = driver.find_element_by_xpath('//li[contains(.,"Следующая")]')
             # Условие проверки доступности кнопки След.
             if click_next.get_attribute("class") == 'pagination__el _disabled':
                 break
@@ -168,12 +177,10 @@ class Parser:
             driver.execute_script('arguments[0].click();', click_next)
             driver.implicitly_wait(3)
 
-
-        print("Данные взяты")
         # Запись данн.маг. в екселл с атрибутом и назв.города
         df_data.to_excel(resource_path(fr"data_files/data_shops/{url}"
                          fr"{'-Город_' + str(count_cities + 1)}.xlsx"), index=False)  #
 
-        print("Данные записались в ", url)
+        logger.debug("Данные записались в {}".format(url))
 
 

@@ -8,3 +8,5 @@ Logs
 /__main__.spec
 /dist/
 /build/
+/ngrok.log
+/env/
