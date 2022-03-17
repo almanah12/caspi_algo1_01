@@ -62,10 +62,8 @@ class RunThread(QRunnable):
                 count_other_city = int(count_all_gds.split(':')[1])
                 count_all_gds = count_gds_on_site + count_other_city
                 self.signals.activity_monitor.emit(
-                    'С "Каб.продавца" взята данных на {} товаров. Будет сделано {} запросов'.format(
-                        count_gds_on_site, count_gds_on_site), 1)
-                logger.debug('С "Каб.продавца" взята данных на {} товаров. Будет сделано {} запросов'
-                             .format(count_gds_on_site, count_gds_on_site))
+                    'С "Каб.продавца" взята данных на {} товаров'.format(count_gds_on_site), 1)
+                logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(count_gds_on_site))
                 # # Парсинг товаров
                 # # download_proxy_list()
                 if not self.gui.check_stop:
@@ -93,6 +91,8 @@ class RunThread(QRunnable):
                         logger.debug(
                             'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
                             'сделано {} запросов'.format(count_gds_on_site, Parser.count_requests))
+
+                    Parser.count_requests = 0
                 # Обработка данных товаров
                 if not self.gui.check_stop:
                     model_perm.setFilter(filter_for_goods_with_data)
@@ -128,10 +128,8 @@ class RunThread(QRunnable):
 
                 # запись xml файла в локальный http сервер через ngrok
                 if not self.gui.check_stop:
-                    logger.debug(self.gui.configuration.radioButton_cond_use_ngrok.isChecked())
                     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
                             and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False:
-                        # self.gui.configuration.auto_downl_xml_comboBox.setCurrentText('Да')
                         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
                         ngrok_thread = threading.Thread(target=server_http_ngrok)
                         ngrok_thread.start()

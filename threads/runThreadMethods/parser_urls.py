@@ -91,11 +91,13 @@ class Parser:
             except TimeoutException:
                 self.signals.emit("Превышение ожидание загрузки страницы(30 сек.)", 3)
                 logger.error('Превышение ожидание загрузки страницы(30 сек.)')
+                # Parser.count_requests -= 1
                 driver.close()
                 continue
 
             except Exception as ex:
                 self.signals.emit('{}'.format(ex), 3)
+                # Parser.count_requests -= 1
                 logger.error(ex)
                 driver.close()
                 continue
