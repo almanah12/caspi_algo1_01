@@ -97,7 +97,6 @@ class Parser:
 
             except Exception as ex:
                 self.signals.emit('{}'.format(ex), 3)
-                # Parser.count_requests -= 1
                 logger.error(ex)
                 driver.close()
                 continue
@@ -109,9 +108,8 @@ class Parser:
 
     # Используется только раз. нужен чтобы убрать выбор города при первом загрузке
     def start_page_push_city(self, driver, current_city):
-        driver.implicitly_wait(5)
-        city_button = driver.find_element_by_link_text(current_city)
-        driver.execute_script("arguments[0].click();", city_button)
+        driver.execute_script("arguments[0].click();", WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, current_city))))
 
     # Движение стрелки по вкладкам для разблокировки подвкладок магазинов товара
     # def move_to_mouse(self, driver):

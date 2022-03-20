@@ -46,6 +46,7 @@ def create_xml(gui):
 
         # Если цена разные для всех городов
         else:
+
             cityprices = xml.Element('cityprices')
             offer.append(cityprices)
             # дОБАВЛЯЕТСЯ СУБЭЛЕменты пока условие истинно

@@ -5,7 +5,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import (QDialog, QMainWindow)
 
-from interface.resources_qtdesigner import conf_rc
+from interface.resources_qtdesigner import conf_rs
 from enums import list_stores_ini, list_stores, list_cities
 from helpers import resource_path
 from interface.config_utils.slot_utils import load_slots
@@ -16,13 +16,8 @@ class Configuration(QDialog):
     """
     Configuration window.
     """
-
-    # def __init__(self, parent: QMainWindow, *args, **kwargs):
-    #     super(Configuration, self).__init__(parent, *args, **kwargs)
-    #     self.setupUi(self)
     def __init__(self, parent: QMainWindow):
-        conf_rc.qInitResources()
-
+        conf_rs.qInitResources()
         super(Configuration, self).__init__(parent)  # Initializing object
         self.CONFIG_FILE_NAME = resource_path(r'data_shop/config.ini')
 
@@ -52,11 +47,6 @@ class Configuration(QDialog):
 
         #
         self.set_widgets_values()
-
-        #
-        # self.path_save_xml_lineEdit.setText(resource_path(r'data_files/data_goods/alash.xml'))
-        # height = self.setting_window.value('window_height')
-        # width = self.setting_window.value('window_width')
 
     def set_widgets_values(self):
         # нАСТРОЙКИ ПАРСИНГА

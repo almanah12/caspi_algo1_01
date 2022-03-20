@@ -4,6 +4,7 @@ Main caspi_algo_mix application.
 """
 import os
 import sys
+import uuid
 
 import requests
 
@@ -11,54 +12,49 @@ from PyQt5 import uic
 from PyQt5.QtCore import QThreadPool
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog
+from cryptocode import decrypt
 
 from sqlalchemy import select, inspect, MetaData
 
 from interface.resources_qtdesigner import main_rs
 from db_QSqlDatabase import model_temp, model_perm
-from enums import filter_for_goods_with_data, filter_for_goods_without_data, filter_all_data, _AppName_
+from enums import filter_for_goods_with_data, filter_for_goods_without_data, filter_all_data, _AppName_, curr_uuid
 from slots import initiate_slots
-from helpers import resource_path, get_current_version
+from helpers import resource_path, get_current_version, logger
 from threads import runThread
 from interface.utils import add_to_table_widget, show_and_bring_window_to_front, add_to_data_table_view
 from interface.configuration import Configuration
 from interface.update import Update
+from interface.license import License
+
 
 from db_tables import temporary_table, engine
-from get_UUID import get_windows_uuid
 app = QApplication(sys.argv)
-# mainUi_path = os.path.join(ROOT_DIR, 'UI', 'UI/parsingMain.ui')
-# dt_goods_path = os.path.join(ROOT_DIR, 'data_files', 'data_goods', 'dt_goods.sqlite')
-
-# db = QSqlDatabase("QSQLITE")
-# db.setDatabaseName(r"D:\PyCharm\PyQT\caspi_algo_mix_v1.05\database_files\data_goods\dt_goods.sqlite")
-# db.open()
 
 
 class Interface(QMainWindow):
     """
     """
-    # def __init__(self, *args, **kwargs):
-    #     super(Interface, self).__init__(*args, **kwargs)
-    #     self.setupUi(self)
-
     def __init__(self, parent=None):
         # Беру конец uuid. потому что она постоянна
-
-        # curr_uuid = str(uuid.uuid1()).split('-')[4]
-        # print(curr_uuid)
-        #
-        # # При самом первом запуске в екселе хранится определеное значение, только при этом значении
-        # # я могу зайти в ексел и переписать текщим uuid, для того чтобы на другом компе не запуст.прог
-        # if uuid_excel['rid'][0] == 'asr12zawe':
-        #     uuid_excel.loc[[0], 'rid'] = curr_uuid
-        #     uuid_excel.to_excel(resource_path('data_files/data_goods/rid.xlsx'))
-
         main_rs.qInitResources()
         super(Interface, self).__init__(parent)  # Initializing object
+        logger.info(curr_uuid)
+        self.license = License(parent=self)  # Loading configuration
+        print(self.license.lineEdit_key_app.text())
 
-        # Программа запускается если в екселе тек. uuid
-        # if curr_uuid == uuid_excel['rid'][0]:
+        word_key = decrypt(
+            self.license.lineEdit_key_app.text(), curr_uuid)
+        if not word_key:
+            logger.debug('Not key')
+            licen = License(parent=self)  # Loading update
+            self.show_simulation(licen)
+        #
+        # logger.info(word_key)
+
+        # main_rs.qInitResources()
+        # super(Interface, self).__init__(parent)  # Initializing object
+
         uic.loadUi(resource_path(r'UI/parsingMain.ui'), self)  # Loading the main UI
 
         self.configuration = Configuration(parent=self)  # Loading configuration
@@ -221,6 +217,10 @@ class Interface(QMainWindow):
                 QMessageBox.about(self, 'Запрос', 'Обновление не вышло')
         except Exception as ex:
             QMessageBox.critical(self, 'Ошибка', f'Ошибка {ex}')
+
+    def check_license(self):
+        pass
+
 
 
 def find_data_file(filename):

@@ -4,7 +4,7 @@ from PyQt5 import uic
 from sqlalchemy import MetaData
 
 from db_tables import engine
-from interface.resources_qtdesigner import add_data_to_base
+from interface.resources_qtdesigner import add_data_to_base_rs
 from helpers import resource_path
 from PyQt5.QtSql import QSqlDatabase, QSqlTableModel
 from PyQt5.QtWidgets import (QDataWidgetMapper, QDialog, QMainWindow, QMessageBox)
@@ -25,7 +25,7 @@ db.open()
 
 class Add_Base_Data(QDialog):
     def __init__(self, parent: QMainWindow, current_index):
-        add_data_to_base.qInitResources()
+        add_data_to_base_rs.qInitResources()
         super(Add_Base_Data, self).__init__(parent)  # Initializing object
         uic.loadUi(resource_path(r'UI/add_data_to_base.ui'), self)  # Loading the main UI
 
@@ -79,6 +79,9 @@ class Add_Base_Data(QDialog):
 
         # Ставит в модель таблицу
         self.model.setTable("permanent_table")
+
+
+
 
         # Упорядочивает данные по фильтру
         self.filter_data()

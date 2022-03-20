@@ -6,11 +6,9 @@ import os
 import sys
 
 import requests
-from cryptography.fernet import Fernet
 from loguru import logger
 from http.server import HTTPServer, CGIHTTPRequestHandler
 from pyngrok import ngrok
-from pyngrok.conf import PyngrokConfig
 
 BASE_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.dirname(BASE_DIR)
@@ -55,29 +53,23 @@ def get_current_version() -> str:
 
 
 # Зашифруем файл и записываем его
-def encrypt(filename, key):
-    f = Fernet(key)
-    with open(filename, 'rb') as file:
-        # прочитать все данные файла
-        file_data = file.read()
-    encrypted_data = f.encrypt(file_data)
-
-    # записать зашифрованный файл
-    with open(filename, 'wb') as file:
-        file.write(encrypted_data)
-
-
-# Расшифруем файл и записываем его
-def decrypt(filename, key):
-    f = Fernet(key)
-    with open(filename, 'rb') as file:
-        # читать зашифрованные данные
-        encrypted_data = file.read()
-    # расшифровать данные
-    decrypted_data = f.decrypt(encrypted_data)
-    # записать оригинальный файл
-    with open(filename, 'wb') as file:
-        file.write(decrypted_data)
+# def encrypt(filename, key):
+#     f = Fernet(key)
+#     with open(filename, 'rb') as file:
+#         # прочитать все данные файла
+#         file_data = file.read()
+#     encrypted_data = f.encrypt(file_data)
+#
+#     # записать зашифрованный файл
+#     with open(filename, 'wb') as file:
+#         file.write(encrypted_data)
+#
+#
+# # Расшифруем файл и записываем его
+# def decrypt(encMessage, key):
+#     fernet = Fernet(key)
+#     decMessage = fernet.decrypt(encMessage).decode()
+#     return decMessage
 
 
 def ngrok_public_url():

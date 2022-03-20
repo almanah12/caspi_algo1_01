@@ -24,7 +24,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../media/conf_rs.qrc">
-    <normaloff>:/logo/conf.png</normaloff>:/logo/conf.png</iconset>
+    <normaloff>:/icons/settings2.ico</normaloff>:/icons/settings2.ico</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
@@ -63,8 +63,12 @@
           <bool>false</bool>
          </property>
          <widget class="QWidget" name="tab">
+          <attribute name="icon">
+           <iconset resource="../media/conf_rs.qrc">
+            <normaloff>:/icons/settings_parser.ico</normaloff>:/icons/settings_parser.ico</iconset>
+          </attribute>
           <attribute name="title">
-           <string>Настройки парсинга</string>
+           <string>Парсинг</string>
           </attribute>
           <layout class="QFormLayout" name="formLayout">
            <property name="labelAlignment">
@@ -150,7 +154,7 @@
                </property>
                <property name="icon">
                 <iconset resource="../media/conf_rs.qrc">
-                 <normaloff>:/icons/plus.png</normaloff>:/icons/plus.png</iconset>
+                 <normaloff>:/icons/plus.ico</normaloff>:/icons/plus.ico</iconset>
                </property>
                <property name="flat">
                 <bool>false</bool>
@@ -170,7 +174,7 @@
                </property>
                <property name="icon">
                 <iconset resource="../media/conf_rs.qrc">
-                 <normaloff>:/icons/minus.png</normaloff>:/icons/minus.png</iconset>
+                 <normaloff>:/icons/minus.ico</normaloff>:/icons/minus.ico</iconset>
                </property>
               </widget>
              </item>
@@ -320,7 +324,7 @@
                </property>
                <property name="icon">
                 <iconset resource="../media/conf_rs.qrc">
-                 <normaloff>:/icons/folder.png</normaloff>:/icons/folder.png</iconset>
+                 <normaloff>:/icons/folder.ico</normaloff>:/icons/folder.ico</iconset>
                </property>
                <property name="checkable">
                 <bool>false</bool>
@@ -366,6 +370,10 @@
           </layout>
          </widget>
          <widget class="QWidget" name="tab_2">
+          <attribute name="icon">
+           <iconset resource="../media/conf_rs.qrc">
+            <normaloff>:/icons/availability.ico</normaloff>:/icons/availability.ico</iconset>
+          </attribute>
           <attribute name="title">
            <string>Точки доступа</string>
           </attribute>
@@ -565,6 +573,10 @@
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
+          <attribute name="icon">
+           <iconset resource="../media/conf_rs.qrc">
+            <normaloff>:/icons/price.ico</normaloff>:/icons/price.ico</iconset>
+          </attribute>
           <attribute name="title">
            <string>Наценка</string>
           </attribute>
@@ -775,7 +787,7 @@
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../media/conf_rs.qrc">
+                <iconset>
                  <normaloff>:/icons/folder.png</normaloff>:/icons/folder.png</iconset>
                </property>
               </widget>
@@ -785,8 +797,12 @@
           </layout>
          </widget>
          <widget class="QWidget" name="tab_3">
+          <attribute name="icon">
+           <iconset resource="../media/conf_rs.qrc">
+            <normaloff>:/icons/server.ico</normaloff>:/icons/server.ico</iconset>
+          </attribute>
           <attribute name="title">
-           <string>Файл</string>
+           <string>Сервер</string>
           </attribute>
           <layout class="QFormLayout" name="formLayout_5">
            <property name="labelAlignment">
@@ -814,7 +830,7 @@
                </property>
                <property name="icon">
                 <iconset resource="../media/conf_rs.qrc">
-                 <normaloff>:/icons/folder.png</normaloff>:/icons/folder.png</iconset>
+                 <normaloff>:/icons/folder.ico</normaloff>:/icons/folder.ico</iconset>
                </property>
               </widget>
              </item>
@@ -917,8 +933,12 @@
           </layout>
          </widget>
          <widget class="QWidget" name="tab_5">
+          <attribute name="icon">
+           <iconset resource="../media/conf_rs.qrc">
+            <normaloff>:/icons/settings_app.ico</normaloff>:/icons/settings_app.ico</iconset>
+          </attribute>
           <attribute name="title">
-           <string>Настройки приложения</string>
+           <string>Приложения</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="0" column="0">

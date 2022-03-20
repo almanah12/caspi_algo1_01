@@ -1,5 +1,19 @@
 <RCC>
   <qresource prefix="logo">
-    <file>eagle2.png</file>
+    <file>internet.ico</file>
+    <file>base_data.ico</file>
+    <file>about.ico</file>
+    <file>temp_table.ico</file>
+    <file>perm_table.ico</file>
+    <file>comment.ico</file>
+    <file>time.ico</file>
+    <file>clear.ico</file>
+    <file>update.ico</file>
+    <file>stop.ico</file>
+    <file>run.ico</file>
+    <file>settings2.ico</file>
+    <file>base_data.ico</file>
+    <file>parsing.ico</file>
+    <file>help (1).ico</file>
   </qresource>
 </RCC>

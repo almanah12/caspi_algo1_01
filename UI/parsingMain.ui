@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>578</height>
+    <height>541</height>
    </rect>
   </property>
   <property name="font">
@@ -19,8 +19,8 @@
    <string>AlashPars</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/logo/eagle2.png</normaloff>:/logo/eagle2.png</iconset>
+   <iconset resource="../media/main_rs.qrc">
+    <normaloff>:/logo/parsing.ico</normaloff>:/logo/parsing.ico</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -50,7 +50,7 @@
          <x>0</x>
          <y>0</y>
          <width>980</width>
-         <height>538</height>
+         <height>501</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -84,6 +84,10 @@
            <bool>true</bool>
           </property>
           <widget class="QWidget" name="simulationTab">
+           <attribute name="icon">
+            <iconset resource="../media/main_rs.qrc">
+             <normaloff>:/logo/internet.ico</normaloff>:/logo/internet.ico</iconset>
+           </attribute>
            <attribute name="title">
             <string>Парсинг</string>
            </attribute>
@@ -142,10 +146,18 @@
                <property name="text">
                 <string>Время исполнения </string>
                </property>
+               <property name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/time.ico</normaloff>:/logo/time.ico</iconset>
+               </property>
               </column>
               <column>
                <property name="text">
                 <string>Сообщение</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/comment.ico</normaloff>:/logo/comment.ico</iconset>
                </property>
               </column>
              </widget>
@@ -205,12 +217,19 @@
               <property name="text">
                <string>Очистить</string>
               </property>
+              <property name="icon">
+               <iconset resource="../media/main_rs.qrc">
+                <normaloff>:/logo/clear.ico</normaloff>:/logo/clear.ico</iconset>
+              </property>
              </widget>
             </item>
             <item row="2" column="2">
              <widget class="QLabel" name="simulationDownloadProgress">
               <property name="text">
                <string>Процесс обработки</string>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -242,6 +261,10 @@
                  <property name="text">
                   <string>Настройки</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="../media/main_rs.qrc">
+                   <normaloff>:/logo/settings2.ico</normaloff>:/logo/settings2.ico</iconset>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -259,6 +282,10 @@
                  </property>
                  <property name="text">
                   <string>Запуск</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../media/main_rs.qrc">
+                   <normaloff>:/logo/run.ico</normaloff>:/logo/run.ico</iconset>
                  </property>
                 </widget>
                </item>
@@ -281,6 +308,10 @@
                  <property name="text">
                   <string>Прервать</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="../media/main_rs.qrc">
+                   <normaloff>:/logo/stop.ico</normaloff>:/logo/stop.ico</iconset>
+                 </property>
                  <property name="checkable">
                   <bool>false</bool>
                  </property>
@@ -292,6 +323,10 @@
            </layout>
           </widget>
           <widget class="QWidget" name="newsTab">
+           <attribute name="icon">
+            <iconset resource="../media/main_rs.qrc">
+             <normaloff>:/logo/base_data.ico</normaloff>:/logo/base_data.ico</iconset>
+           </attribute>
            <attribute name="title">
             <string>База</string>
            </attribute>
@@ -302,11 +337,49 @@
                <number>0</number>
               </property>
               <widget class="QWidget" name="tab_7">
+               <attribute name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/perm_table.ico</normaloff>:/logo/perm_table.ico</iconset>
+               </attribute>
                <attribute name="title">
                 <string>Постоянная таблица</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout">
+                <item row="0" column="1">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>Фильтр</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" colspan="8">
+                 <widget class="QTableView" name="permanent_tableView">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="3">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="7">
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>679</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="2">
                  <widget class="QComboBox" name="filter_comboBox">
                   <property name="enabled">
                    <bool>true</bool>
@@ -328,36 +401,13 @@
                   </item>
                  </widget>
                 </item>
-                <item row="0" column="5">
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>679</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>Фильтр:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="6">
-                 <widget class="QTableView" name="permanent_tableView">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
               <widget class="QWidget" name="tab_8">
+               <attribute name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/temp_table.ico</normaloff>:/logo/temp_table.ico</iconset>
+               </attribute>
                <attribute name="title">
                 <string>Временная таблица</string>
                </attribute>
@@ -393,6 +443,10 @@
                 <property name="text">
                  <string>Обновить</string>
                 </property>
+                <property name="icon">
+                 <iconset resource="../media/main_rs.qrc">
+                  <normaloff>:/logo/update.ico</normaloff>:/logo/update.ico</iconset>
+                </property>
                </widget>
               </item>
              </layout>
@@ -400,6 +454,10 @@
            </layout>
           </widget>
           <widget class="QWidget" name="tab">
+           <attribute name="icon">
+            <iconset resource="../media/main_rs.qrc">
+             <normaloff>:/logo/help (1).ico</normaloff>:/logo/help (1).ico</iconset>
+           </attribute>
            <attribute name="title">
             <string>Помощь</string>
            </attribute>
@@ -418,12 +476,20 @@
                <property name="text">
                 <string>Обновление</string>
                </property>
+               <property name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/update.ico</normaloff>:/logo/update.ico</iconset>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_about_app">
                <property name="text">
                 <string>О программе</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/about.ico</normaloff>:/logo/about.ico</iconset>
                </property>
               </widget>
              </item>

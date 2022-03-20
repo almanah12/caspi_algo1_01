@@ -1,10 +1,14 @@
 <RCC>
   <qresource prefix="icons">
-    <file>folder.png</file>
-    <file>minus.png</file>
-    <file>plus.png</file>
+    <file>settings2.ico</file>
+    <file>minus.ico</file>
+    <file>plus.ico</file>
+    <file>folder.ico</file>
+    <file>settings_app.ico</file>
+    <file>server.ico</file>
+    <file>price.ico</file>
+    <file>availability.ico</file>
+    <file>settings_parser.ico</file>
   </qresource>
-  <qresource prefix="logo">
-    <file>conf.png</file>
-  </qresource>
+  <qresource prefix="logo"/>
 </RCC>

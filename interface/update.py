@@ -12,6 +12,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import (QDialog, QMainWindow, QApplication)
 from py7zr import py7zr
 
+from interface.resources_qtdesigner import main_rs
 from helpers import resource_path, logger
 
 app = QApplication(sys.argv)
@@ -26,7 +27,7 @@ class Update(QDialog):
     #     super(Configuration, self).__init__(parent, *args, **kwargs)
     #     self.setupUi(self)
     def __init__(self, parent: QMainWindow):
-
+        main_rs.qInitResources()
         super(Update, self).__init__(parent)  # Initializing object
 
         uic.loadUi(resource_path(r'UI/update.ui'), self)  # Loading the main UI
@@ -35,7 +36,12 @@ class Update(QDialog):
         self.pushButton_install_app.clicked.connect(self.install_update)
 
     def install_update(self):
-        win32api.ShellExecute(0, 'open', resource_path(r'data_files/data_update_app/alashPars.exe'), None, None, 10)
+        try:
+            win32api.ShellExecute(0, 'open', resource_path(r'data_files/data_update_app/alashPars.exe'), None, None, 10)
+        except Exception as ex:
+            logger.error(ex)
+            self.label_update_text.setText(f'{ex}')
+
         self.destroy()
         self.parent.destroy()
         sys.exit(app.exec_())
@@ -67,12 +73,3 @@ class Update(QDialog):
             logger.error(ex)
             self.label_update_text.setText(f'{ex}')
 
-        # with gdown.download(url, output) as r:
-        #     print('count ', int(r.headers.get('Content-Length')))
-        #     self.progressBar_download_app['maximum'] = int(r.headers.get('Content-Length'))
-        #     r.raise_for_status()
-        #     with open(resource_path(r'data_files/test.exe'), 'wb') as f:
-        #         for chunk in r.iter_content(chunk_size=4096):
-        #             if chunk:  # filter out keep-alive new chunks
-        #                 f.write(chunk)
-        #                 self.progressBar_download_app.setValue(chunk)

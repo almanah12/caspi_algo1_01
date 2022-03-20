@@ -14,8 +14,8 @@
    <string>БД+</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../media/add_data_to_base.qrc">
-    <normaloff>:/logo/add_database.png</normaloff>:/logo/add_database.png</iconset>
+   <iconset resource="../media/add_data_to_base_rs.qrc">
+    <normaloff>:/icon/add_data.ico</normaloff>:/icon/add_data.ico</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -197,8 +197,8 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../../media/add_data_to_base.qrc">
-                <normaloff>:/icons/plus.png</normaloff>:/icons/plus.png</iconset>
+               <iconset resource="../media/add_data_to_base_rs.qrc">
+                <normaloff>:/icon/plus.ico</normaloff>:/icon/plus.ico</iconset>
               </property>
              </widget>
             </item>
@@ -217,8 +217,8 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../../media/add_data_to_base.qrc">
-                <normaloff>:/icons/minus.png</normaloff>:/icons/minus.png</iconset>
+               <iconset resource="../media/add_data_to_base_rs.qrc">
+                <normaloff>:/icon/minus.ico</normaloff>:/icon/minus.ico</iconset>
               </property>
              </widget>
             </item>
@@ -273,9 +273,13 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="sity_1">
+          <attribute name="icon">
+           <iconset resource="../media/add_data_to_base_rs.qrc">
+            <normaloff>:/icon/city.ico</normaloff>:/icon/city.ico</iconset>
+          </attribute>
           <attribute name="title">
            <string>Город 1</string>
           </attribute>
@@ -359,6 +363,10 @@
           </layout>
          </widget>
          <widget class="QWidget" name="sity_2">
+          <attribute name="icon">
+           <iconset resource="../media/add_data_to_base_rs.qrc">
+            <normaloff>:/icon/city.ico</normaloff>:/icon/city.ico</iconset>
+          </attribute>
           <attribute name="title">
            <string>Город 2</string>
           </attribute>
@@ -429,6 +437,10 @@
           </layout>
          </widget>
          <widget class="QWidget" name="sity_3">
+          <attribute name="icon">
+           <iconset resource="../media/add_data_to_base_rs.qrc">
+            <normaloff>:/icon/city.ico</normaloff>:/icon/city.ico</iconset>
+          </attribute>
           <attribute name="title">
            <string>Город 3</string>
           </attribute>
@@ -499,6 +511,10 @@
           </layout>
          </widget>
          <widget class="QWidget" name="sity_4">
+          <attribute name="icon">
+           <iconset resource="../media/add_data_to_base_rs.qrc">
+            <normaloff>:/icon/city.ico</normaloff>:/icon/city.ico</iconset>
+          </attribute>
           <attribute name="title">
            <string>Город 4</string>
           </attribute>
@@ -577,7 +593,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../media/add_data_to_base.qrc"/>
+  <include location="../media/add_data_to_base_rs.qrc"/>
  </resources>
  <connections/>
 </ui>

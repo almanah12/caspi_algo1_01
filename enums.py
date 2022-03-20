@@ -1,6 +1,8 @@
 """
 Enum classes and constants.
 """
+import uuid
+
 import pandas
 
 from helpers import resource_path
@@ -51,10 +53,10 @@ filter_for_goods_with_data = "Себестоимость LIKE '%%' AND Себе�
                 "Город_1_мин_ц LIKE '%%' AND Город_1_мин_ц is not '' AND " \
                 "Город_1_макс_ц LIKE '%%' AND Город_1_макс_ц is not ''"
 
-uuid_excel = pandas.read_excel(resource_path(r'data_files/data_goods/rid.xlsx'))
-uuid_key =uuid_excel['rid'].tolist()
+curr_uuid = str(uuid.uuid1()).split('-')[4]
 
-crypt_key = b'M1IfMy3imodL37mYjkfjXo6a6OHyi5sH2gRoe3TZsTI='
-
+# telegram
+token = "5186311540:AAHhIODRjVjaUhjmQVzSQwalUk3JsOHmB4E"
+channel_id = "834178298"
 
 

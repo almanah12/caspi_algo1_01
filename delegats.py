@@ -16,7 +16,7 @@ class ButtonEditorDelegate(QStyledItemDelegate):
         super().__init__(parent)
         self.parent = parent
         self._pressed = None
-        self._buttonTxt = QIcon(resource_path(r"icons_delegate/pencil.png"))
+        self._buttonTxt = QIcon(resource_path(r"icons_delegate/edit.png"))
 
     def paint(self, painter, option, index):
         painter.save()
@@ -70,7 +70,7 @@ class ButtonDeleteDelegate(QStyledItemDelegate):
         super().__init__(parent)
         self.parent = parent
         self._pressed = None
-        self._buttonTxt = QIcon(resource_path(r"icons_delegate/table-delete-row.png"))
+        self._buttonTxt = QIcon(resource_path(r"icons_delegate/delete.png"))
 
     def paint(self, painter, option, index):
         painter.save()

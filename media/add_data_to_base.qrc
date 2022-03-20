@@ -1,9 +1,1 @@
-<RCC>
-  <qresource prefix="logo">
-    <file>add_database.png</file>
-  </qresource>
-  <qresource prefix="icons">
-    <file>minus.png</file>
-    <file>plus.png</file>
-  </qresource>
-</RCC>
+<RCC/>

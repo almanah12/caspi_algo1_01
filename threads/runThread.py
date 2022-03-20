@@ -12,7 +12,7 @@ from db_tables import temporary_table, engine
 from enums import filter_for_goods_with_data, filter_all_data
 from helpers import resource_path, logger, server_http_ngrok, download_proxy_list
 from threads.runThreadMethods.create_xml import create_xml
-from threads.runThreadMethods.gets_dt_caspi_client import gets_data
+from threads.runThreadMethods.gets_dt_caspi_client import GetDataKaspiSeller
 from threads.runThreadMethods.parser_urls import Parser
 from threads.runThreadMethods.processing_data import ProcessingData
 from threads.runThreadMethods.auto_loading_xml import set_http_adress
@@ -54,16 +54,18 @@ class RunThread(QRunnable):
                 if self.gui.check_stop:
                     break
                 self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
+                self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" checkingggggggggg', 4)
+
                 logger.info('Сбор данных с "Кабинета продавца"')
-                count_all_gds = gets_data(self.gui, self.signals.activity_monitor)
+
+                gets_data = GetDataKaspiSeller(self.gui, self.signals.activity_monitor)
+                gets_data.gets_data()
                 self.signals.activity_table.emit()
                 self.signals.restore.emit(True, 0)
-                count_gds_on_site = int(count_all_gds.split(':')[0])
-                count_other_city = int(count_all_gds.split(':')[1])
-                count_all_gds = count_gds_on_site + count_other_city
                 self.signals.activity_monitor.emit(
-                    'С "Каб.продавца" взята данных на {} товаров'.format(count_gds_on_site), 1)
-                logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(count_gds_on_site))
+                    'С "Каб.продавца" взята данных на {} товаров'.format(GetDataKaspiSeller.count_gds), 1)
+                logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(GetDataKaspiSeller.count_gds))
+                logger.info(GetDataKaspiSeller.count_other_city)
                 # # Парсинг товаров
                 # # download_proxy_list()
                 if not self.gui.check_stop:
@@ -81,18 +83,17 @@ class RunThread(QRunnable):
                     if self.gui.configuration.same_price_citiesradioButton.isChecked():
                         self.signals.activity_monitor.emit(
                             'С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'.format(
-                                count_gds_on_site, Parser.count_requests), 1)
+                                GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
                         logger.debug('С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'
-                                     .format(count_gds_on_site, Parser.count_requests))
+                                     .format(GetDataKaspiSeller.count_gds, Parser.count_requests))
                     else:
                         self.signals.activity_monitor.emit(
                             'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
-                            'сделано {} запросов'.format(count_gds_on_site, Parser.count_requests), 1)
+                            'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
                         logger.debug(
                             'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
-                            'сделано {} запросов'.format(count_gds_on_site, Parser.count_requests))
+                            'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests))
 
-                    Parser.count_requests = 0
                 # Обработка данных товаров
                 if not self.gui.check_stop:
                     model_perm.setFilter(filter_for_goods_with_data)
@@ -127,15 +128,21 @@ class RunThread(QRunnable):
                 #                                               self.gui.configuration.name_folder_lineEdit.text())
 
                 # запись xml файла в локальный http сервер через ngrok
-                if not self.gui.check_stop:
-                    if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
-                            and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False:
-                        self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
-                        ngrok_thread = threading.Thread(target=server_http_ngrok)
-                        ngrok_thread.start()
-                        logger.info('Поставлена автоматическая загрузка xml файла http-сервер')
-                        auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
-                        self.gui.configuration.radioButton_cond_use_ngrok.setChecked(True)
+                # if not self.gui.check_stop:
+                #     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
+                #             and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False:
+                #         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
+                #         ngrok_thread = threading.Thread(target=server_http_ngrok)
+                #         ngrok_thread.start()
+                #         logger.info('Поставлена автоматическая загрузка xml файла http-сервер')
+                #         auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
+                #         self.gui.configuration.radioButton_cond_use_ngrok.setChecked(True)
+
+                # Обнуления переменых
+                GetDataKaspiSeller.count_gds = 0
+                GetDataKaspiSeller.count_other_city = 0
+                Parser.count_requests = 0
+
                 # Запуск программы через х время
                 if not self.gui.check_stop:
                     from_time_sec = self.gui.configuration.interval_from_spinBox.value() * 60
