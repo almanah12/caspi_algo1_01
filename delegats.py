@@ -43,8 +43,10 @@ class ButtonEditorDelegate(QStyledItemDelegate):
         elif event.type() == QtCore.QEvent.MouseButtonRelease:
             if self._pressed == (index.row(), index.column()):
                 self.buttonClicked.emit(*self._pressed)
-                self.add_base_data = Add_Base_Data(self.parent, index.row())
-                self.add_base_data.show()
+                self.add_base_data = Add_Base_Data(self.parent)
+                self.add_base_data.init_delegate(index.row())
+                self.add_base_data.exec_()
+
                 self.add_base_data.activateWindow()
                 self.add_base_data.raise_()
 

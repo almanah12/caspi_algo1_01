@@ -46,6 +46,7 @@ def create_simulation_slots(gui):
     # gui.pushButton_update_app.clicked.connect(gui.check_updates)
 
     gui.search_table_articul_lineEdit.textChanged.connect(gui.search_articul)
+
     gui.pushButton_update.clicked.connect(gui.update_table)
 
     gui.filter_comboBox.currentTextChanged.connect(gui.filter_data)

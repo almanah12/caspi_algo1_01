@@ -12,25 +12,26 @@ from enums import list_stores, list_cities, filter_for_goods_with_data, filter_f
     list_stores_ini
 from interface.config_utils.user_config_utils import search_line_comboBox, add_comboBox, delete_comboBox, \
     get_list_comboBox
+from db_QSqlDatabase import db
+#
+# if not os.path.exists(resource_path('data_shop')):
+#     os.mkdir(resource_path('data_shop'))
 
-if not os.path.exists(resource_path('data_shop')):
-    os.mkdir(resource_path('data_shop'))
-
-meta = MetaData()
-meta.create_all(engine)
-db = QSqlDatabase("QSQLITE")
-db.setDatabaseName(resource_path(r"data_shop/dt_goods.sqlite"))
-db.open()
+# meta = MetaData()
+# meta.create_all(engine)
+# db = QSqlDatabase("QSQLITE")
+# db.setDatabaseName(resource_path(r"data_shop/dt_goods.sqlite"))
+# db.open()
 
 
 class Add_Base_Data(QDialog):
-    def __init__(self, parent: QMainWindow, current_index):
+    def __init__(self, parent: QMainWindow):
         add_data_to_base_rs.qInitResources()
         super(Add_Base_Data, self).__init__(parent)  # Initializing object
         uic.loadUi(resource_path(r'UI/add_data_to_base.ui'), self)  # Loading the main UI
 
         self.parent = parent
-        self.current_index = current_index
+        # self.current_index = current_index
 
         self.model = QSqlTableModel(db=db)
 
@@ -80,17 +81,18 @@ class Add_Base_Data(QDialog):
         # Ставит в модель таблицу
         self.model.setTable("permanent_table")
 
-
-
-
         # Упорядочивает данные по фильтру
         self.filter_data()
+        self.search_articul(self.parent.search_table_articul_lineEdit.text())
 
         # Заполняет модель данными
         self.model.select()
 
         # Выводить данные с текущим индексом
-        self.mapper.setCurrentIndex(self.current_index)
+        # self.mapper.setCurrentIndex(self.current_index)
+
+    def init_delegate(self, current_index):
+        self.mapper.setCurrentIndex(current_index)
 
     def filter_data(self):
         """
@@ -103,6 +105,10 @@ class Add_Base_Data(QDialog):
         else:
             filter_str = 'Артикул LIKE "%%"'
             self.model.setFilter(filter_str)
+
+    def search_articul(self, s):
+        filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
+        self.model.setFilter(filter_str)
 
     def calculate_min_max_price(self, widget_lineEdit, widget_spinBox):
         """

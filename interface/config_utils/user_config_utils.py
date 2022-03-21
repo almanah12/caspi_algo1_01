@@ -81,6 +81,7 @@ def list_proxy_folder1(gui, typeFile, widget):
     else:
         QtWidgets.QMessageBox.information(gui, 'Message', 'Вы ничего не выбрали.')
 
+
 def search_line_comboBox(word_list, widget, i=True):
     """ Autocompletion of sender and subject """
     word_set = set(word_list)

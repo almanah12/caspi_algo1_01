@@ -16,6 +16,7 @@ from cryptocode import decrypt
 
 from sqlalchemy import select, inspect, MetaData
 
+from interface.add_base_data import Add_Base_Data
 from interface.resources_qtdesigner import main_rs
 from db_QSqlDatabase import model_temp, model_perm
 from enums import filter_for_goods_with_data, filter_for_goods_without_data, filter_all_data, _AppName_, curr_uuid
@@ -58,6 +59,7 @@ class Interface(QMainWindow):
         uic.loadUi(resource_path(r'UI/parsingMain.ui'), self)  # Loading the main UI
 
         self.configuration = Configuration(parent=self)  # Loading configuration
+        self.add_data_base = Add_Base_Data(parent=self)  # Loading configuration
 
         # Initiating threading pool
         self.threadCount = self.configuration.number_thread_spinBox.value()
@@ -217,10 +219,6 @@ class Interface(QMainWindow):
                 QMessageBox.about(self, 'Запрос', 'Обновление не вышло')
         except Exception as ex:
             QMessageBox.critical(self, 'Ошибка', f'Ошибка {ex}')
-
-    def check_license(self):
-        pass
-
 
 
 def find_data_file(filename):

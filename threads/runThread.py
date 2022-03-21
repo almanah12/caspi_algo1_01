@@ -54,7 +54,7 @@ class RunThread(QRunnable):
                 if self.gui.check_stop:
                     break
                 self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
-                self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" checkingggggggggg', 4)
+                self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" chec ngr62', 4)
 
                 logger.info('Сбор данных с "Кабинета продавца"')
 
@@ -66,77 +66,77 @@ class RunThread(QRunnable):
                     'С "Каб.продавца" взята данных на {} товаров'.format(GetDataKaspiSeller.count_gds), 1)
                 logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(GetDataKaspiSeller.count_gds))
                 logger.info(GetDataKaspiSeller.count_other_city)
-                # # Парсинг товаров
-                # # download_proxy_list()
-                if not self.gui.check_stop:
-                    links = []
-                    s = select(temporary_table)
-                    conn = engine.connect()
-                    res = conn.execute(s)
-                    for row in res:
-                        links.append(row.Ссылка)
-                    logger.debug(links)
-                    self.signals.activity_monitor.emit("Сбор данных с сайта товара", 1)
-                    logger.info('Сбор данных с сайта товара')
-                    parser_site = Parser(self.gui, links, self.signals.activity_monitor)
-                    parser_site.parse()
-                    if self.gui.configuration.same_price_citiesradioButton.isChecked():
-                        self.signals.activity_monitor.emit(
-                            'С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'.format(
-                                GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
-                        logger.debug('С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'
-                                     .format(GetDataKaspiSeller.count_gds, Parser.count_requests))
-                    else:
-                        self.signals.activity_monitor.emit(
-                            'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
-                            'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
-                        logger.debug(
-                            'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
-                            'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests))
-
-                # Обработка данных товаров
-                if not self.gui.check_stop:
-                    model_perm.setFilter(filter_for_goods_with_data)
-                    count_goods_with_data = model_perm.rowCount()
-
-                    model_perm.setFilter(filter_all_data)
-                    count_goods_all_data = model_perm.rowCount()
-
-                    if count_goods_all_data == count_goods_with_data:
-                        self.signals.activity_monitor.emit("Запуск обработки данных", 1)
-                        logger.info('Запуск обработки данных')
-                        proc_dt = ProcessingData(self.gui, self.signals.activity_monitor)
-                        proc_dt.processing_dt()
-                    else:
-                        self.signals.activity_monitor.emit("Данные товаров не заполнено, заполните таблицу", 2)
-                        logger.error('Данные товаров не заполнено, заполните таблицу')
-                        break
-
-                # Собрать данные в xml файл
-                if not self.gui.check_stop:
-                    self.signals.activity_monitor.emit('Запуск создание "xml" файла ', 1)
-                    logger.info('Запуск создание "xml" файла ')
-                    create_xml(self.gui)
-
-                self.signals.activity_monitor.emit('Запуск записи xml файла в сервер', 1)
-                logger.info('Запуск записи xml файла в сервер')
+                # # # Парсинг товаров
+                # # # download_proxy_list()
+                # if not self.gui.check_stop:
+                #     links = []
+                #     s = select(temporary_table)
+                #     conn = engine.connect()
+                #     res = conn.execute(s)
+                #     for row in res:
+                #         links.append(row.Ссылка)
+                #     logger.debug(links)
+                #     self.signals.activity_monitor.emit("Сбор данных с сайта товара", 1)
+                #     logger.info('Сбор данных с сайта товара')
+                #     parser_site = Parser(self.gui, links, self.signals.activity_monitor)
+                #     parser_site.parse()
+                #     if self.gui.configuration.same_price_citiesradioButton.isChecked():
+                #         self.signals.activity_monitor.emit(
+                #             'С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'.format(
+                #                 GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
+                #         logger.debug('С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'
+                #                      .format(GetDataKaspiSeller.count_gds, Parser.count_requests))
+                #     else:
+                #         self.signals.activity_monitor.emit(
+                #             'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
+                #             'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
+                #         logger.debug(
+                #             'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
+                #             'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests))
+                #
+                # # Обработка данных товаров
+                # if not self.gui.check_stop:
+                #     model_perm.setFilter(filter_for_goods_with_data)
+                #     count_goods_with_data = model_perm.rowCount()
+                #
+                #     model_perm.setFilter(filter_all_data)
+                #     count_goods_all_data = model_perm.rowCount()
+                #
+                #     if count_goods_all_data == count_goods_with_data:
+                #         self.signals.activity_monitor.emit("Запуск обработки данных", 1)
+                #         logger.info('Запуск обработки данных')
+                #         proc_dt = ProcessingData(self.gui, self.signals.activity_monitor)
+                #         proc_dt.processing_dt()
+                #     else:
+                #         self.signals.activity_monitor.emit("Данные товаров не заполнено, заполните таблицу", 2)
+                #         logger.error('Данные товаров не заполнено, заполните таблицу')
+                #         break
+                #
+                # # Собрать данные в xml файл
+                # if not self.gui.check_stop:
+                #     self.signals.activity_monitor.emit('Запуск создание "xml" файла ', 1)
+                #     logger.info('Запуск создание "xml" файла ')
+                #     create_xml(self.gui)
+                #
+                # self.signals.activity_monitor.emit('Запуск записи xml файла в сервер', 1)
+                # logger.info('Запуск записи xml файла в сервер')
 
                 # запись xml файла в сервер google cloud storage
                 # if not self.gui.check_stop:
                 #     run_autodownload_xml.upload_to_bucket_xml(self.gui.configuration.name_xml_file_lineEdit.text(),
                 #                                               resource_path(r"data_shop/alash.xml"),
                 #                                               self.gui.configuration.name_folder_lineEdit.text())
-
-                # запись xml файла в локальный http сервер через ngrok
-                # if not self.gui.check_stop:
-                #     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
-                #             and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False:
-                #         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
-                #         ngrok_thread = threading.Thread(target=server_http_ngrok)
-                #         ngrok_thread.start()
-                #         logger.info('Поставлена автоматическая загрузка xml файла http-сервер')
-                #         auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
-                #         self.gui.configuration.radioButton_cond_use_ngrok.setChecked(True)
+                #
+                # # запись xml файла в локальный http сервер через ngrok
+                if not self.gui.check_stop:
+                    if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
+                            and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False:
+                        self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
+                        ngrok_thread = threading.Thread(target=server_http_ngrok)
+                        ngrok_thread.start()
+                        logger.info('Поставлена автоматическая загрузка xml файла http-сервер')
+                        auto_loading_xml.set_http_adress(self.gui, self.signals.activity_monitor)
+                        self.gui.configuration.radioButton_cond_use_ngrok.setChecked(True)
 
                 # Обнуления переменых
                 GetDataKaspiSeller.count_gds = 0
