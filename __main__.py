@@ -59,7 +59,6 @@ class Interface(QMainWindow):
         uic.loadUi(resource_path(r'UI/parsingMain.ui'), self)  # Loading the main UI
 
         self.configuration = Configuration(parent=self)  # Loading configuration
-        self.add_data_base = Add_Base_Data(parent=self)  # Loading configuration
 
         # Initiating threading pool
         self.threadCount = self.configuration.number_thread_spinBox.value()
@@ -111,8 +110,7 @@ class Interface(QMainWindow):
         Opens simulation settings in the configuration window.
         """
         show_and_bring_window_to_front(qdialog)
-        # self.configuration.configurationTabWidget.setCurrentIndex()
-        # self.configuration.simulationConfigurationTabWidget.setCurrentIndex(0)
+
 
     def end_bot_thread(self):
         """

@@ -88,10 +88,8 @@ class Add_Base_Data(QDialog):
         # Заполняет модель данными
         self.model.select()
 
-        # Выводить данные с текущим индексом
-        # self.mapper.setCurrentIndex(self.current_index)
-
     def init_delegate(self, current_index):
+        # Выводить данные с текущим индексом
         self.mapper.setCurrentIndex(current_index)
 
     def filter_data(self):
