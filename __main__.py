@@ -44,6 +44,7 @@ class Interface(QMainWindow):
         super(Interface, self).__init__(parent)  # Initializing object
         logger.info(curr_uuid)
         logger.info('curr_uuid')
+        logger.info('curr_uuid123')
 
         self.license = License(parent=self)  # Loading configuration
         print(self.license.lineEdit_key_app.text())
