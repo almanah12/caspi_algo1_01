@@ -45,7 +45,7 @@ class Interface(QMainWindow):
 
         self.license = License(parent=self)  # Loading configuration
         print(self.license.lineEdit_key_app.text())
-        logger.info('curr_uuid123')
+        logger.info('qwerty')
 
 
         # ntpCllient = ntplib.NTPClient()
