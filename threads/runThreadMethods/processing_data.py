@@ -154,14 +154,15 @@ class ProcessingData:
                     try:
                         price_min = self.curr_row['Город_' + str(self.city_number) + '_мин_ц']
                         new_price = price_min
-                        competitor = 'Начальная цена выше мин.ц'
+                        check_price_min = price_min - 1
+                        competitor = 'Текущ.цена в не диапазоне мин. и макс.ц'
                         self.write_data(new_price, competitor)
                         self.activ_moni.emit("Test", 1)
                         break
                     except:
                         price_min1 = self.curr_row['Город_1_мин_ц']
                         new_price = price_min1
-                        competitor = 'Начальная цена выше мин.ц'
+                        competitor = 'Текущ.цена в не диапазоне мин. и макс.ц'
                         self.write_data(new_price, competitor)
                         self.activ_moni.emit("Testerrror", 1)
                         break
@@ -181,7 +182,7 @@ class ProcessingData:
         """
        try - Выполняется условие когда есть мин и макс цены для всех городов.
        exsept - Выполняется условие когда поставлен галочка разные цены для всех городов, и если в остальных
-       городах нету мин и макс цены. Втаком случае возникает ошибка и наш exsept берет за мин и макс цены из
+       городах нету мин и макс цены. В таком случае возникает ошибка и наш exsept берет за мин и макс цены из
        первого города.
        k - номер магаза который обрабатывается:
        num_c - номер города:
