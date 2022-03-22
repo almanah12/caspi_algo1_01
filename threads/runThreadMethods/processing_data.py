@@ -15,6 +15,7 @@ class ProcessingData:
     limiter: object
 
     def __init__(self, gui, activ_moni):
+        logger(info)
         self.gui = gui
         self.activ_moni = activ_moni
         self.name_our_store = self.gui.configuration.name_store_comboBox.currentText()
