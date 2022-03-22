@@ -5,7 +5,9 @@ Main caspi_algo_mix application.
 import os
 import sys
 import uuid
+from datetime import datetime
 
+import ntplib
 import requests
 
 from PyQt5 import uic
@@ -41,8 +43,20 @@ class Interface(QMainWindow):
         main_rs.qInitResources()
         super(Interface, self).__init__(parent)  # Initializing object
         logger.info(curr_uuid)
+        logger.info('curr_uuid')
+
         self.license = License(parent=self)  # Loading configuration
         print(self.license.lineEdit_key_app.text())
+
+        ntpCllient = ntplib.NTPClient()
+        res = ntpCllient.request('pool.ntp.org')
+
+        date_demo_work = datetime(2022, 3, 22)
+        logger.info(date_demo_work.timestamp() - res.tx_time)
+
+        if date_demo_work.timestamp() - res.tx_time < 0:
+            QMessageBox.information(self, 'Демо-версия', 'Срок демо-версии истек')
+            sys.exit()
 
         word_key = decrypt(
             self.license.lineEdit_key_app.text(), curr_uuid)

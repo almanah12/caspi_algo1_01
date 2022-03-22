@@ -54,7 +54,7 @@ class RunThread(QRunnable):
                 if self.gui.check_stop:
                     break
                 self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
-                self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" chec ngr62', 4)
+                self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" check demo-version', 4)
 
                 logger.info('Сбор данных с "Кабинета продавца"')
 
