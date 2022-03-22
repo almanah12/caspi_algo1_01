@@ -26,7 +26,6 @@ from db_QSqlDatabase import db
 
 class Add_Base_Data(QDialog):
     def __init__(self, parent: QMainWindow):
-        logger.info('curr_uuid')
 
         add_data_to_base_rs.qInitResources()
         super(Add_Base_Data, self).__init__(parent)  # Initializing object

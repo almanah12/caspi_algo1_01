@@ -47,8 +47,6 @@ class RunThread(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        logger.info('curr_uuid')
-
 
         start_time = time.time()
         try:
