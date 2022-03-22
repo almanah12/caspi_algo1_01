@@ -226,50 +226,50 @@ class GetDataKaspiSeller:
         # Переменая которая нужна для записи в данных в временную табл.
         if count_cities == 1:
             sql_insert_temporary_table = temporary_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_цена=price_goods,
+                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
                 Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0])
             # Переменая которая нужна для записи в данных в постоянную табл.
             sql_insert_permanent_table = permanent_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Текущая_цена=price_goods, Город_1=sort_list_cities[0])
+                Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0])
 
             sql_insert_permanent_table_current_price = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                .values(Текущая_цена=price_goods, Город_1=sort_list_cities[0])
+                .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0])
 
         if count_cities == 2:
             sql_insert_temporary_table = temporary_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_цена=price_goods,
+                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
                 Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
                 Город_2=sort_list_cities[1])
             # Переменая которая нужна для записи в данных в постоянную табл.
             sql_insert_permanent_table = permanent_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Текущая_цена=price_goods, Город_1=sort_list_cities[0],
+                Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
                 Город_2=sort_list_cities[1])
             sql_insert_permanent_table_current_price = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                .values(Текущая_цена=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
+                .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
 
         if count_cities == 3:
             sql_insert_temporary_table = temporary_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_цена=price_goods,
+                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
                 Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
                 Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
             # Переменая которая нужна для записи в данных в постоянную табл.
             sql_insert_permanent_table = permanent_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Текущая_цена=price_goods, Город_1=sort_list_cities[0],
+                Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
                 Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
             sql_insert_permanent_table_current_price = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                .values(Текущая_цена=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
+                .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
 
         if count_cities == 4:
             sql_insert_temporary_table = temporary_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_цена=price_goods,
+                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
                 Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
                 Город_2=sort_list_cities[1], Город_3=sort_list_cities[2], Город_4=sort_list_cities[3])
             # Переменая которая нужна для записи в данных в постоянную табл.
             sql_insert_permanent_table = permanent_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Текущая_цена=price_goods, Город_1=sort_list_cities[0],
+                Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
                 Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
             sql_insert_permanent_table_current_price = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                .values(Текущая_цена=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2],
+                .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2],
                         Город_4=sort_list_cities[3])
 
         condition_to_perm_table = session.query(permanent_table).filter(

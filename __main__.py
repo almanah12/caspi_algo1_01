@@ -44,9 +44,6 @@ class Interface(QMainWindow):
         super(Interface, self).__init__(parent)  # Initializing object
 
         self.license = License(parent=self)  # Loading configuration
-        print(self.license.lineEdit_key_app.text())
-        logger.info('curr_uuid123')
-
 
         # ntpCllient = ntplib.NTPClient()
         # res = ntpCllient.request('pool.ntp.org')

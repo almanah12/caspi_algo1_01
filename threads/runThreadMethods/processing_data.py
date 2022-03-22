@@ -38,8 +38,15 @@ class ProcessingData:
             self.city_number = i.split('_')[2].split('.')[0]
             self.curr_row = session.query(permanent_table).filter(
                 permanent_table.c.Артикул == self.curr_artikul).one()
-            self.limiter = self.curr_row['ЕстьЛиОгранич']
+            self.limiter = self.curr_row['Огранич_?']
 
+            # Для опредления положения магаза и занесения его в базу
+            for k in range(len(getattr(self, 'name_shops'))):
+                if self.name_shops[k] == self.name_our_store:
+                    session.query(permanent_table).filter(permanent_table.c.Артикул == self.curr_artikul).update(
+                        {'Тек_#': k+1}, synchronize_session=False)
+                    session.commit()
+                    break
             #
             if self.name_our_store in self.name_shops:
                 # Одна цена для всех городов
@@ -71,7 +78,7 @@ class ProcessingData:
             # Если нету нашего магаза в списке
             else:
                 self.activ_moni.emit("Наш магазин отсуствует у данного товара " + str(self.curr_artikul), 3)
-                new_price = self.curr_row['Текущая_цена']
+                new_price = self.curr_row['Текущая_ц']
                 competitor = "Магазин отсуствует у данного товара"
                 self.write_data(new_price, competitor)
 
@@ -107,23 +114,6 @@ class ProcessingData:
 
                     # Если конкурента нет и после нашего есть магаз
                     elif k < len(self.name_shops) - 1 and k != 0:
-                        # price_max = self.curr_row['Город_'+ str(self.city_number)+'_макс_ц']
-                        # # Поднят цену к цене конк.
-                        # if self.gui.configuration.up_price_to_competitor_comboBox.currentText() == 'Да':
-                        #     print(self.price_shops[k + 1])
-                        #     print(type(self.price_shops[k + 1]))
-                        #     if self.price_shops[k + 1] < price_max:
-                        #         new_price = self.price_shops[k + 1] - self.change_pr
-                        #         competitor = "Поднятие к цене конк:"+self.name_shops[k+1]
-                        #         self.write_data(new_price, competitor)
-                        #         break
-                        #     else:
-                        #         new_price = self.price_shops[k]
-                        #         competitor = "Нет конк. преж.цена"
-                        #         self.write_data(new_price, competitor)
-                        #         break
-                        # # Оставить цену как есть
-                        # elif self.gui.configuration.up_price_to_competitor_comboBox.currentText() == 'Нет':
                         new_price = self.price_shops[k]
                         competitor = "Нет конк. преж.цена"
                         self.write_data(new_price, competitor)
@@ -238,16 +228,6 @@ class ProcessingData:
                 #     {'Город_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
                 # session.commit()
                 return True
-
-    # def error_check_price_in_min_max(self, k):
-    #     pass
-    #     """
-    #       Выполняется условие когда поставлен галочка разные цены для всех городов, и если в остальных городах
-    #     нету мин и макс цены. Втаком случае возникает ошибка и наш exsept берет за мин и макс цены из
-    #     первого города.
-    #      k - номер магаза который обрабатывается:
-    #      num_c - номер города:
-    #     """
 
     def write_data(self, new_price, competitor):
         session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(

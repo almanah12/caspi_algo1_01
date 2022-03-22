@@ -45,7 +45,7 @@ class Add_Base_Data(QDialog):
         self.mapper.addMapping(self.check_limiter_comboBox, 6)
         self.mapper.addMapping(self.limiter_comboBox, 7)
 
-        self.mapper.addMapping(self.city_comboBox, 8)
+        self.mapper.addMapping(self.city_1_comboBox, 8)
         self.mapper.addMapping(self.min_price_lineEdit_1, 9)
         self.mapper.addMapping(self.max_price_lineEdit_1, 10)
 
@@ -60,8 +60,8 @@ class Add_Base_Data(QDialog):
         self.remove_name_store_pushButton.clicked.connect(lambda: delete_comboBox(list_stores_ini, self.limiter_comboBox))
 
         # (1) Добавляет список в виджет, (2) Поиск выбора в виджете comboBox
-        self.city_comboBox.addItems(list_cities)
-        search_line_comboBox(list_cities, self.city_comboBox)
+        self.city_1_comboBox.addItems(list_cities)
+        search_line_comboBox(list_cities, self.city_1_comboBox)
 
         # Кнопки управления
         self.previousButton.clicked.connect(self.mapper.toPrevious)
@@ -158,7 +158,7 @@ class Add_Base_Data(QDialog):
                 msg.setWindowTitle("Ошибка")
                 msg.exec_()
 
-            elif self.city_comboBox.currentText() not in list_cities:
+            elif self.city_1_comboBox.currentText() not in list_cities:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Critical)
                 msg.setText("Ошибка")
