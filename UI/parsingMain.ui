@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>541</height>
+    <height>580</height>
    </rect>
   </property>
   <property name="font">
@@ -50,7 +50,7 @@
          <x>0</x>
          <y>0</y>
          <width>980</width>
-         <height>501</height>
+         <height>540</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -75,7 +75,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="movable">
            <bool>true</bool>
@@ -99,6 +99,9 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: rgb(217, 236, 255);</string>
               </property>
               <property name="frameShape">
                <enum>QFrame::Box</enum>
@@ -169,6 +172,12 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="locale">
+               <locale language="English" country="UnitedStatesMinorOutlyingIslands"/>
               </property>
               <property name="minimum">
                <number>0</number>
@@ -356,6 +365,9 @@
                  <widget class="QTableView" name="permanent_tableView">
                   <property name="enabled">
                    <bool>true</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: rgb(217, 236, 255);</string>
                   </property>
                  </widget>
                 </item>

@@ -40,14 +40,26 @@ class Add_Base_Data(QDialog):
         self.mapper.setModel(self.model)
         self.mapper.addMapping(self.articul_lineEdit, 2)
         self.mapper.addMapping(self.lineEdit_2, 3)
-        self.mapper.addMapping(self.current_price_lineEdit, 4)
-        self.mapper.addMapping(self.first_cost_lineEdit, 5)
-        self.mapper.addMapping(self.check_limiter_comboBox, 6)
-        self.mapper.addMapping(self.limiter_comboBox, 7)
+        self.mapper.addMapping(self.current_price_lineEdit, 5)
+        self.mapper.addMapping(self.first_cost_lineEdit, 6)
+        self.mapper.addMapping(self.check_limiter_comboBox, 7)
+        self.mapper.addMapping(self.limiter_comboBox, 8)
 
-        self.mapper.addMapping(self.city_1_comboBox, 8)
-        self.mapper.addMapping(self.min_price_lineEdit_1, 9)
-        self.mapper.addMapping(self.max_price_lineEdit_1, 10)
+        self.mapper.addMapping(self.city_1_comboBox, 9)
+        self.mapper.addMapping(self.min_price_lineEdit_1, 10)
+        self.mapper.addMapping(self.max_price_lineEdit_1, 11)
+
+        self.mapper.addMapping(self.city_2_comboBox, 12)
+        self.mapper.addMapping(self.min_price_lineEdit_2, 13)
+        self.mapper.addMapping(self.max_price_lineEdit_2, 14)
+
+        self.mapper.addMapping(self.city_3_comboBox, 15)
+        self.mapper.addMapping(self.min_price_lineEdit_3, 16)
+        self.mapper.addMapping(self.max_price_lineEdit_3, 17)
+
+        self.mapper.addMapping(self.city_4_comboBox, 18)
+        self.mapper.addMapping(self.min_price_lineEdit_4, 19)
+        self.mapper.addMapping(self.max_price_lineEdit_4, 20)
 
         # (1, 2) Добавляет список в виджет, (3) Поиск выбора в виджете comboBox
         listItems = get_list_comboBox(list_stores_ini, list_stores)
@@ -74,10 +86,28 @@ class Add_Base_Data(QDialog):
         self.check_limiter_comboBox.currentTextChanged.connect(self.check_limiter)
 
         # Вычисляет мин и макс цены умножая Себест. на % соотношение
+        # Город_1
         self.min_price_spinBox_1.valueChanged.connect(lambda: self.calculate_min_max_price\
                                                       (self.min_price_lineEdit_1, self.min_price_spinBox_1))
         self.max_price_spinBox_1.valueChanged.connect(lambda: self.calculate_min_max_price\
                                                       (self.max_price_lineEdit_1, self.max_price_spinBox_1))
+        # Город_2
+        self.min_price_spinBox_2.valueChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.min_price_lineEdit_2, self.min_price_spinBox_2))
+        self.max_price_spinBox_2.valueChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.max_price_lineEdit_2, self.max_price_spinBox_2))
+        # Город_3
+        self.min_price_spinBox_3.valueChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.min_price_lineEdit_3, self.min_price_spinBox_3))
+        self.max_price_spinBox_3.valueChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.max_price_lineEdit_3, self.max_price_spinBox_3))
+        # Город_4
+        self.min_price_spinBox_4.valueChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.min_price_lineEdit_4, self.min_price_spinBox_4))
+        self.max_price_spinBox_4.valueChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.max_price_lineEdit_4, self.max_price_spinBox_4))
+
+
 
         # Ставит в модель таблицу
         self.model.setTable("permanent_table")

@@ -135,7 +135,7 @@ class ProcessingData:
                             break
                 else:
                     try:
-                        price_min = self.curr_row['Город_' + str(self.city_number) + '_мин_ц']
+                        price_min = self.curr_row['Г_' + str(self.city_number) + '_мин_ц']
                         new_price = price_min
                         check_price_min = price_min - 1
                         competitor = 'Текущ.цена в не диапазоне мин. и макс.ц'
@@ -143,7 +143,7 @@ class ProcessingData:
                         self.activ_moni.emit("Test", 1)
                         break
                     except:
-                        price_min1 = self.curr_row['Город_1_мин_ц']
+                        price_min1 = self.curr_row['Г_1_мин_ц']
                         new_price = price_min1
                         competitor = 'Текущ.цена в не диапазоне мин. и макс.ц'
                         self.write_data(new_price, competitor)
@@ -171,16 +171,16 @@ class ProcessingData:
        num_c - номер города:
        """
         try:
-            price_min = self.curr_row['Город_' + str(self.city_number) + '_мин_ц']
-            price_max = self.curr_row['Город_' + str(self.city_number) + '_макс_ц']
+            price_min = self.curr_row['Г_' + str(self.city_number) + '_мин_ц']
+            price_max = self.curr_row['Г_' + str(self.city_number) + '_макс_ц']
             if price_min <= self.price_shops[k] <= price_max:
                 new_price = self.price_shops[k] - self.change_pr
                 competitor = self.name_shops[k]
                 self.write_data(new_price, competitor)
                 return True
         except:
-            price_min1 = self.curr_row['Город_1_мин_ц']
-            price_max1 = self.curr_row['Город_1_макс_ц']
+            price_min1 = self.curr_row['Г_1_мин_ц']
+            price_max1 = self.curr_row['Г_1_макс_ц']
             if price_min1 <= self.price_shops[k] <= price_max1:
                 new_price = self.price_shops[k] - self.change_pr
                 competitor = self.name_shops[k]
@@ -189,7 +189,7 @@ class ProcessingData:
 
     def check_price_in_minmax_yes(self, k):
         try:
-            if self.curr_row['Город_' + str(self.city_number) + '_мин_ц'] < self.price_shops[k]:
+            if self.curr_row['Г_' + str(self.city_number) + '_мин_ц'] < self.price_shops[k]:
                 new_price = self.price_shops[k] + self.change_pr
                 self.write_data(new_price, 'Цена после огр.')
                 # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
@@ -199,8 +199,8 @@ class ProcessingData:
                 # session.commit()
                 return True
 
-            elif self.curr_row['Город_' + str(self.city_number) + '_мин_ц'] > self.price_shops[k]:
-                new_price = self.curr_row['Город_' + str(self.city_number) + '_мин_ц']
+            elif self.curr_row['Г_' + str(self.city_number) + '_мин_ц'] > self.price_shops[k]:
+                new_price = self.curr_row['Г_' + str(self.city_number) + '_мин_ц']
                 self.write_data(new_price, 'Цена огр. выше нашей мин.ц')
                 # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
                 #     {'Город_' + str(self.city_number) + '_Конк': 'Цена после огр.'}, synchronize_session=False)
@@ -210,7 +210,7 @@ class ProcessingData:
                 return True
 
         except:
-            if self.curr_row['Город_1_мин_ц'] < self.price_shops[k]:
+            if self.curr_row['Г_1_мин_ц'] < self.price_shops[k]:
                 new_price = self.price_shops[k] + self.change_pr
                 self.write_data(new_price, 'Цена после огр.')
                 # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
@@ -219,8 +219,8 @@ class ProcessingData:
                 #     {'Город_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
                 # session.commit()
                 return True
-            elif self.curr_row['Город_1_мин_ц'] > self.price_shops[k]:
-                new_price = self.curr_row['Город_1_мин_ц']
+            elif self.curr_row['Г_1_мин_ц'] > self.price_shops[k]:
+                new_price = self.curr_row['Г_1_мин_ц']
                 self.write_data(new_price, 'Цена огр. выше нашей мин.ц')
                 # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
                 #     {'Город_' + str(self.city_number) + '_Конк': 'Цена после огр.'}, synchronize_session=False)
@@ -231,7 +231,7 @@ class ProcessingData:
 
     def write_data(self, new_price, competitor):
         session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-            {'Город_' + str(self.city_number) + '_Конк': competitor}, synchronize_session=False)
+            {'Г_' + str(self.city_number) + '_Конк': competitor}, synchronize_session=False)
         session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-            {'Город_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
+            {'Г_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
         session.commit()
