@@ -42,13 +42,13 @@ list_cities = sorted(list_cities)
 filter_all_data = 'Артикул LIKE "%%"'
 
 filter_for_goods_without_data = "Себестоимость is NULL  or Себестоимость is '' or " \
-                "ЕстьЛиОгранич is NULL  or ЕстьЛиОгранич is '' or " \
+                "Есть_огрч is NULL  or Есть_огрч is '' or " \
                 "Город_1 is NULL  or Город_1 is '' or " \
                 "Город_1_мин_ц is NULL  or Город_1_мин_ц is '' or " \
                 "Город_1_макс_ц is NULL  or Город_1_макс_ц is ''"
 
 filter_for_goods_with_data = "Себестоимость LIKE '%%' AND Себестоимость is not '' AND " \
-                "ЕстьЛиОгранич LIKE '%%' AND ЕстьЛиОгранич is not '' AND " \
+                "Есть_огрч LIKE '%%' AND Есть_огрч is not '' AND " \
                 "Город_1 LIKE '%%' AND Город_1 is not '' AND " \
                 "Город_1_мин_ц LIKE '%%' AND Город_1_мин_ц is not '' AND " \
                 "Город_1_макс_ц LIKE '%%' AND Город_1_макс_ц is not ''"

@@ -67,41 +67,43 @@ class RunThread(QRunnable):
                     'С "Каб.продавца" взята данных на {} товаров'.format(GetDataKaspiSeller.count_gds), 1)
                 logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(GetDataKaspiSeller.count_gds))
                 logger.info(GetDataKaspiSeller.count_other_city)
-                # # # Парсинг товаров
-                # # # download_proxy_list()
-                if not self.gui.check_stop:
-                    links = []
-                    s = select(temporary_table)
-                    conn = engine.connect()
-                    res = conn.execute(s)
-                    for row in res:
-                        links.append(row.Ссылка)
-                    logger.debug(links)
-                    self.signals.activity_monitor.emit("Сбор данных с сайта товара", 1)
-                    logger.info('Сбор данных с сайта товара')
-                    parser_site = Parser(self.gui, links, self.signals.activity_monitor)
-                    parser_site.parse()
-                    if self.gui.configuration.same_price_citiesradioButton.isChecked():
-                        self.signals.activity_monitor.emit(
-                            'С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'.format(
-                                GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
-                        logger.debug('С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'
-                                     .format(GetDataKaspiSeller.count_gds, Parser.count_requests))
-                    else:
-                        self.signals.activity_monitor.emit(
-                            'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
-                            'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
-                        logger.debug(
-                            'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
-                            'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests))
-
+                # # # # Парсинг товаров
+                # # # # download_proxy_list()
+                # if not self.gui.check_stop:
+                #     links = []
+                #     s = select(temporary_table)
+                #     conn = engine.connect()
+                #     res = conn.execute(s)
+                #     for row in res:
+                #         links.append(row.Ссылка)
+                #     logger.debug(links)
+                #     self.signals.activity_monitor.emit("Сбор данных с сайта товара", 1)
+                #     logger.info('Сбор данных с сайта товара')
+                #     parser_site = Parser(self.gui, links, self.signals.activity_monitor)
+                #     parser_site.parse()
+                #     if self.gui.configuration.same_price_citiesradioButton.isChecked():
+                #         self.signals.activity_monitor.emit(
+                #             'С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'.format(
+                #                 GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
+                #         logger.debug('С "Каб.продавца" взята данных на {} товаров. Сделано {} запросов'
+                #                      .format(GetDataKaspiSeller.count_gds, Parser.count_requests))
+                #     else:
+                #         self.signals.activity_monitor.emit(
+                #             'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
+                #             'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests), 1)
+                #         logger.debug(
+                #             'С "Каб.продавца" взята данных на {} товаров. С учетом режима "Разные цены для городов" '
+                #             'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests))
+                #
                 # Обработка данных товаров
                 if not self.gui.check_stop:
                     model_perm.setFilter(filter_for_goods_with_data)
                     count_goods_with_data = model_perm.rowCount()
+                    logger.debug(count_goods_with_data)
 
                     model_perm.setFilter(filter_all_data)
                     count_goods_all_data = model_perm.rowCount()
+                    logger.debug(count_goods_all_data)
 
                     if count_goods_all_data == count_goods_with_data:
                         self.signals.activity_monitor.emit("Запуск обработки данных", 1)

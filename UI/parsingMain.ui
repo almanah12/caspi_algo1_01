@@ -409,7 +409,7 @@
                  <normaloff>:/logo/temp_table.ico</normaloff>:/logo/temp_table.ico</iconset>
                </attribute>
                <attribute name="title">
-                <string>Временная таблица</string>
+                <string extracomment="Для хранения промежуточных данных">Временная таблица</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout_7">
                 <item row="0" column="0">

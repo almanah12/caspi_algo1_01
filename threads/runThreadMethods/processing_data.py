@@ -38,13 +38,13 @@ class ProcessingData:
             self.city_number = i.split('_')[2].split('.')[0]
             self.curr_row = session.query(permanent_table).filter(
                 permanent_table.c.Артикул == self.curr_artikul).one()
-            self.limiter = self.curr_row['Огранич_?']
+            self.limiter = self.curr_row['Есть_огрч']
 
             # Для опредления положения магаза и занесения его в базу
             for k in range(len(getattr(self, 'name_shops'))):
                 if self.name_shops[k] == self.name_our_store:
                     session.query(permanent_table).filter(permanent_table.c.Артикул == self.curr_artikul).update(
-                        {'Тек_#': k+1}, synchronize_session=False)
+                        {'Тек_п': k+1}, synchronize_session=False)
                     session.commit()
                     break
             #
