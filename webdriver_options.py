@@ -1,23 +1,26 @@
 from random import randint
 
+from selenium.webdriver.chrome.service import Service
 from seleniumwire import webdriver
 import selenium
 
-from helpers import resource_path, logger
+from caspi_pars.helpers import resource_path, logger
 
 
 def get_driver():
     args = ["hide_console", ]
 
     options = selenium.webdriver.ChromeOptions()
-
     # user-agent
     options.add_argument("user-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0")
     # for ChromeDriver version 79.0.3945.16 or over
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--headless")
-    driver = selenium.webdriver.Chrome(executable_path=resource_path(r"driver_browser/chromedriver.exe"), service_args=args,
-                              options=options)
+    # ser = Service(resource_path(r"driver_browser/chromedriver.exe"))
+
+    driver = selenium.webdriver.Chrome(
+        executable_path=resource_path(r"driver_browser/chromedriver.exe"),
+        service_args=args, options=options)
     return driver
 
 

@@ -1,18 +1,14 @@
-import os
-
 from PyQt5 import uic
-from sqlalchemy import MetaData
 
-from db_tables import engine
-from interface.resources_qtdesigner import add_data_to_base_rs
-from helpers import resource_path
+from caspi_pars.interface.resources_qtdesigner import add_data_to_base_rs
+from caspi_pars.helpers import resource_path
 from PyQt5.QtSql import QSqlDatabase, QSqlTableModel
 from PyQt5.QtWidgets import (QDataWidgetMapper, QDialog, QMainWindow, QMessageBox)
-from enums import list_stores, list_cities, filter_for_goods_with_data, filter_for_goods_without_data, \
+from caspi_pars.enums import list_stores, list_cities, filter_for_goods_with_data, filter_for_goods_without_data, \
     list_stores_ini
-from interface.config_utils.user_config_utils import search_line_comboBox, add_comboBox, delete_comboBox, \
+from caspi_pars.interface.config_utils.user_config_utils import search_line_comboBox, add_comboBox, delete_comboBox, \
     get_list_comboBox
-from db_QSqlDatabase import db
+from caspi_pars.db_QSqlDatabase import db
 #
 # if not os.path.exists(resource_path('data_shop')):
 #     os.mkdir(resource_path('data_shop'))
@@ -46,8 +42,10 @@ class Add_Base_Data(QDialog):
         self.mapper.addMapping(self.limiter_comboBox, 8)
 
         self.mapper.addMapping(self.city_1_comboBox, 9)
-        self.mapper.addMapping(self.min_price_lineEdit_1, 10)
-        self.mapper.addMapping(self.max_price_lineEdit_1, 11)
+        self.mapper.addMapping(self.min_price_spinBox_1, 10)
+        self.mapper.addMapping(self.min_price_lineEdit_1, 11)
+        self.mapper.addMapping(self.max_price_spinBox_1, 12)
+        self.mapper.addMapping(self.max_price_lineEdit_1, 13)
 
         self.mapper.addMapping(self.city_2_comboBox, 12)
         self.mapper.addMapping(self.min_price_lineEdit_2, 13)
@@ -139,7 +137,8 @@ class Add_Base_Data(QDialog):
         filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
         self.model.setFilter(filter_str)
 
-    def calculate_min_max_price(self, widget_lineEdit, widget_spinBox):
+    def \
+            calculate_min_max_price(self, widget_lineEdit, widget_spinBox):
         """
         """
         try:

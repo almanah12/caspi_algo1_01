@@ -57,7 +57,7 @@
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <property name="usesScrollButtons">
           <bool>false</bool>
@@ -363,9 +363,6 @@
               </property>
              </item>
             </widget>
-           </item>
-           <item row="13" column="1">
-            <widget class="QLineEdit" name="lineEdit"/>
            </item>
           </layout>
          </widget>
@@ -793,6 +790,90 @@
               </widget>
              </item>
             </layout>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_32">
+             <property name="text">
+              <string>Автоматическая заполнение данных</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QComboBox" name="comboBox_autocomplete">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>Нет</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Да</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_33">
+             <property name="text">
+              <string>Себестоимость(от начальной цены)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="label_35">
+             <property name="text">
+              <string>МИнимиальная цена(от начальной цены)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="label_37">
+             <property name="text">
+              <string>Максимальная цена(от начальной цены)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_min_cost_k">
+             <property name="maximum">
+              <double>5.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.950000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_max_cost_k">
+             <property name="maximum">
+              <double>5.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.500000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_prime_cost_k">
+             <property name="maximum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.800000000000000</double>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

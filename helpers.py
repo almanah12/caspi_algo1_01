@@ -18,15 +18,15 @@ logger.add(sys.stderr, format="{time} {level} {message}", filter="my_module", le
 logger.add(log_file_path, rotation="00:00", retention="30 days", encoding='utf-8', level="INFO")
 
 
-def find_data_file(filename):
-    if getattr(sys, "frozen", False):
-        # The application is frozen
-        datadir = os.path.dirname(sys.executable)
-    else:
-        # The application is not frozen
-        # Change this bit to match where you store your data files:
-        datadir = os.path.dirname(__file__)
-    return os.path.join(datadir, filename)
+# def find_data_file(filename):
+#     if getattr(sys, "frozen", False):
+#         # The application is frozen
+#         datadir = os.path.dirname(sys.executable)
+#     else:
+#         # The application is not frozen
+#         # Change this bit to match where you store your data files:
+#         datadir = os.path.dirname(__file__)
+#     return os.path.join(datadir, filename)
 
 
 def resource_path(relative_path):

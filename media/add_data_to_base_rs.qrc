@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="icon">
-    <file>add_data.ico</file>
-    <file>city.ico</file>
-    <file>plus.ico</file>
-    <file>minus.ico</file>
-  </qresource>
-</RCC>

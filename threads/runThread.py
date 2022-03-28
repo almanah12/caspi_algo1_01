@@ -6,16 +6,16 @@ import threading
 from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot, QThreadPool
 from sqlalchemy import select
 
-from threads.runThreadMethods import run_autodownload_xml, auto_loading_xml
-from db_QSqlDatabase import model_perm
-from db_tables import temporary_table, engine
-from enums import filter_for_goods_with_data, filter_all_data
-from helpers import resource_path, logger, server_http_ngrok, download_proxy_list
-from threads.runThreadMethods.create_xml import create_xml
-from threads.runThreadMethods.gets_dt_caspi_client import GetDataKaspiSeller
-from threads.runThreadMethods.parser_urls import Parser
-from threads.runThreadMethods.processing_data import ProcessingData
-from threads.runThreadMethods.auto_loading_xml import set_http_adress
+from caspi_pars.threads.runThreadMethods import run_autodownload_xml, auto_loading_xml
+from caspi_pars.db_QSqlDatabase import model_perm
+from caspi_pars.db_tables import temporary_table, engine
+from caspi_pars.enums import filter_for_goods_with_data, filter_all_data
+from caspi_pars.helpers import resource_path, logger, server_http_ngrok, download_proxy_list
+from caspi_pars.threads.runThreadMethods.create_xml import create_xml
+from caspi_pars.threads.runThreadMethods.gets_dt_caspi_client import GetDataKaspiSeller
+from caspi_pars.threads.runThreadMethods.parser_urls import Parser
+from caspi_pars.threads.runThreadMethods.processing_data import ProcessingData
+from caspi_pars.threads.runThreadMethods.auto_loading_xml import set_http_adress
 
 import time
 
@@ -99,11 +99,9 @@ class RunThread(QRunnable):
                 if not self.gui.check_stop:
                     model_perm.setFilter(filter_for_goods_with_data)
                     count_goods_with_data = model_perm.rowCount()
-                    logger.debug(count_goods_with_data)
 
                     model_perm.setFilter(filter_all_data)
                     count_goods_all_data = model_perm.rowCount()
-                    logger.debug(count_goods_all_data)
 
                     if count_goods_all_data == count_goods_with_data:
                         self.signals.activity_monitor.emit("Запуск обработки данных", 1)

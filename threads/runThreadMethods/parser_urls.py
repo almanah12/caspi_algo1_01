@@ -4,11 +4,11 @@ import pandas as pd
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-from webdriver_options import get_driver, get_driver_proxy
 from selenium.common.exceptions import TimeoutException
-from db_tables import temporary_table, session
-from helpers import resource_path, logger
+
+from caspi_pars.webdriver_options import get_driver
+from caspi_pars.db_tables import temporary_table, session
+from caspi_pars.helpers import resource_path, logger
 
 
 class Parser:

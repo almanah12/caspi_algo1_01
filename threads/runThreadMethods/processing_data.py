@@ -1,8 +1,8 @@
 from os import listdir
 import pandas as pd
 
-from db_tables import session, permanent_table, temporary_table
-from helpers import resource_path
+from caspi_pars.db_tables import session, permanent_table, temporary_table
+from caspi_pars.helpers import resource_path
 
 
 class ProcessingData:
@@ -40,7 +40,7 @@ class ProcessingData:
                 permanent_table.c.Артикул == self.curr_artikul).one()
             self.limiter = self.curr_row['Есть_огрч']
 
-            # Для опредления положения магаза и занесения его в базу
+            # Для опредления положения магаза в продаже и занесения его в базу
             for k in range(len(getattr(self, 'name_shops'))):
                 if self.name_shops[k] == self.name_our_store:
                     session.query(permanent_table).filter(permanent_table.c.Артикул == self.curr_artikul).update(
@@ -58,20 +58,19 @@ class ProcessingData:
                     # Не допускает другие города в цикл(Город_1 для всех городов)
                     if self.curr_artikul != previous_articul:
                         previous_articul = self.curr_artikul
-                        if self.limiter == "Нет":
-                            self.limiter_no()
-                        else:
-                            self.limiter_yes()
+                        self.limiter_no_yes()
+
                 # Разные цены для всех городов
                 else:
                     """
                       Условие выбирает разные цены для городов. выставляется Цена. разные цены
                       для всех городов
                     """
-                    if self.limiter == "Нет":
-                        self.limiter_no()
-                    else:
-                        self.limiter_yes()
+                    self.limiter_no_yes()
+                    # if self.limiter == "Нет":
+                    #     self.limiter_no()
+                    # else:
+                    #     self.limiter_yes()
 
                 self.activ_moni.emit('Файл ' + i + ' успешно обработан', 1)
 
@@ -81,6 +80,12 @@ class ProcessingData:
                 new_price = self.curr_row['Текущая_ц']
                 competitor = "Магазин отсуствует у данного товара"
                 self.write_data(new_price, competitor)
+
+    def limiter_no_yes(self):
+        if self.limiter == "Нет":
+            self.limiter_no()
+        else:
+            self.limiter_yes()
 
     # Ограничитель нет
     def limiter_no(self):
@@ -103,7 +108,7 @@ class ProcessingData:
 
             # Если назв.магаз равно нашему магазу
             elif self.name_shops[k] == self.name_our_store:
-                # Если цена не ниже себестоимости
+                # Если цена не ниже мин_макс цены
                 if self.check_price_in_minmax_no(k):
                     # Если конкурента не найден и магаз в конце списка или вовсе один в списке
                     if (k == len(self.name_shops) - 1) or k == len(self.name_shops):
@@ -138,16 +143,14 @@ class ProcessingData:
                         price_min = self.curr_row['Г_' + str(self.city_number) + '_мин_ц']
                         new_price = price_min
                         check_price_min = price_min - 1
-                        competitor = 'Текущ.цена в не диапазоне мин. и макс.ц'
+                        competitor = 'Текущ.цена в не диапазоне мин_макс.ц'
                         self.write_data(new_price, competitor)
-                        self.activ_moni.emit("Test", 1)
                         break
                     except:
                         price_min1 = self.curr_row['Г_1_мин_ц']
                         new_price = price_min1
                         competitor = 'Текущ.цена в не диапазоне мин. и макс.ц'
                         self.write_data(new_price, competitor)
-                        self.activ_moni.emit("Testerrror", 1)
                         break
 
     # Ограничитель есть
@@ -192,41 +195,21 @@ class ProcessingData:
             if self.curr_row['Г_' + str(self.city_number) + '_мин_ц'] < self.price_shops[k]:
                 new_price = self.price_shops[k] + self.change_pr
                 self.write_data(new_price, 'Цена после огр.')
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_Конк': 'Цена после огр.'}, synchronize_session=False)
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
-                # session.commit()
                 return True
 
             elif self.curr_row['Г_' + str(self.city_number) + '_мин_ц'] > self.price_shops[k]:
                 new_price = self.curr_row['Г_' + str(self.city_number) + '_мин_ц']
                 self.write_data(new_price, 'Цена огр. выше нашей мин.ц')
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_Конк': 'Цена после огр.'}, synchronize_session=False)
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
-                # session.commit()
                 return True
 
         except:
             if self.curr_row['Г_1_мин_ц'] < self.price_shops[k]:
                 new_price = self.price_shops[k] + self.change_pr
                 self.write_data(new_price, 'Цена после огр.')
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_Конк': 'Цена после огр.'}, synchronize_session=False)
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
-                # session.commit()
                 return True
             elif self.curr_row['Г_1_мин_ц'] > self.price_shops[k]:
                 new_price = self.curr_row['Г_1_мин_ц']
                 self.write_data(new_price, 'Цена огр. выше нашей мин.ц')
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_Конк': 'Цена после огр.'}, synchronize_session=False)
-                # session.query(temporary_table).filter(temporary_table.c.Артикул == self.curr_artikul).update(
-                #     {'Город_' + str(self.city_number) + '_новая_ц': new_price}, synchronize_session=False)
-                # session.commit()
                 return True
 
     def write_data(self, new_price, competitor):

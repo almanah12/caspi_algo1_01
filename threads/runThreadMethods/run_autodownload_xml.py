@@ -2,7 +2,7 @@
 import os
 from google.cloud import storage
 
-from helpers import resource_path
+from caspi_pars.helpers import resource_path
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = resource_path(r'data_files/ServiceKey_GoogleCloud/alash-scrap'
                                                              r'-c4bc016b7411.json')

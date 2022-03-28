@@ -324,9 +324,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="min_price_spinBox_1">
-               <property name="maximum">
-                <number>300</number>
+              <widget class="QDoubleSpinBox" name="min_price_spinBox_1">
+               <property name="decimals">
+                <number>1</number>
                </property>
               </widget>
              </item>
@@ -352,9 +352,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="max_price_spinBox_1">
-               <property name="maximum">
-                <number>300</number>
+              <widget class="QDoubleSpinBox" name="max_price_spinBox_1">
+               <property name="decimals">
+                <number>1</number>
                </property>
               </widget>
              </item>

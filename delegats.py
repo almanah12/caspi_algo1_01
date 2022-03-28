@@ -3,9 +3,9 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import (QStyleOptionButton, QStyledItemDelegate, QStyle, QMainWindow, QMessageBox)
 from PyQt5.QtCore import QSize
 
-from db_QSqlDatabase import model_perm
-from helpers import resource_path
-from interface.add_base_data import Add_Base_Data
+from caspi_pars.db_QSqlDatabase import model_perm
+from caspi_pars.helpers import resource_path
+from caspi_pars.interface.add_base_data import Add_Base_Data
 from PyQt5.QtGui import QIcon
 
 

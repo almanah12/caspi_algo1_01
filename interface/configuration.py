@@ -5,11 +5,11 @@ from PyQt5 import uic
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import (QDialog, QMainWindow)
 
-from interface.resources_qtdesigner import conf_rs
-from enums import list_stores_ini, list_stores, list_cities
-from helpers import resource_path
-from interface.config_utils.slot_utils import load_slots
-from interface.config_utils.user_config_utils import search_line_comboBox, save_comboBox, get_list_comboBox
+from caspi_pars.interface.resources_qtdesigner import conf_rs
+from caspi_pars.enums import list_stores_ini, list_stores, list_cities
+from caspi_pars.helpers import resource_path
+from caspi_pars.interface.config_utils.slot_utils import load_slots
+from caspi_pars.interface.config_utils.user_config_utils import search_line_comboBox, save_comboBox, get_list_comboBox
 
 
 class Configuration(QDialog):
@@ -42,6 +42,9 @@ class Configuration(QDialog):
 
         self.visible_list_articul()
         self.list_articulcomboBox.currentTextChanged.connect(self.visible_list_articul)
+
+        self.visible_autocomplete()
+        self.comboBox_autocomplete.currentTextChanged.connect(self.visible_autocomplete)
 
         load_slots(self)
 
@@ -181,6 +184,23 @@ class Configuration(QDialog):
             self.list_articullineEdit.setVisible(True)
 
             self.label_24.setVisible(True)
+
+    def visible_autocomplete(self):
+        if self.comboBox_autocomplete.currentText() == 'Нет':
+            self.label_33.setVisible(False)
+            self.label_35.setVisible(False)
+            self.label_37.setVisible(False)
+            self.doubleSpinBox_prime_cost_k.setVisible(False)
+            self.doubleSpinBox_min_cost_k.setVisible(False)
+            self.doubleSpinBox_max_cost_k.setVisible(False)
+
+        else:
+            self.label_33.setVisible(True)
+            self.label_35.setVisible(True)
+            self.label_37.setVisible(True)
+            self.doubleSpinBox_prime_cost_k.setVisible(True)
+            self.doubleSpinBox_min_cost_k.setVisible(True)
+            self.doubleSpinBox_max_cost_k.setVisible(True)
 
     # def check_same_price_cities(self):
     #     if self.same_price_cities_checkBox.checkState():

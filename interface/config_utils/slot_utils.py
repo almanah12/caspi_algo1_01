@@ -1,12 +1,9 @@
 """
 Slots helper functions for configuration.py can be found here.
 """
-from PyQt5.QtWidgets import (QCheckBox, QDoubleSpinBox, QHBoxLayout, QLabel, QScrollArea, QSpinBox, QTabWidget,
-                             QVBoxLayout)
-
-from interface.config_utils.user_config_utils import list_proxy_folder, delete_comboBox, add_comboBox, \
+from caspi_pars.interface.config_utils.user_config_utils import list_proxy_folder, delete_comboBox, add_comboBox, \
     list_proxy_folder1
-from enums import list_stores, list_stores_ini
+from caspi_pars.enums import list_stores, list_stores_ini
 
 
 def load_slots(config_obj):

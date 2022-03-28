@@ -5,14 +5,14 @@ File containing utility functions for the GUI.
 from datetime import datetime
 from typing import List
 
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QColorConstants
 from PyQt5.QtWidgets import QComboBox, QDialog, QMessageBox, QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QTableView)
 
-from delegats import ButtonEditorDelegate, ButtonDeleteDelegate
-
+from caspi_pars.delegats import ButtonEditorDelegate, ButtonDeleteDelegate
+from caspi_pars.helpers import logger
 
 def create_popup(parent, msg: str, title='Warning'):
     """
@@ -95,15 +95,28 @@ def add_to_table_widget(table, data: list, color,  insertDate=True):
             table.item(row_position, column).setBackground(QColorConstants.Svg.greenyellow)
 
 
-def add_to_data_table_view(self, model, name_table, table: QTableView):
+# class ColumnSwapProxy(QtCore.QSortFilterProxyModel):
+#     def data(self, index, role=QtCore.Qt.DisplayRole):
+#         logger.debug(index)
+#         return super().data(index.sibling(index.row(), index.column() + 1), role)
+#
+#     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+#         if orientation == QtCore.Qt.Horizontal and (section==10 or section==12):
+#             section += 1
+#         return super().headerData(section, orientation, role)
+
+
+def add_to_data_table_view(parent, model, name_table, table: QTableView):
     table.setSelectionBehavior(QAbstractItemView.SelectRows)
     header = table.horizontalHeader()
 
     table.setHorizontalHeader(header)
+    # proxy = ColumnSwapProxy()
+    # proxy.setSourceModel(model)
     table.setModel(model)
     if name_table == 'permanent_table':
-        editor_delegate = ButtonEditorDelegate(self)  # Была ошибка, передал self и проблема решилась
-        delete_delegate = ButtonDeleteDelegate(self)
+        editor_delegate = ButtonEditorDelegate(parent)  # Была ошибка, передал self и проблема решилась
+        delete_delegate = ButtonDeleteDelegate(parent)
 
         table.setItemDelegateForColumn(0, editor_delegate)
         table.setItemDelegateForColumn(1, delete_delegate)
@@ -111,16 +124,19 @@ def add_to_data_table_view(self, model, name_table, table: QTableView):
     model.setTable(name_table)
     model.select()
 
-    # После долгих попыток получилось изменить ширину столбца табл.
-    # Нужно было поставить setColumnWidth в конце метода
-    # header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-    # header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-
     # Подгон равзмера столбца по содержанию
     table.resizeColumnsToContents()
 
+    # После долгих попыток получилось изменить ширину столбца табл.
+    # Нужно было поставить setColumn
+    # Width в конце метода
+    table.setColumnWidth(7, 0)
+    table.setColumnWidth(8, 0)
+    table.setColumnWidth(10, 0)  # Скрывает столбец
+    table.setColumnWidth(12, 0)
 
-def add_to_data_table_temp(self, model, name_table, table: QTableView):
+
+def add_to_data_table_temp(model, name_table, table: QTableView):
     table.setSelectionBehavior(QAbstractItemView.SelectRows)
 
     # table.setHorizontalHeader(header)

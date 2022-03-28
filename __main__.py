@@ -4,7 +4,6 @@ Main caspi_algo_mix application.
 """
 import os
 import sys
-import uuid
 from datetime import datetime
 
 import ntplib
@@ -18,20 +17,19 @@ from cryptocode import decrypt
 
 from sqlalchemy import select, inspect, MetaData
 
-from interface.add_base_data import Add_Base_Data
-from interface.resources_qtdesigner import main_rs
-from db_QSqlDatabase import model_temp, model_perm
-from enums import filter_for_goods_with_data, filter_for_goods_without_data, filter_all_data, _AppName_, curr_uuid
-from slots import initiate_slots
-from helpers import resource_path, get_current_version, logger
-from threads import runThread
-from interface.utils import add_to_table_widget, show_and_bring_window_to_front, add_to_data_table_view
-from interface.configuration import Configuration
-from interface.update import Update
-from interface.license import License
+from caspi_pars.interface.resources_qtdesigner import main_rs
+from caspi_pars.db_QSqlDatabase import model_temp, model_perm
+from caspi_pars.enums import filter_for_goods_with_data, filter_for_goods_without_data, filter_all_data, _AppName_, curr_uuid
+from caspi_pars.slots import initiate_slots
+from caspi_pars.helpers import resource_path, get_current_version, logger
+from caspi_pars.threads import runThread
+from caspi_pars.interface.utils import add_to_table_widget, show_and_bring_window_to_front, add_to_data_table_view
+from caspi_pars.interface.configuration import Configuration
+from caspi_pars.interface.update import Update
+from caspi_pars.interface.license import License
+from caspi_pars.db_tables import temporary_table, engine
 
 
-from db_tables import temporary_table, engine
 app = QApplication(sys.argv)
 
 
@@ -61,11 +59,6 @@ class Interface(QMainWindow):
             logger.debug('Not key')
             licen = License(parent=self)  # Loading update
             self.show_simulation(licen)
-        #
-        # logger.info(word_key)
-
-        # main_rs.qInitResources()
-        # super(Interface, self).__init__(parent)  # Initializing object
 
         uic.loadUi(resource_path(r'UI/parsingMain.ui'), self)  # Loading the main UI
 
@@ -121,7 +114,6 @@ class Interface(QMainWindow):
         Opens simulation settings in the configuration window.
         """
         show_and_bring_window_to_front(qdialog)
-
 
     def end_bot_thread(self):
         """
@@ -229,16 +221,16 @@ class Interface(QMainWindow):
         except Exception as ex:
             QMessageBox.critical(self, 'Ошибка', f'Ошибка {ex}')
 
-
-def find_data_file(filename):
-    if getattr(sys, "frozen", False):
-        # The application is frozen
-        datadir = os.path.dirname(sys.executable)
-    else:
-        # The application is not frozen
-        # Change this bit to match where you store your data files:
-        datadir = os.path.dirname(__file__)
-    return os.path.join(datadir, filename)
+#
+# def find_data_file(filename):
+#     if getattr(sys, "frozen", False):
+#         # The application is frozen
+#         datadir = os.path.dirname(sys.executable)
+#     else:
+#         # The application is not frozen
+#         # Change this bit to match where you store your data files:
+#         datadir = os.path.dirname(__file__)
+#     return os.path.join(datadir, filename)
 
 
 def main():

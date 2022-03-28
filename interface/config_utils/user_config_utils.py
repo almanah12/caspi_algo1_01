@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QCompleter
 from qtpy import QtCore
 
-from helpers import resource_path
+from caspi_pars.helpers import resource_path
 
 
 def getOpenFilesAndDirs(parent=None, caption='', directory='',

@@ -8,10 +8,10 @@ import telepot
 from PyQt5 import uic
 from PyQt5.QtCore import QSettings, QTime
 from PyQt5.QtWidgets import (QDialog, QMainWindow, QApplication)
-from interface.resources_qtdesigner import license_rs
+from caspi_pars.interface.resources_qtdesigner import license_rs
 
-from enums import curr_uuid, token, channel_id
-from helpers import resource_path, logger
+from caspi_pars.enums import curr_uuid, token, channel_id
+from caspi_pars.helpers import resource_path, logger
 
 app = QApplication(sys.argv)
 

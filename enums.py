@@ -5,7 +5,7 @@ import uuid
 
 import pandas
 
-from helpers import resource_path
+from caspi_pars.helpers import resource_path
 
 
 _AppName_ = 'AlashPars'
@@ -58,5 +58,6 @@ curr_uuid = str(uuid.uuid1()).split('-')[4]
 # telegram
 token = "5186311540:AAHhIODRjVjaUhjmQVzSQwalUk3JsOHmB4E"
 channel_id = "834178298"
+
 
 

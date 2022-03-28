@@ -12,8 +12,8 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import (QDialog, QMainWindow, QApplication)
 from py7zr import py7zr
 
-from interface.resources_qtdesigner import main_rs
-from helpers import resource_path, logger
+from caspi_pars.interface.resources_qtdesigner import main_rs
+from caspi_pars.helpers import resource_path, logger
 
 app = QApplication(sys.argv)
 

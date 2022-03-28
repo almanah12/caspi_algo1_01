@@ -1,9 +1,9 @@
 import xml.etree.ElementTree as xml
 
 
-from db_tables import conn_engine, temp_table_select
-from enums import code_cities
-from helpers import resource_path
+from caspi_pars.db_tables import conn_engine, temp_table_select
+from caspi_pars.enums import code_cities
+from caspi_pars.helpers import resource_path
 
 
 def create_xml(gui):
@@ -42,7 +42,7 @@ def create_xml(gui):
         # Если цена одна для всех городов
         if gui.configuration.same_price_citiesradioButton.isChecked():
             price = xml.SubElement(offer, 'price')
-            price.text = str(row.Город_1_новая_ц)
+            price.text = str(row.Г_1_новая_ц)
 
         # Если цена разные для всех городов
         else:
@@ -52,16 +52,16 @@ def create_xml(gui):
             # дОБАВЛЯЕТСЯ СУБЭЛЕменты пока условие истинно
             if row.Колич_городов > 0:
                 cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_1])
-                cityprice.text = str(row.Город_1_новая_ц)
+                cityprice.text = str(row.Г_1_новая_ц)
             if row.Колич_городов > 1:
                 cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_2])
-                cityprice.text = str(row.Город_2_новая_ц)
+                cityprice.text = str(row.Г_2_новая_ц)
             if row.Колич_городов > 2:
                 cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_3])
-                cityprice.text = str(row.Город_3_новая_ц)
+                cityprice.text = str(row.Г_3_новая_ц)
             if row.Колич_городов > 3:
                 cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_4])
-                cityprice.text = str(row.Город_4_новая_ц)
+                cityprice.text = str(row.Г_4_новая_ц)
 
     tree = xml.ElementTree(kaspi_catalog)
     tree.write(resource_path(r'data_shop/alash.xml'))

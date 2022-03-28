@@ -1,20 +1,13 @@
 import time
-import os
-import shutil
-import pandas as pd
-
-from collections import OrderedDict
 
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from helpers import resource_path
-from webdriver_options import get_driver
-from sqlalchemy import MetaData
-from db_tables import temporary_table, permanent_table, engine, session
-from helpers import logger,ngrok_public_url
+from caspi_pars.webdriver_options import get_driver
+
+from caspi_pars.helpers import logger,ngrok_public_url
 
 
 def set_http_adress(gui, signals):
@@ -87,7 +80,7 @@ def set_http_adress(gui, signals):
             logger.debug('end auto loading')
 
         except TimeoutException:
-            logger.error('Превышение ожидание загрузки страницы(30 сек.)')
+            logger.error('Превышение ожидание загрузки страницы(30 сек.) или проблема в xml файле')
             driver.close()
             continue
         except Exception as ex:
