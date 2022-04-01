@@ -7,13 +7,13 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from caspi_pars.webdriver_options import get_driver
 
-from caspi_pars.helpers import logger,ngrok_public_url
+from caspi_pars.helpers import logger, ngrok_public_url, enter_caspi_seller
 
 
 def set_http_adress(gui, signals):
-    for _ in range(3):
+    for _ in range(5):
         try:
-            driver = get_driver()
+            driver = get_driver(False)
 
             url = 'https://kaspi.kz/merchantcabinet/login?logout=true'
 
@@ -26,18 +26,11 @@ def set_http_adress(gui, signals):
             driver.maximize_window()
             driver.implicitly_wait(10)
             # Вбиваем логин и пароль
-            mail = driver.find_element_by_id('email')
-            mail.send_keys(gui.configuration.email_login_lineEdit.text())
+            enter_caspi_seller(driver, gui.configuration.email_login_lineEdit.text(),
+                               gui.configuration.password_lineEdit.text())
 
-            password = driver.find_element_by_id('password')
-            password.send_keys(gui.configuration.password_lineEdit.text())
-
-            enter_btn = driver.find_element_by_xpath('/html/body/div[4]/main/div[2]/div[4]/button')
-            driver.implicitly_wait(10)
-            enter_btn.click()
             if gui.check_stop:
                 break
-
 
             products_btn = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))

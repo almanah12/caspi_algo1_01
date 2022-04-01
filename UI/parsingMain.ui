@@ -354,47 +354,43 @@
                 <string>Постоянная таблица</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout">
-                <item row="0" column="1">
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>Фильтр</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="8">
-                 <widget class="QTableView" name="permanent_tableView">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background-color: rgb(217, 236, 255);</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="7">
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>679</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                 <item row="0" column="2">
+                 <widget class="QComboBox" name="comboBox_show_data_other_city">
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::NoContextMenu</enum>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>3</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Все города</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="1">
                  <widget class="QComboBox" name="filter_comboBox">
                   <property name="enabled">
                    <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string extracomment="Фильтр данных"/>
+                  </property>
+                  <property name="toolTipDuration">
+                   <number>-1</number>
                   </property>
                   <item>
                    <property name="text">
@@ -411,6 +407,29 @@
                     <string>Товары без данных</string>
                    </property>
                   </item>
+                 </widget>
+                </item>
+                <item row="0" column="5">
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>679</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="0" colspan="6">
+                 <widget class="QTableView" name="permanent_tableView">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: rgb(217, 236, 255);</string>
+                  </property>
                  </widget>
                 </item>
                </layout>
@@ -448,9 +467,41 @@
                <widget class="QLineEdit" name="search_table_articul_lineEdit"/>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_update">
+               <widget class="QPushButton" name="pushButton_path_to_excel_1c">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="toolTipDuration">
+                 <number>-1</number>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
                 <property name="text">
-                 <string>Обновить</string>
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../media/main_rs.qrc">
+                  <normaloff>:/logo/folder.ico</normaloff>:/logo/folder.ico</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_update">
+                <property name="toolTip">
+                 <string/>
+                </property>
+                <property name="toolTipDuration">
+                 <number>-1</number>
+                </property>
+                <property name="text">
+                 <string/>
                 </property>
                 <property name="icon">
                  <iconset resource="../media/main_rs.qrc">
@@ -473,8 +524,8 @@
            <widget class="QWidget" name="verticalLayoutWidget">
             <property name="geometry">
              <rect>
-              <x>809</x>
-              <y>10</y>
+              <x>0</x>
+              <y>470</y>
               <width>141</width>
               <height>81</height>
              </rect>

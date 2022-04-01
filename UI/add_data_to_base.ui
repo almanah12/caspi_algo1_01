@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>610</height>
+    <width>581</width>
+    <height>595</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,11 +28,49 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>590</height>
+        <width>561</width>
+        <height>575</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="previousButton">
+           <property name="text">
+            <string>Пред.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="nextButton">
+           <property name="text">
+            <string>След.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveButton">
+           <property name="text">
+            <string>Сохр.</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="cursor">
@@ -87,40 +125,6 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Текущая цена:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="current_price_lineEdit">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="first_cost__label">
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Себестоимость:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="first_cost_lineEdit"/>
-          </item>
-          <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="font">
              <font>
@@ -132,7 +136,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="2" column="1">
            <widget class="QComboBox" name="check_limiter_comboBox">
             <property name="enabled">
              <bool>true</bool>
@@ -152,7 +156,7 @@
             </item>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_6">
             <property name="font">
              <font>
@@ -164,7 +168,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="3" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QComboBox" name="limiter_comboBox">
@@ -227,53 +231,18 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="previousButton">
-           <property name="text">
-            <string>Пред.</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="nextButton">
-           <property name="text">
-            <string>След.</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="saveButton">
-           <property name="text">
-            <string>Сохр.</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
+       <item row="1" column="0">
         <widget class="QTabWidget" name="tabWidget">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="font">
           <font>
            <pointsize>10</pointsize>
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="sity_1">
           <attribute name="icon">
@@ -288,33 +257,54 @@
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_8">
+            <widget class="QLabel" name="label_3">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="text">
-              <string>Город 1:</string>
+              <string>Текущая цена:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="city_1_comboBox">
-             <property name="editable">
+            <widget class="QLineEdit" name="current_price_lineEdit_1">
+             <property name="enabled">
               <bool>true</bool>
-             </property>
-             <property name="insertPolicy">
-              <enum>QComboBox::InsertAlphabetically</enum>
              </property>
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="first_cost__label">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="text">
-              <string>Город 1 мин.цена:</string>
+              <string>Себестоимость:</string>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
+            <widget class="QLineEdit" name="first_cost_lineEdit_1"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Минимальная цена:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <widget class="QLineEdit" name="min_price_lineEdit_1"/>
+              <widget class="QLineEdit" name="min_price_lineEdit_1">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_7">
@@ -328,21 +318,34 @@
                <property name="decimals">
                 <number>1</number>
                </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>25.000000000000000</double>
+               </property>
               </widget>
              </item>
             </layout>
            </item>
-           <item row="2" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_10">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="text">
-              <string>Город 1 макс.цена:</string>
+              <string>Максимальная цена:</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="3" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
-              <widget class="QLineEdit" name="max_price_lineEdit_1"/>
+              <widget class="QLineEdit" name="max_price_lineEdit_1">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_12">
@@ -355,6 +358,12 @@
               <widget class="QDoubleSpinBox" name="max_price_spinBox_1">
                <property name="decimals">
                 <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
                </property>
               </widget>
              </item>
@@ -375,40 +384,44 @@
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_14">
+            <widget class="QLabel" name="label_21">
              <property name="text">
-              <string>Город 2:</string>
+              <string>Текущая цена:</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QLineEdit" name="max_price_lineEdit_2"/>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>%</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="max_price_spinBox_2"/>
-             </item>
-            </layout>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="current_price_lineEdit_2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_16">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_22">
              <property name="text">
-              <string>Город 2 макс.цена:</string>
+              <string>Себестоимость:</string>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
+            <widget class="QLineEdit" name="first_cost_lineEdit_2"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Минимальная цена:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QLineEdit" name="min_price_lineEdit_2"/>
+              <widget class="QLineEdit" name="min_price_lineEdit_2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_11">
@@ -418,23 +431,57 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="min_price_spinBox_2"/>
+              <widget class="QDoubleSpinBox" name="min_price_spinBox_2">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>25.000000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_15">
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_16">
              <property name="text">
-              <string>Город 2 мин.цена:</string>
+              <string>Максимальная цена:</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="city_2_comboBox">
-             <property name="editable">
-              <bool>true</bool>
-             </property>
-            </widget>
+           <item row="3" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLineEdit" name="max_price_lineEdit_2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="max_price_spinBox_2">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -451,37 +498,44 @@
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_23">
+            <widget class="QLabel" name="label_25">
              <property name="text">
-              <string>Город 3:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_24">
-             <property name="text">
-              <string>Город 3 мин.цена:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_20">
-             <property name="text">
-              <string>Город 3 макс.цена:</string>
+              <string>Текущая цена:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="city_3_comboBox">
-             <property name="editable">
+            <widget class="QLineEdit" name="current_price_lineEdit_3">
+             <property name="enabled">
               <bool>true</bool>
              </property>
             </widget>
            </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_27">
+             <property name="text">
+              <string>Себестоимость:</string>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="1">
+            <widget class="QLineEdit" name="first_cost_lineEdit_3"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_24">
+             <property name="text">
+              <string>Минимальная цена:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <item>
-              <widget class="QLineEdit" name="min_price_lineEdit_3"/>
+              <widget class="QLineEdit" name="min_price_lineEdit_3">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_13">
@@ -491,14 +545,35 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="min_price_spinBox_3"/>
+              <widget class="QDoubleSpinBox" name="min_price_spinBox_3">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>25.000000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_20">
+             <property name="text">
+              <string>Максимальная цена:</string>
+             </property>
+            </widget>
            </item>
            <item row="3" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_8">
              <item>
-              <widget class="QLineEdit" name="max_price_lineEdit_3"/>
+              <widget class="QLineEdit" name="max_price_lineEdit_3">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_17">
@@ -508,7 +583,17 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="max_price_spinBox_3"/>
+              <widget class="QDoubleSpinBox" name="max_price_spinBox_3">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -527,37 +612,44 @@
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_29">
+            <widget class="QLabel" name="label_28">
              <property name="text">
-              <string>Город 4:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_30">
-             <property name="text">
-              <string>Город 4 мин.цена:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_26">
-             <property name="text">
-              <string>Город 4 макс.цена:</string>
+              <string>Текущая цена:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="city_4_comboBox">
-             <property name="editable">
+            <widget class="QLineEdit" name="current_price_lineEdit_4">
+             <property name="enabled">
               <bool>true</bool>
              </property>
             </widget>
            </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_31">
+             <property name="text">
+              <string>Себестоимость:</string>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="1">
+            <widget class="QLineEdit" name="first_cost_lineEdit_4"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_30">
+             <property name="text">
+              <string>Минимальная цена:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_9">
              <item>
-              <widget class="QLineEdit" name="min_price_lineEdit_4"/>
+              <widget class="QLineEdit" name="min_price_lineEdit_4">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_18">
@@ -567,14 +659,35 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="min_price_spinBox_4"/>
+              <widget class="QDoubleSpinBox" name="min_price_spinBox_4">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>25.000000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
-           <item row="2" column="1">
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_26">
+             <property name="text">
+              <string>Максимальная цена:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_10">
              <item>
-              <widget class="QLineEdit" name="max_price_lineEdit_4"/>
+              <widget class="QLineEdit" name="max_price_lineEdit_4">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_19">
@@ -584,7 +697,17 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="max_price_spinBox_4"/>
+              <widget class="QDoubleSpinBox" name="max_price_spinBox_4">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>100.000000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

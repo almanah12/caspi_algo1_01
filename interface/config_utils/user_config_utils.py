@@ -5,7 +5,7 @@ Saving, loading, and copying settings helper functions for configuration.py can 
 import os
 
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QCompleter
+from PyQt5.QtWidgets import QFileDialog, QCompleter, QMessageBox
 from qtpy import QtCore
 
 from caspi_pars.helpers import resource_path
@@ -121,3 +121,32 @@ def save_comboBox(file, comboBox):
 def delete_comboBox(file, comboBox):
     comboBox.removeItem(comboBox.currentIndex())
     save_comboBox(file, comboBox)
+
+
+def add_pp(config):
+    if not config.lineEdit_list_PP.text():
+        config.lineEdit_list_PP.setText(config.comboBox_list_name_pp.currentText())
+    else:
+        config.lineEdit_list_PP.setText(config.lineEdit_list_PP.text()+";"+config.comboBox_list_name_pp.currentText())
+
+
+def clear_pp(config):
+    config.lineEdit_list_PP.setText('')
+
+
+def add_city(config):
+    if not config.comboBox_number_cities.currentText() or not config.comboBox_name_city.currentText()\
+            or not config.lineEdit_list_PP.text():
+        QMessageBox.about(config, 'Ошибка', 'Нужно заполнить поля("№ города", "Название города", "Точки продаж")')
+    elif config.comboBox_number_cities.currentText() == 'Основной город':
+        config.lineEdit_city_name_1.setText(config.comboBox_name_city.currentText())
+        config.lineEdit_seller_points_1.setText(config.lineEdit_list_PP.text())
+    elif config.comboBox_number_cities.currentText() == 'Город 2':
+        config.lineEdit_city_name_2.setText(config.comboBox_name_city.currentText())
+        config.lineEdit_seller_points_2.setText(config.lineEdit_list_PP.text())
+    elif config.comboBox_number_cities.currentText() == 'Город 3':
+        config.lineEdit_city_name_3.setText(config.comboBox_name_city.currentText())
+        config.lineEdit_seller_points_3.setText(config.lineEdit_list_PP.text())
+    elif config.comboBox_number_cities.currentText() == 'Город 4':
+        config.lineEdit_city_name_4.setText(config.comboBox_name_city.currentText())
+        config.lineEdit_seller_points_4.setText(config.lineEdit_list_PP.text())

@@ -9,6 +9,8 @@ from caspi_pars.enums import list_stores, list_cities, filter_for_goods_with_dat
 from caspi_pars.interface.config_utils.user_config_utils import search_line_comboBox, add_comboBox, delete_comboBox, \
     get_list_comboBox
 from caspi_pars.db_QSqlDatabase import db
+from caspi_pars.db_tables import session, permanent_table, temporary_table
+
 #
 # if not os.path.exists(resource_path('data_shop')):
 #     os.mkdir(resource_path('data_shop'))
@@ -27,6 +29,36 @@ class Add_Base_Data(QDialog):
         super(Add_Base_Data, self).__init__(parent)  # Initializing object
         uic.loadUi(resource_path(r'UI/add_data_to_base.ui'), self)  # Loading the main UI
 
+        self.add_b_d_dict = {
+                'current_price_1': self.current_price_lineEdit_1,
+                'first_cost_1': self.first_cost_lineEdit_1,
+                'min_price_1': self.min_price_lineEdit_1,
+                'max_price_1': self.max_price_lineEdit_1,
+                'min_price_spinBox_1': self.min_price_spinBox_1,
+                'max_price_spinBox_1': self.max_price_spinBox_1,
+
+                'current_price_2': self.current_price_lineEdit_2,
+                'first_cost_2': self.first_cost_lineEdit_2,
+                'min_price_2': self.min_price_lineEdit_2,
+                'max_price_2': self.max_price_lineEdit_2,
+                'min_price_spinBox_2': self.min_price_spinBox_2,
+                'max_price_spinBox_2': self.max_price_spinBox_2,
+
+                'current_price_3': self.current_price_lineEdit_3,
+                'first_cost_3': self.first_cost_lineEdit_3,
+                'min_price_3': self.min_price_lineEdit_3,
+                'max_price_3': self.max_price_lineEdit_3,
+                'min_price_spinBox_3': self.min_price_spinBox_3,
+                'max_price_spinBox_3': self.max_price_spinBox_3,
+
+                'current_price_4': self.current_price_lineEdit_4,
+                'first_cost_4': self.first_cost_lineEdit_4,
+                'min_price_4': self.min_price_lineEdit_4,
+                'max_price_4': self.max_price_lineEdit_4,
+                'min_price_spinBox_4': self.min_price_spinBox_4,
+                'max_price_spinBox_4': self.max_price_spinBox_4,
+            }
+
         self.parent = parent
         # self.current_index = current_index
 
@@ -36,28 +68,36 @@ class Add_Base_Data(QDialog):
         self.mapper.setModel(self.model)
         self.mapper.addMapping(self.articul_lineEdit, 2)
         self.mapper.addMapping(self.lineEdit_2, 3)
-        self.mapper.addMapping(self.current_price_lineEdit, 5)
-        self.mapper.addMapping(self.first_cost_lineEdit, 6)
-        self.mapper.addMapping(self.check_limiter_comboBox, 7)
-        self.mapper.addMapping(self.limiter_comboBox, 8)
+        self.mapper.addMapping(self.check_limiter_comboBox, 4)
+        self.mapper.addMapping(self.limiter_comboBox, 5)
 
-        self.mapper.addMapping(self.city_1_comboBox, 9)
+        self.mapper.addMapping(self.current_price_lineEdit_1, 8)
+        self.mapper.addMapping(self.first_cost_lineEdit_1, 9)
         self.mapper.addMapping(self.min_price_spinBox_1, 10)
         self.mapper.addMapping(self.min_price_lineEdit_1, 11)
         self.mapper.addMapping(self.max_price_spinBox_1, 12)
         self.mapper.addMapping(self.max_price_lineEdit_1, 13)
 
-        self.mapper.addMapping(self.city_2_comboBox, 12)
-        self.mapper.addMapping(self.min_price_lineEdit_2, 13)
-        self.mapper.addMapping(self.max_price_lineEdit_2, 14)
+        self.mapper.addMapping(self.current_price_lineEdit_2, 16)
+        self.mapper.addMapping(self.first_cost_lineEdit_2, 17)
+        self.mapper.addMapping(self.min_price_spinBox_2, 18)
+        self.mapper.addMapping(self.min_price_lineEdit_2, 19)
+        self.mapper.addMapping(self.max_price_spinBox_2, 20)
+        self.mapper.addMapping(self.max_price_lineEdit_2, 21)
 
-        self.mapper.addMapping(self.city_3_comboBox, 15)
-        self.mapper.addMapping(self.min_price_lineEdit_3, 16)
-        self.mapper.addMapping(self.max_price_lineEdit_3, 17)
+        self.mapper.addMapping(self.current_price_lineEdit_3, 24)
+        self.mapper.addMapping(self.first_cost_lineEdit_3, 25)
+        self.mapper.addMapping(self.min_price_spinBox_3, 26)
+        self.mapper.addMapping(self.min_price_lineEdit_3, 27)
+        self.mapper.addMapping(self.max_price_spinBox_3, 28)
+        self.mapper.addMapping(self.max_price_lineEdit_3, 29)
 
-        self.mapper.addMapping(self.city_4_comboBox, 18)
-        self.mapper.addMapping(self.min_price_lineEdit_4, 19)
-        self.mapper.addMapping(self.max_price_lineEdit_4, 20)
+        self.mapper.addMapping(self.current_price_lineEdit_4, 32)
+        self.mapper.addMapping(self.first_cost_lineEdit_4, 33)
+        self.mapper.addMapping(self.min_price_spinBox_4, 34)
+        self.mapper.addMapping(self.min_price_lineEdit_4, 35)
+        self.mapper.addMapping(self.max_price_spinBox_4, 36)
+        self.mapper.addMapping(self.max_price_lineEdit_4, 37)
 
         # (1, 2) Добавляет список в виджет, (3) Поиск выбора в виджете comboBox
         listItems = get_list_comboBox(list_stores_ini, list_stores)
@@ -69,13 +109,14 @@ class Add_Base_Data(QDialog):
                                                                          self.limiter_comboBox, list_stores))
         self.remove_name_store_pushButton.clicked.connect(lambda: delete_comboBox(list_stores_ini, self.limiter_comboBox))
 
-        # (1) Добавляет список в виджет, (2) Поиск выбора в виджете comboBox
-        self.city_1_comboBox.addItems(list_cities)
-        search_line_comboBox(list_cities, self.city_1_comboBox)
+        # # (1) Добавляет список в виджет, (2) Поиск выбора в виджете comboBox
+        # self.city_1_comboBox.addItems(list_cities)
+        # search_line_comboBox(list_cities, self.city_1_comboBox)
 
         # Кнопки управления
-        self.previousButton.clicked.connect(self.mapper.toPrevious)
-        self.nextButton.clicked.connect(self.mapper.toNext)
+        self.previousButton.clicked.connect(self.previous_button)
+        self.nextButton.clicked.connect(self.next_button)
+
 
         # Проверяем КОРРЕкТНО Ли введеные данные
         self.saveButton.clicked.connect(self.check_condition_save)
@@ -83,29 +124,50 @@ class Add_Base_Data(QDialog):
         # Проверяет есть ли ограничитель. Если да - огр:вкл
         self.check_limiter_comboBox.currentTextChanged.connect(self.check_limiter)
 
+        # Проверяет
+        self.check_limiter_comboBox.currentTextChanged.connect(self.check_limiter)
+
         # Вычисляет мин и макс цены умножая Себест. на % соотношение
         # Город_1
         self.min_price_spinBox_1.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.min_price_lineEdit_1, self.min_price_spinBox_1))
+                                                      (self.first_cost_lineEdit_1, self.min_price_lineEdit_1, self.min_price_spinBox_1))
         self.max_price_spinBox_1.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.max_price_lineEdit_1, self.max_price_spinBox_1))
+                                                      (self.first_cost_lineEdit_1,self.max_price_lineEdit_1, self.max_price_spinBox_1))
+        self.first_cost_lineEdit_1.textChanged.connect(lambda: self.calculate_min_max_price \
+                                                    (self.first_cost_lineEdit_1, self.min_price_lineEdit_1, self.min_price_spinBox_1))
+        self.first_cost_lineEdit_1.textChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.first_cost_lineEdit_1, self.max_price_lineEdit_1, self.max_price_spinBox_1))
+
         # Город_2
         self.min_price_spinBox_2.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.min_price_lineEdit_2, self.min_price_spinBox_2))
+                                                      (self.first_cost_lineEdit_2, self.min_price_lineEdit_2, self.min_price_spinBox_2))
         self.max_price_spinBox_2.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.max_price_lineEdit_2, self.max_price_spinBox_2))
+                                                      (self.first_cost_lineEdit_2, self.max_price_lineEdit_2, self.max_price_spinBox_2))
+        self.first_cost_lineEdit_2.textChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.first_cost_lineEdit_2, self.min_price_lineEdit_2, self.min_price_spinBox_2))
+        self.first_cost_lineEdit_2.textChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.first_cost_lineEdit_2, self.max_price_lineEdit_2, self.max_price_spinBox_2))
         # Город_3
         self.min_price_spinBox_3.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.min_price_lineEdit_3, self.min_price_spinBox_3))
+                                                      (self.first_cost_lineEdit_3, self.min_price_lineEdit_3, self.min_price_spinBox_3))
         self.max_price_spinBox_3.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.max_price_lineEdit_3, self.max_price_spinBox_3))
+                                                      (self.first_cost_lineEdit_3, self.max_price_lineEdit_3, self.max_price_spinBox_3))
+        self.first_cost_lineEdit_3.textChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.first_cost_lineEdit_3, self.min_price_lineEdit_3, self.max_price_spinBox_3))
+        self.first_cost_lineEdit_3.textChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.first_cost_lineEdit_3, self.max_price_lineEdit_3, self.max_price_spinBox_3))
+
+
         # Город_4
         self.min_price_spinBox_4.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.min_price_lineEdit_4, self.min_price_spinBox_4))
+                                                      (self.first_cost_lineEdit_4, self.min_price_lineEdit_4, self.min_price_spinBox_4))
         self.max_price_spinBox_4.valueChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.max_price_lineEdit_4, self.max_price_spinBox_4))
-
-
+                                                      (self.first_cost_lineEdit_4, self.max_price_lineEdit_4, self.max_price_spinBox_4))
+        self.first_cost_lineEdit_4.textChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.first_cost_lineEdit_4, self.min_price_lineEdit_4, self.max_price_spinBox_4))
+        self.first_cost_lineEdit_4.textChanged.connect(lambda: self.calculate_min_max_price\
+                                                      (self.first_cost_lineEdit_4, self.max_price_lineEdit_4, self.max_price_spinBox_4))
+        # self.tabWidget.itemClicked.connect(self.city_visible)
 
         # Ставит в модель таблицу
         self.model.setTable("permanent_table")
@@ -120,6 +182,27 @@ class Add_Base_Data(QDialog):
     def init_delegate(self, current_index):
         # Выводить данные с текущим индексом
         self.mapper.setCurrentIndex(current_index)
+        self.tab_widget_manipulation()
+
+    def next_button(self):
+        self.mapper.toNext()
+        self.tab_widget_manipulation()
+
+    def previous_button(self):
+        self.mapper.toPrevious()
+        self.tab_widget_manipulation()
+
+    def tab_widget_manipulation(self):
+        curr_row = session.query(permanent_table). \
+            filter(permanent_table.c.Артикул == self.articul_lineEdit.text()).first()
+        for i in range(self.tabWidget.count()):
+            self.tabWidget.setTabEnabled(i, True)
+        for i in range(int(curr_row['Колич_г']), self.tabWidget.count()):
+            self.tabWidget.setTabEnabled(i, False)
+        for i in range(self.tabWidget.count()):
+            self.tabWidget.setTabText(i, 'Город {}'.format(i+1))
+        for i in range(int(curr_row['Колич_г'])):
+            self.tabWidget.setTabText(i, curr_row['Город_{}'.format(i+1)])
 
     def filter_data(self):
         """
@@ -137,24 +220,15 @@ class Add_Base_Data(QDialog):
         filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
         self.model.setFilter(filter_str)
 
-    def \
-            calculate_min_max_price(self, widget_lineEdit, widget_spinBox):
+    def calculate_min_max_price(self, first_cost, widget_lineEdit, widget_spinBox):
         """
         """
         try:
-            min_max_price = int((int(self.first_cost_lineEdit.text()) * widget_spinBox.value()) / 100 + \
-                                int(self.first_cost_lineEdit.text()))
+            min_max_price = int((int(first_cost.text()) * widget_spinBox.value())/100 + \
+                                int(first_cost.text()))
             widget_lineEdit.setText(str(min_max_price))
-            # curr_articul = self.articul_lineEdit.text()
-            # print('curr_articul: ', curr_articul)
-            # curr_row = session.query(percent_price_table).filter(percent_price_table.c.Артикул == curr_articul).one()
-            # print(curr_row)
-            # conn.execute(percent_price_table.insert().values(Город_1_мин_ценаПроценты=self.min_price_spinBox_1.value(), Город_1_макс_ценаПроценты=self.max_price_spinBox_1.value()))
-            # curr_row.Город_1_мин_ценаПроценты = self.min_price_spinBox_1.value()
-            # session.commit()
-            # # curr_row.Город_1_макс_ценаПроценты =
-        except Exception:
-            print('calculate_min_max_price:', Exception)
+
+        except Exception as ex:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setText("Ошибка")
@@ -175,43 +249,46 @@ class Add_Base_Data(QDialog):
 
     def check_condition_save(self):
         """
-        Проверка условии на - правильно ли
-        введены данные
+        Проверка условии на - правильность
+        введеных данных
         """
-        try:
-            if not (int(self.current_price_lineEdit.text())/3 < int(self.first_cost_lineEdit.text()) < int(self.current_price_lineEdit.text())*3):
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Critical)
-                msg.setText("Ошибка")
-                msg.setText('Значение себестоимости слишком занижена \nили завышена от текущей цены')
-                msg.setWindowTitle("Ошибка")
-                msg.exec_()
+        curr_row = session.query(permanent_table). \
+            filter(permanent_table.c.Артикул == self.articul_lineEdit.text()).first()
+        if self.parent.configuration.different_price_citiesradioButton.isChecked():
+            full_data_bool = True
+            for i in range(1, int(curr_row['Колич_г']+1)):
+                full_data_bool *= bool(self.add_b_d_dict['first_cost_{}'.format(i)].text())* \
+                                  bool(self.add_b_d_dict['min_price_spinBox_{}'.format(i)].value())* \
+                                  bool(self.add_b_d_dict['max_price_spinBox_{}'.format(i)].value())
 
-            elif self.city_1_comboBox.currentText() not in list_cities:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Critical)
-                msg.setText("Ошибка")
-                msg.setText('Выберите город из списка(Город №)')
-                msg.setWindowTitle("Ошибка")
-                msg.exec_()
+            self.check_full_data_bool(full_data_bool)
 
-            else:
-                self.mapper.submit()
-                self.parent.filter_data()
+        else:
+            full_data_bool = bool(self.add_b_d_dict['first_cost_1'].text()) * \
+                              bool(self.add_b_d_dict['min_price_spinBox_1'].value()) * \
+                              bool(self.add_b_d_dict['max_price_spinBox_'].value())
+            self.check_full_data_bool(full_data_bool)
 
-        except Exception as ex:
-            print('check_condition_save: ', ex)
+    def check_full_data_bool(self, full_data_bool, ):
+        if full_data_bool==1:
+            self.mapper.submit()
+            self.parent.filter_data()
+        else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
-            msg.setText("Ошибка")
-            msg.setText('Нужно записать целочисленное \nзначение в Себестоимость!')
+            msg.setText("Условие: Разные цены для городов")
+            msg.setText('Заполните данные всех городов')
             msg.setWindowTitle("Ошибка")
             msg.exec_()
 
-    # def insert_percent_price_to_table(self):
-    #     curr_articul = self.articul_lineEdit.text()
-    #     print('curr_articul: ', curr_articul)
-    #     curr_row = session.query(percent_price_table).filter(percent_price_table.c.Артикул == curr_articul).one()
-    #     curr_row.Город_1_мин_ценаПроценты = self.min_price_spinBox_1.value()
-    #     curr_row.Город_1_макс_ценаПроценты = self.max_price_spinBox_1.value()
+        # if not (int(self.current_price_lineEdit.text())/3 < int(self.first_cost_lineEdit.text()) < int(self.current_price_lineEdit.text())*3):
+        #     msg = QMessageBox()
+        #     msg.setIcon(QMessageBox.Critical)
+        #     msg.setText("Ошибка")
+        #     msg.setText('Значение себестоимости слишком занижена \nили завышена от текущей цены')
+        #     msg.setWindowTitle("Ошибка")
+        #     msg.exec_()
+
+
+
 

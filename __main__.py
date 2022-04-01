@@ -25,6 +25,8 @@ from caspi_pars.helpers import resource_path, get_current_version, logger
 from caspi_pars.threads import runThread
 from caspi_pars.interface.utils import add_to_table_widget, show_and_bring_window_to_front, add_to_data_table_view
 from caspi_pars.interface.configuration import Configuration
+from caspi_pars.interface.add_base_data import Add_Base_Data
+
 from caspi_pars.interface.update import Update
 from caspi_pars.interface.license import License
 from caspi_pars.db_tables import temporary_table, engine
@@ -63,6 +65,7 @@ class Interface(QMainWindow):
         uic.loadUi(resource_path(r'UI/parsingMain.ui'), self)  # Loading the main UI
 
         self.configuration = Configuration(parent=self)  # Loading configuration
+        self.add_data_base = Add_Base_Data(parent=self)  # Loading
 
         # Initiating threading pool
         self.threadCount = self.configuration.number_thread_spinBox.value()
@@ -79,6 +82,11 @@ class Interface(QMainWindow):
 
         if self.table_exists(engine, 'temporary_table'):
             add_to_data_table_view(self, model_temp, 'temporary_table', self.temporary_tableView)
+
+        self.comboBox_show_data_other_city.setToolTip("Показывает данные для определеннго числа городов")
+        self.filter_comboBox.setToolTip("Фильтр данных")
+        self.pushButton_path_to_excel_1c.setToolTip("Путь к файлу Excel(1С) для обн. данных")
+        self.pushButton_update.setToolTip("Обновить данные")
 
     def initiate_click_run_thread(self):
         """

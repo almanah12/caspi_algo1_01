@@ -1,5 +1,8 @@
 import os
+import pickle
 import shutil
+import time
+
 import pandas as pd
 
 from collections import OrderedDict
@@ -13,7 +16,7 @@ from selenium.common.exceptions import TimeoutException
 from caspi_pars.helpers import resource_path
 from caspi_pars.webdriver_options import get_driver
 from caspi_pars.db_tables import temporary_table, permanent_table, engine, session
-from caspi_pars.helpers import logger
+from caspi_pars.helpers import logger, enter_caspi_seller
 
 
 class GetDataKaspiSeller:
@@ -33,7 +36,7 @@ class GetDataKaspiSeller:
         #  Создаем папку занова для excel файлов
         os.mkdir(resource_path(r'data_files/data_shops'))
 
-        for _ in range(3):
+        for _ in range(5):
             try:
                 meta = MetaData()
                 meta.create_all(engine)  # или books.create(engine), authors.create(engine)
@@ -45,24 +48,22 @@ class GetDataKaspiSeller:
                 # Заходит на стр. каспи клиент
                 url = 'https://kaspi.kz/merchantcabinet/login?logout=true'
 
-                driver = get_driver()
+                driver = get_driver(False)
                 driver.get(url)
-                driver.set_page_load_timeout(30)
+                driver.set_page_load_timeout(40)
+                driver.implicitly_wait(20)
+
                 if self.gui.check_stop:
                     break
                 # Установливает окно браузера в полный экран(потому что мешает подсказка-помощник сайта)
                 driver.maximize_window()
-                driver.implicitly_wait(10)
                 # Вбиваем логин и пароль
-                mail = driver.find_element(By.ID, 'email')
-                mail.send_keys(self.gui.configuration.email_login_lineEdit.text())
+                enter_caspi_seller(driver, self.gui.configuration.email_login_lineEdit.text(), self.gui.configuration.password_lineEdit.text())
 
-                password = driver.find_element(By.ID, 'password')
-                password.send_keys(self.gui.configuration.password_lineEdit.text())
-
-                enter_btn = driver.find_element(By.XPATH,'/html/body/div[4]/main/div[2]/div[4]/button')
-                driver.implicitly_wait(10)
-                enter_btn.click()
+                # for cookie in pickle.load(open(resource_path('caspi_enter_cookies') 'wb'))):
+                #     driver.add_cookie(cookie)
+                # time.sleep(2)
+                # driver.refresh()
 
                 if self.gui.check_stop:
                     break
@@ -126,7 +127,7 @@ class GetDataKaspiSeller:
 
                 # Цикл для записи данных товаров
                 for i in range(len(count_shops)):
-                # for i in range(1):
+                # for i in range(4):
                     self.gets_dt_good(driver, i)
 
                 # Берем значение кнопки след 'true' или 'false'
@@ -206,131 +207,94 @@ class GetDataKaspiSeller:
             availability_in_stors = driver.find_elements_by_xpath(
                 '//div[@class="offer-managment__pickup-points-cell-point"]')[i].text
             for i in availability_in_stors.split(', '):
-                if i == self.gui.configuration.PP1.objectName():
-                    list_cities.insert(0, self.gui.configuration.PP1.currentText())
-                elif i == self.gui.configuration.PP2.objectName():
-                    list_cities.append(self.gui.configuration.PP2.currentText())
-                elif i == self.gui.configuration.PP3.objectName():
-                    list_cities.append(self.gui.configuration.PP3.currentText())
-                elif i == self.gui.configuration.PP4.objectName():
-                    list_cities.append(self.gui.configuration.PP4.currentText())
+                if i in self.gui.configuration.lineEdit_seller_points_1.text().split(';'):
+                    list_cities.insert(0, self.gui.configuration.lineEdit_city_name_1.text())
+                elif i in self.gui.configuration.lineEdit_seller_points_2.text().split(';'):
+                    list_cities.append(self.gui.configuration.lineEdit_city_name_2.text())
+                elif i in self.gui.configuration.lineEdit_seller_points_3.text().split(';'):
+                    list_cities.append(self.gui.configuration.lineEdit_city_name_3.text())
+                elif i in self.gui.configuration.lineEdit_seller_points_4.text().split(';'):
+                    list_cities.append(self.gui.configuration.lineEdit_city_name_4.text())
+
             # Отфильтровывает убирает повт. города
             sort_list_cities = list(OrderedDict.fromkeys(list_cities))
-            logger.debug(sort_list_cities)
+            logger.debug('sort_list_cities {}'.format(sort_list_cities))
             count_cities = len(sort_list_cities)
+            for i in range(4):
+                sort_list_cities.append(None)
+            logger.debug('sort_list_cities {}'.format(sort_list_cities))
 
         except:
             availability_in_stores = "Нет доступных точек"
 
-        # Автозаполнение
-        if self.gui.configuration.comboBox_autocomplete.currentText() == 'Нет':
-            if count_cities == 1:
-                # Переменая которая нужна для записи в данных в временную табл.
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0])
-
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0])
-
-            if count_cities == 2:
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1])
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
-
-            if count_cities == 3:
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-
-            if count_cities == 4:
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1], Город_3=sort_list_cities[2], Город_4=sort_list_cities[3])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2],
-                            Город_4=sort_list_cities[3])
+        sql_insert_temporary_table = temporary_table.insert().values(
+            Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods,
+            Доступность=availability_in_stores, Колич_г=count_cities, Город_1=sort_list_cities[0],
+            Город_2=sort_list_cities[1], Город_3=sort_list_cities[2], Город_4=sort_list_cities[3])
+        # Переменая которая нужна для записи в данных в постоянную табл.
+        sql_insert_permanent_table = permanent_table.insert().values(
+            Артикул=vendor_code_goods, Модель=name_goods, Город_1=sort_list_cities[0],
+            Город_2=sort_list_cities[1], Город_3=sort_list_cities[2], Колич_г=count_cities)
+        sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+            .values(Колич_г=count_cities, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2],
+                    Город_4=sort_list_cities[3])
 
         # Автозаполнение
-        else:
-            price_cost_auto = int(price_goods * self.gui.configuration.doubleSpinBox_prime_cost_k.value())
-            min_p_auto = int(price_goods * self.gui.configuration.doubleSpinBox_min_cost_k.value())
-            max_p_auto = int(price_goods * self.gui.configuration.doubleSpinBox_max_cost_k.value())
-            if count_cities == 1:
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
-                    Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto)
-
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0])
-
-            if count_cities == 2:
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods,
-                    Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto,
-                    Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
-
-            if count_cities == 3:
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods,
-                    Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto,
-                    Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-
-            if count_cities == 4:
-                sql_insert_temporary_table = temporary_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
-                    Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
-                    Город_2=sort_list_cities[1], Город_3=sort_list_cities[2], Город_4=sort_list_cities[3])
-                # Переменая которая нужна для записи в данных в постоянную табл.
-                sql_insert_permanent_table = permanent_table.insert().values(
-                    Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
-                    Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto,
-                    Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
-                sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                    .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2],
-                            Город_4=sort_list_cities[3])
-
-            self.gui.configuration.comboBox_autocomplete.setCurrentText('Нет')
+        # else:
+        #     price_cost_auto = int(price_goods * self.gui.configuration.doubleSpinBox_prime_cost_k.value())
+        #     min_p_auto = int(price_goods * self.gui.configuration.doubleSpinBox_min_cost_k.value())
+        #     max_p_auto = int(price_goods * self.gui.configuration.doubleSpinBox_max_cost_k.value())
+        #     if count_cities == 1:
+        #         sql_insert_temporary_table = temporary_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods,
+        #             Доступность=availability_in_stores, Колич_г=count_cities, Город_1=sort_list_cities[0])
+        #         # Переменая которая нужна для записи в данных в постоянную табл.
+        #         sql_insert_permanent_table = permanent_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Город_1=sort_list_cities[0],
+        #             Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto)
+        #
+        #         sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+        #             .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0])
+        #
+        #     if count_cities == 2:
+        #         sql_insert_temporary_table = temporary_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
+        #             Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
+        #             Город_2=sort_list_cities[1])
+        #         # Переменая которая нужна для записи в данных в постоянную табл.
+        #         sql_insert_permanent_table = permanent_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods,
+        #             Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto,
+        #             Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
+        #         sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+        #             .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1])
+        #
+        #     if count_cities == 3:
+        #         sql_insert_temporary_table = temporary_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
+        #             Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
+        #             Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
+        #         # Переменая которая нужна для записи в данных в постоянную табл.
+        #         sql_insert_permanent_table = permanent_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods,
+        #             Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto,
+        #             Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
+        #         sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+        #             .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
+        #
+        #     if count_cities == 4:
+        #         sql_insert_temporary_table = temporary_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0], Ссылка=link_goods, Текущая_ц=price_goods,
+        #             Доступность=availability_in_stores, Колич_городов=count_cities, Город_1=sort_list_cities[0],
+        #             Город_2=sort_list_cities[1], Город_3=sort_list_cities[2], Город_4=sort_list_cities[3])
+        #         # Переменая которая нужна для записи в данных в постоянную табл.
+        #         sql_insert_permanent_table = permanent_table.insert().values(
+        #             Артикул=vendor_code_goods, Модель=name_goods, Текущая_ц=price_goods, Город_1=sort_list_cities[0],
+        #             Себестоимость=price_cost_auto, Есть_огрч="Нет", Г_1_мин_ц=min_p_auto, Г_1_макс_ц=max_p_auto,
+        #             Город_2=sort_list_cities[1], Город_3=sort_list_cities[2])
+        #         sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+        #             .values(Текущая_ц=price_goods, Город_1=sort_list_cities[0], Город_2=sort_list_cities[1], Город_3=sort_list_cities[2],
+        #                     Город_4=sort_list_cities[3])
 
         condition_to_perm_table = session.query(permanent_table).filter(
             permanent_table.c.Артикул == vendor_code_goods).first()

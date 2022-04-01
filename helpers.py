@@ -3,19 +3,24 @@ Miscellaneous helper functions and constants.
 """
 
 import os
+import pickle
 import sys
 
 import requests
 from loguru import logger
 from http.server import HTTPServer, CGIHTTPRequestHandler
 from pyngrok import ngrok
+from selenium.webdriver.common.by import By
 
 BASE_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
 log_file_path = os.path.join(BASE_DIR, 'Logs/check.log')
+log_time_path = os.path.join(BASE_DIR, 'Logs/time.log')
+
 logger.add(sys.stderr, format="{time} {level} {message}", filter="my_module", level="INFO")
 logger.add(log_file_path, rotation="00:00", retention="30 days", encoding='utf-8', level="INFO")
+logger.add(log_time_path, rotation="00:00", retention="30 days", encoding='utf-8', level="CRITICAL")
 
 
 # def find_data_file(filename):
@@ -99,3 +104,16 @@ def download_proxy_list():
     with open("data_shop/proxy_list.txt", 'wb') as f:
         # to a new file in binary mode.
         f.write(r.content)
+
+
+def enter_caspi_seller(driver, email_login, password_login):
+    mail = driver.find_element(By.ID, 'email')
+    mail.send_keys(email_login)
+
+    password = driver.find_element(By.ID, 'password')
+    password.send_keys(password_login)
+
+    enter_btn = driver.find_element(By.XPATH, '//button[@class="button"]')
+    driver.implicitly_wait(10)
+    enter_btn.click()
+    # pickle.dump(driver.get_cookies(), open(f"caspi_enter_cookies", "wb"))

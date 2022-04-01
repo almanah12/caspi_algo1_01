@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import (QDialog, QMainWindow)
 
 from caspi_pars.interface.resources_qtdesigner import conf_rs
-from caspi_pars.enums import list_stores_ini, list_stores, list_cities
+from caspi_pars.enums import list_stores_ini, list_stores, list_cities, list_PP, list_number_cities
 from caspi_pars.helpers import resource_path
 from caspi_pars.interface.config_utils.slot_utils import load_slots
 from caspi_pars.interface.config_utils.user_config_utils import search_line_comboBox, save_comboBox, get_list_comboBox
@@ -43,8 +43,8 @@ class Configuration(QDialog):
         self.visible_list_articul()
         self.list_articulcomboBox.currentTextChanged.connect(self.visible_list_articul)
 
-        self.visible_autocomplete()
-        self.comboBox_autocomplete.currentTextChanged.connect(self.visible_autocomplete)
+        self.visible_google_cloud()
+        self.auto_downl_xml_to_google_comboBox.currentTextChanged.connect(self.visible_google_cloud)
 
         load_slots(self)
 
@@ -66,18 +66,15 @@ class Configuration(QDialog):
         self.type_proxy_comboBox.setCurrentText(self.setting_variables.value('type_proxy'))
 
         # Точки доступа
-        self.PP1.setCurrentText(self.setting_variables.value('PP1'))
-        self.PP2.setCurrentText(self.setting_variables.value('PP2'))
-        self.PP3.setCurrentText(self.setting_variables.value('PP3'))
-        self.PP4.setCurrentText(self.setting_variables.value('PP4'))
-        self.PP5.setCurrentText(self.setting_variables.value('PP5'))
-        self.PP6.setCurrentText(self.setting_variables.value('PP6'))
-        self.PP7.setCurrentText(self.setting_variables.value('PP7'))
-        self.PP8.setCurrentText(self.setting_variables.value('PP8'))
-        self.PP9.setCurrentText(self.setting_variables.value('PP9'))
-        self.PP10.setCurrentText(self.setting_variables.value('PP10'))
-        self.PP11.setCurrentText(self.setting_variables.value('PP11'))
-        self.PP12.setCurrentText(self.setting_variables.value('PP12'))
+        self.lineEdit_city_name_1.setText(self.setting_variables.value('city_name_1'))
+        self.lineEdit_seller_points_1.setText(self.setting_variables.value('seller_points_1'))
+        self.lineEdit_city_name_2.setText(self.setting_variables.value('city_name_2'))
+        self.lineEdit_seller_points_2.setText(self.setting_variables.value('seller_points_2'))
+        self.lineEdit_city_name_3.setText(self.setting_variables.value('city_name_3'))
+        self.lineEdit_seller_points_3.setText(self.setting_variables.value('seller_points_3'))
+        self.lineEdit_city_name_4.setText(self.setting_variables.value('city_name_4'))
+        self.lineEdit_seller_points_4.setText(self.setting_variables.value('seller_points_4'))
+
 
         # Наценка
         self.same_price_citiesradioButton.setChecked(self.setting_variables.value('same_price_cities', type=bool))
@@ -94,9 +91,9 @@ class Configuration(QDialog):
         self.list_articullineEdit.setText(self.setting_variables.value('path_list_articul'))
 
         # Файл
-        self.path_save_xml_lineEdit.setText(self.setting_variables.value('path_save_xml'))
+        # self.path_save_xml_lineEdit.setText(self.setting_variables.value('path_save_xml'))
         self.auto_downl_xml_comboBox.setCurrentText(self.setting_variables.value('auto_downl_xml'))
-        self.downl_file_ftp_comboBox.setCurrentText(self.setting_variables.value('downl_file_ftp'))
+        self.auto_downl_xml_to_google_comboBox.setCurrentText(self.setting_variables.value('auto_downl_xml_to_google_comboBox'))
         self.name_xml_file_lineEdit.setText(self.setting_variables.value('name_xml_file'))
         self.name_folder_lineEdit.setText(self.setting_variables.value('name_folder'))
 
@@ -121,18 +118,14 @@ class Configuration(QDialog):
         self.setting_variables.setValue('type_proxy', self.type_proxy_comboBox.currentText())
 
         # Точки доступа
-        self.setting_variables.setValue('PP1', self.PP1.currentText())
-        self.setting_variables.setValue('PP2', self.PP2.currentText())
-        self.setting_variables.setValue('PP3', self.PP3.currentText())
-        self.setting_variables.setValue('PP4', self.PP4.currentText())
-        self.setting_variables.setValue('PP5', self.PP5.currentText())
-        self.setting_variables.setValue('PP6', self.PP6.currentText())
-        self.setting_variables.setValue('PP7', self.PP7.currentText())
-        self.setting_variables.setValue('PP8', self.PP8.currentText())
-        self.setting_variables.setValue('PP9', self.PP9.currentText())
-        self.setting_variables.setValue('PP10', self.PP10.currentText())
-        self.setting_variables.setValue('PP11', self.PP11.currentText())
-        self.setting_variables.setValue('PP12', self.PP12.currentText())
+        self.setting_variables.setValue('city_name_1', self.lineEdit_city_name_1.text())
+        self.setting_variables.setValue('seller_points_1', self.lineEdit_seller_points_1.text())
+        self.setting_variables.setValue('city_name_2', self.lineEdit_city_name_2.text())
+        self.setting_variables.setValue('seller_points_2', self.lineEdit_seller_points_2.text())
+        self.setting_variables.setValue('city_name_3', self.lineEdit_city_name_3.text())
+        self.setting_variables.setValue('seller_points_3', self.lineEdit_seller_points_3.text())
+        self.setting_variables.setValue('city_name_4', self.lineEdit_city_name_4.text())
+        self.setting_variables.setValue('seller_points_4', self.lineEdit_seller_points_4.text())
 
         # Наценка
         self.setting_variables.setValue('same_price_cities', self.same_price_citiesradioButton.isChecked())
@@ -145,9 +138,9 @@ class Configuration(QDialog):
         self.setting_variables.setValue('path_list_articul', self.list_articullineEdit.text())
 
         # Файл
-        self.setting_variables.setValue('path_save_xml', self.path_save_xml_lineEdit.text())
+        # self.setting_variables.setValue('path_save_xml', self.path_save_xml_lineEdit.text())
         self.setting_variables.setValue('auto_downl_xml', self.auto_downl_xml_comboBox.currentText())
-        self.setting_variables.setValue('list_articul_path', self.downl_file_ftp_comboBox.currentText())
+        self.setting_variables.setValue('auto_downl_xml_to_google_comboBox', self.auto_downl_xml_to_google_comboBox.currentText())
         self.setting_variables.setValue('name_xml_file', self.name_xml_file_lineEdit.text())
         self.setting_variables.setValue('name_folder', self.name_folder_lineEdit.text())
 
@@ -185,65 +178,31 @@ class Configuration(QDialog):
 
             self.label_24.setVisible(True)
 
-    def visible_autocomplete(self):
-        if self.comboBox_autocomplete.currentText() == 'Нет':
-            self.label_33.setVisible(False)
-            self.label_35.setVisible(False)
-            self.label_37.setVisible(False)
-            self.doubleSpinBox_prime_cost_k.setVisible(False)
-            self.doubleSpinBox_min_cost_k.setVisible(False)
-            self.doubleSpinBox_max_cost_k.setVisible(False)
+    def visible_google_cloud(self):
+        if self.auto_downl_xml_to_google_comboBox.currentText() == 'Нет':
+            self.label_25.setVisible(False)
+            self.label_26.setVisible(False)
+            self.name_xml_file_lineEdit.setVisible(False)
+            self.name_folder_lineEdit.setVisible(False)
 
         else:
-            self.label_33.setVisible(True)
-            self.label_35.setVisible(True)
-            self.label_37.setVisible(True)
-            self.doubleSpinBox_prime_cost_k.setVisible(True)
-            self.doubleSpinBox_min_cost_k.setVisible(True)
-            self.doubleSpinBox_max_cost_k.setVisible(True)
+            self.label_25.setVisible(True)
+            self.label_26.setVisible(True)
+            self.name_xml_file_lineEdit.setVisible(True)
+            self.name_folder_lineEdit.setVisible(True)
 
-    # def check_same_price_cities(self):
-    #     if self.same_price_cities_checkBox.checkState():
-    #         self.different_price_cities_checkBox.setEnabled(False)
-    #     else:
-    #         self.different_price_cities_checkBox.setEnabled(True)
-    #
-    # def check_different_price_cities(self):
-    #     if self.different_price_cities_checkBox.checkState():
-    #         self.same_price_cities_checkBox.setEnabled(False)
-    #     else:
-    #         self.same_price_cities_checkBox.setEnabled(True)
     def set_list_cities_comboBoxes(self):
         # (1) Добавляет список в виджет, (2) Поиск выбора в виджете comboBox
-        self.PP1.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP1)
-        self.PP2.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP2)
-        self.PP3.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP3)
-        self.PP4.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP4)
-        self.PP5.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP5)
-        self.PP6.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP6)
-        self.PP7.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP7)
-        self.PP8.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP8)
-        self.PP9.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP9)
-        self.PP10.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP10)
-        self.PP11.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP11)
-        self.PP12.addItems(list_cities)
-        search_line_comboBox(list_cities, self.PP12)
+        self.comboBox_name_city.addItems(list_cities)
+        # search_line_comboBox(list_cities, self.comboBox_name_city_1)
+        self.comboBox_list_name_pp.addItems(list_PP)
+        self.comboBox_number_cities.addItems(list_number_cities)
 
     def condition_filled_data_in_settings(self):
         value_bool = bool(self.email_login_lineEdit.text())*bool(self.password_lineEdit.text()) *\
                      bool(self.name_store_comboBox.currentText())*bool(self.id_partner_lineEdit.text()) *\
-                     bool(self.name_xml_file_lineEdit.text())*bool(self.PP1.currentText())
+                     bool(self.name_xml_file_lineEdit.text())*bool(self.lineEdit_city_name_1.text())*\
+                     bool(self.lineEdit_seller_points_1.text())
         return value_bool
 
         # if self.name_xml_file_lineEdit.text() is None or self.name_xml_file_lineEdit.text() == '':

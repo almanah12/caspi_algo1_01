@@ -39,19 +39,31 @@ code_cities = {'Алматы': "750000000", 'Абай': "353220100", 'Аккол
 
 list_cities = sorted(list_cities)
 
+list_PP = ('', 'PP1', 'PP2', 'PP3', 'PP4', 'PP5', 'PP6', 'PP7')
+list_number_cities = ('', 'Основной город', 'Город 2', 'Город 3', 'Город 4')
 filter_all_data = 'Артикул LIKE "%%"'
 
-filter_for_goods_without_data = "Себестоимость is NULL  or Себестоимость is '' or " \
+list_user_agents = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
+                    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
+                    'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0',
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 12.3; rv:98.0) Gecko/20100101 Firefox/98.0',
+                    )
+
+filter_for_goods_without_data = "Тек_ц1 is NULL  or Тек_ц1 is '' or " \
+                "Сбстоимость1 is NULL  or Сбстоимость1 is '' or " \
                 "Есть_огрч is NULL  or Есть_огрч is '' or " \
                 "Город_1 is NULL  or Город_1 is '' or " \
-                "Г_1_мин_ц is NULL  or Г_1_мин_ц is '' or " \
-                "Г_1_макс_ц is NULL  or Г_1_макс_ц is ''"
+                "Мин_ц1 is NULL  or Мин_ц1 is '' or " \
+                "Макс_ц1 is NULL  or Макс_ц1 is ''"
 
-filter_for_goods_with_data = "Себестоимость LIKE '%%' AND Себестоимость is not '' AND " \
+filter_for_goods_with_data = "Тек_ц1 LIKE '%%' AND Тек_ц1 is not '' AND " \
+                "Сбстоимость1 LIKE '%%' AND Сбстоимость1 is not '' AND " \
                 "Есть_огрч LIKE '%%' AND Есть_огрч is not '' AND " \
                 "Город_1 LIKE '%%' AND Город_1 is not '' AND " \
-                "Г_1_мин_ц LIKE '%%' AND Г_1_мин_ц is not '' AND " \
-                "Г_1_макс_ц LIKE '%%' AND Г_1_макс_ц is not ''"
+                "Мин_ц1 LIKE '%%' AND Мин_ц1 is not '' AND " \
+                "Макс_ц1 LIKE '%%' AND Макс_ц1 is not ''"
 
 curr_uuid = str(uuid.uuid1()).split('-')[4]
 

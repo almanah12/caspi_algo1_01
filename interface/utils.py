@@ -123,27 +123,74 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
 
     model.setTable(name_table)
     model.select()
-
-    # Подгон равзмера столбца по содержанию
+    # Подгон размера столбца по содержанию
     table.resizeColumnsToContents()
-
     # После долгих попыток получилось изменить ширину столбца табл.
     # Нужно было поставить setColumn
     # Width в конце метода
-    table.setColumnWidth(7, 0)
-    table.setColumnWidth(8, 0)
-    table.setColumnWidth(10, 0)  # Скрывает столбец
-    table.setColumnWidth(12, 0)
 
+    # Показывать данные остальных городов
+    if parent.comboBox_show_data_other_city.currentText() == '1':
+        # Город 2
+        table.setColumnWidth(14, 0)
+        table.setColumnWidth(15, 0)
+        table.setColumnWidth(16, 0)  # Скрывает столбец
+        table.setColumnWidth(17, 0)
+        table.setColumnWidth(19, 0)
+        table.setColumnWidth(21, 0)
+        # Город 3
+        table.setColumnWidth(22, 0)
+        table.setColumnWidth(23, 0)
+        table.setColumnWidth(24, 0)
+        table.setColumnWidth(25, 0)
+        table.setColumnWidth(27, 0)
+        table.setColumnWidth(29, 0)
+        # Город 4
+        table.setColumnWidth(30, 0)
+        table.setColumnWidth(31, 0)
+        table.setColumnWidth(32, 0)
+        table.setColumnWidth(33, 0)
+        table.setColumnWidth(35, 0)
+        table.setColumnWidth(37, 0)
+    elif parent.comboBox_show_data_other_city.currentText() == '2':
+        # Город 3
+        table.setColumnWidth(22, 0)
+        table.setColumnWidth(23, 0)
+        table.setColumnWidth(24, 0)
+        table.setColumnWidth(25, 0)
+        table.setColumnWidth(27, 0)
+        table.setColumnWidth(29, 0)
+        # Город 4
+        table.setColumnWidth(30, 0)
+        table.setColumnWidth(31, 0)
+        table.setColumnWidth(32, 0)
+        table.setColumnWidth(33, 0)
+        table.setColumnWidth(35, 0)
+        table.setColumnWidth(37, 0)
+    elif parent.comboBox_show_data_other_city.currentText() == '3':
+        # Город 4
+        table.setColumnWidth(30, 0)
+        table.setColumnWidth(31, 0)
+        table.setColumnWidth(32, 0)
+        table.setColumnWidth(33, 0)
+        table.setColumnWidth(35, 0)
+        table.setColumnWidth(37, 0)
 
-def add_to_data_table_temp(model, name_table, table: QTableView):
-    table.setSelectionBehavior(QAbstractItemView.SelectRows)
+    else:
+        table.resizeColumnsToContents()
 
-    # table.setHorizontalHeader(header)
-    table.setModel(model)
-
-    model.setTable(name_table)
-    model.select()
+    if name_table == 'permanent_table':
+        table.setColumnWidth(4, 0)
+        table.setColumnWidth(5, 0)
+        table.setColumnWidth(10, 0)  # Скрывает столбец
+        table.setColumnWidth(12, 0)
+        table.setColumnWidth(18, 0)
+        table.setColumnWidth(20, 0)
+        table.setColumnWidth(26, 0)
+        table.setColumnWidth(28, 0)
+        table.setColumnWidth(34, 0)
+        table.setColumnWidth(36, 0)
+        table.setColumnWidth(38, 0)
 
 
 def clear_table(table: QTableWidget):

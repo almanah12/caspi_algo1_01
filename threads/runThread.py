@@ -58,7 +58,6 @@ class RunThread(QRunnable):
                 self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" check demo-version', 4)
 
                 logger.info('Сбор данных с "Кабинета продавца"')
-
                 gets_data = GetDataKaspiSeller(self.gui, self.signals.activity_monitor)
                 gets_data.gets_data()
                 self.signals.activity_table.emit()
@@ -70,16 +69,21 @@ class RunThread(QRunnable):
                 # Парсинг товаров
                 # download_proxy_list()
                 if not self.gui.check_stop:
-                    links = []
+                    links = ['https://kaspi.kz/shop/p/philips-ph-8080-fen-6000-w-102877466/']
                     s = select(temporary_table)
                     conn = engine.connect()
                     res = conn.execute(s)
-                    for row in res:
-                        links.append(row.Ссылка)
+                    links = [row.Ссылка for row in res]
+
                     logger.debug(links)
                     self.signals.activity_monitor.emit("Сбор данных с сайта товара", 1)
                     logger.info('Сбор данных с сайта товара')
-                    parser_site = Parser(self.gui, links, self.signals.activity_monitor)
+                    if self.gui.configuration.use_proxy_comboBox.currentText() == 'Да':
+                        use_proxy = True
+                    else:
+                        use_proxy = False
+
+                    parser_site = Parser(self.gui, links, self.signals.activity_monitor, use_proxy)
                     parser_site.parse()
                     if self.gui.configuration.same_price_citiesradioButton.isChecked():
                         self.signals.activity_monitor.emit(
@@ -103,10 +107,12 @@ class RunThread(QRunnable):
                     model_perm.setFilter(filter_all_data)
                     count_goods_all_data = model_perm.rowCount()
 
+                    proc_dt = ProcessingData(self.gui, self.signals.activity_monitor)
+                    proc_dt.write_perm_table_data()
+
                     if count_goods_all_data == count_goods_with_data:
                         self.signals.activity_monitor.emit("Запуск обработки данных", 1)
                         logger.info('Запуск обработки данных')
-                        proc_dt = ProcessingData(self.gui, self.signals.activity_monitor)
                         proc_dt.processing_dt()
                     else:
                         self.signals.activity_monitor.emit("Данные товаров не заполнено, заполните таблицу", 2)
@@ -153,6 +159,11 @@ class RunThread(QRunnable):
                     s = restart_time % 60
                     self.signals.activity_monitor.emit('Цикл перезапустится через {} мин. и {} сек.'.format(m, s), 4)
                     logger.info('Цикл перезапустится через {} мин. и {} сек.'.format(m, s))
+
+                    end_time = time.time() - start_time
+                    self.signals.activity_monitor.emit('Время выполнение цикла: {} сек'.format(end_time), 4)
+                    logger.critical('Время выполнениецикла: {} сек'.format(end_time))
+
                     for _ in range(restart_time):
                         if not self.gui.check_stop:
                             time.sleep(1)
@@ -167,4 +178,7 @@ class RunThread(QRunnable):
             self.signals.restore.emit(False, 1)
 
         finally:
+            GetDataKaspiSeller.count_gds = 0
+            GetDataKaspiSeller.count_other_city = 0
+            Parser.count_requests = 0
             self.signals.restore.emit(False, 1)

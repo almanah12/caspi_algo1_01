@@ -4,7 +4,7 @@ import pandas as pd
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 from caspi_pars.webdriver_options import get_driver
 from caspi_pars.db_tables import temporary_table, session
@@ -14,10 +14,11 @@ from caspi_pars.helpers import resource_path, logger
 class Parser:
     count_requests = 0
 
-    def __init__(self, gui, urls, signals):
+    def __init__(self, gui, urls, signals, use_proxy):
         self.gui = gui
         self.urls = urls
         self.signals = signals
+        self.use_proxy = use_proxy
 
     def parse(self):
         pool = ThreadPool(self.gui.configuration.number_thread_spinBox.value())
@@ -29,14 +30,15 @@ class Parser:
         articul = url.split('/')[5].split('-')[-1] + '_' + \
                   self.gui.configuration.id_partner_lineEdit.text()
         curr_row = session.query(temporary_table).filter(temporary_table.c.Ссылка == url).one()
-        curr_numb_city = curr_row.Колич_городов
+        curr_numb_city = curr_row.Колич_г
         curr_city = curr_row.Город_1
         self.signals.emit('Парсинг товара {}'.format(url.split('/')[5]), 1)
         for _ in range(3):
             if self.gui.check_stop:
                 break
             try:
-                driver = get_driver()
+                logger.debug(self.use_proxy)
+                driver = get_driver(self.use_proxy)
                 # еСЛИ стр. не загрузится выдаст ошибку и закроет стр.
                 driver.set_page_load_timeout(30)
 
@@ -66,6 +68,9 @@ class Parser:
                             break
                         # новый список для данных кажд. г.
                         driver.find_element_by_xpath('//a[@id="citySelector"]').click()
+
+                        # chec25nnggggggggg
+                        # driver.find_element_by_link_text(curr_row.Город_(1+i)).click()
 
                         # Кликаем на след. город
                         # РЕШИТЬ ВОПРОС В БУДУЩЕМ(9/15/21)
@@ -166,6 +171,12 @@ class Parser:
                                     })
             # Данные магазов
             df_data = pd.DataFrame(shops_result)
+
+
+            try:
+                driver.find_element_by_xpath('//li[contains(.,"Следующая")]')
+            except NoSuchElementException:
+                break
             click_next = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, '//li[contains(.,"Следующая")]')))
 

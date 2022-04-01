@@ -2,7 +2,7 @@
 Slots helper functions for configuration.py can be found here.
 """
 from caspi_pars.interface.config_utils.user_config_utils import list_proxy_folder, delete_comboBox, add_comboBox, \
-    list_proxy_folder1
+    list_proxy_folder1, add_pp, clear_pp, add_city
 from caspi_pars.enums import list_stores, list_stores_ini
 
 
@@ -12,17 +12,24 @@ def load_slots(config_obj):
     :param config_obj: Configuration QDialog object (from configuration.py)
     :return: None
     """
-    c = config_obj
-    c.load_list_proxy_pushButton.clicked.connect(lambda: list_proxy_folder(gui=c, typeFile='text files(*.txt)',
-                                                                           widget=c.list_proxy_path_lineEdit))
-    c.path_for_saveXML_pushButton.clicked.connect(lambda: list_proxy_folder1(gui=c, typeFile='xml files(*.xml)',
-                                                                            widget=c.path_save_xml_lineEdit))
-    c.list_articulpushButton.clicked.connect(lambda: list_proxy_folder(gui=c, typeFile='csv files(*.csv)',
-                                                                            widget=c.list_articullineEdit))
+    config = config_obj
+    config.load_list_proxy_pushButton.clicked.connect(lambda: list_proxy_folder(gui=config, typeFile='text files(*.txt)',
+                                                                           widget=config.list_proxy_path_lineEdit))
+    # config.path_for_saveXML_pushButton.clicked.connect(lambda: list_proxy_folder1(gui=config, typeFile='xml files(*.xml)',
+    #                                                                         widget=config.path_save_xml_lineEdit))
+    config.list_articulpushButton.clicked.connect(lambda: list_proxy_folder(gui=config, typeFile='csv files(*.csv)',
+                                                                            widget=config.list_articullineEdit))
 
     # дОБАВЛЯЕТ и удаляет назв. магаза
-    c.add_name_store_pushButton.clicked.connect(lambda: add_comboBox(list_stores_ini,
-                                                                        c.name_store_comboBox, list_stores))
-    c.remove_name_store_pushButton.clicked.connect(lambda: delete_comboBox(list_stores_ini, c.name_store_comboBox))
+    config.add_name_store_pushButton.clicked.connect(lambda: add_comboBox(list_stores_ini,
+                                                                        config.name_store_comboBox, list_stores))
+    config.remove_name_store_pushButton.clicked.connect(lambda: delete_comboBox(list_stores_ini, config.name_store_comboBox))
+
+    # дОБАВЛЯЕТ и удаляет назв. точки продаж
+    config.pushButton_add_pp.clicked.connect(lambda: add_pp(config))
+    config.pushButton_clear_all_pp.clicked.connect(lambda: clear_pp(config))
+    config.pushButton_add_city.clicked.connect(lambda: add_city(config))
+
+
 
 
