@@ -7,6 +7,7 @@ from caspi_pars.db_QSqlDatabase import model_perm
 from caspi_pars.helpers import resource_path
 from caspi_pars.interface.add_base_data import Add_Base_Data
 from PyQt5.QtGui import QIcon
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class ButtonEditorDelegate(QStyledItemDelegate):
@@ -114,12 +115,28 @@ class ButtonDeleteDelegate(QStyledItemDelegate):
 
         return False
 
-    def createEditor(self, parent, option, index):
-        """ Disable the createEditor or you'll lose your button on a double-click """
-        return None
 
-    def setEditorData(self, item, index):
-        """ We don't change what's in the button so disable this event also """
-        return None
-
-
+class ReadOnlyDelegate(QStyledItemDelegate):
+    def createEditor(self, parent, option, insex):
+        return
+# class ColorDelegate(QtWidgets.QStyledItemDelegate):
+#     def paint(self, painter, option, index):
+#         if index.column() in (4, 5):
+#             model = index.model()
+#             r = index.row()
+#             color = calculate_color(model, r)
+#             if color != index.data(QtCore.Qt.BackgroundRole):
+#                 for i in range(model.columnCount()):
+#                     model.setData(model.index(r, i), color, QtCore.Qt.BackgroundRole)
+#         super(ColorDelegate, self).paint(painter, option, index)
+#
+#
+# def calculate_color(model, row):
+#     max_value = int(model.index(row, 2).data())
+#     current_value = int(model.index(row, 3).data())
+#     if current_value == 0:
+#         return QtGui.QBrush(QtCore.Qt.white)
+#     elif max_value == current_value:
+#         return QtGui.QBrush(QtCore.Qt.green)
+#     else:
+#         return QtGui.QBrush(QtCore.Qt.yellow)

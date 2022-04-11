@@ -4,13 +4,17 @@ Miscellaneous helper functions and constants.
 
 import os
 import pickle
+import random
 import sys
+import threading
+import time
 
 import requests
 from loguru import logger
 from http.server import HTTPServer, CGIHTTPRequestHandler
 from pyngrok import ngrok
 from selenium.webdriver.common.by import By
+
 
 BASE_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.dirname(BASE_DIR)
@@ -83,13 +87,27 @@ def ngrok_public_url():
     return public_url
 
 
+class Server_Http_Ngrok:
+    def __init__(self):
+        server_address = ("", 8000)
+        httpd = HTTPServer(server_address, CGIHTTPRequestHandler)
+
+    def start_s(self):
+        self.httpd.serve_forever()
+
+    def stop_s(self):
+        self.httpd.socket.close()
+
+
 def server_http_ngrok():
     server_address = ("", 8000)
     httpd = HTTPServer(server_address, CGIHTTPRequestHandler)
     try:
         # Block until CTRL-C or some other terminating event
         httpd.serve_forever()
+    # return httpd
     except KeyboardInterrupt:
+        logger.debug('KILL http')
         httpd.socket.close()
 
 
@@ -117,3 +135,38 @@ def enter_caspi_seller(driver, email_login, password_login):
     driver.implicitly_wait(10)
     enter_btn.click()
     # pickle.dump(driver.get_cookies(), open(f"caspi_enter_cookies", "wb"))
+
+
+def restart_time(first_time, second_time, start_time, activity_monitor, gui):
+    from_time_sec = first_time * 60
+    before_time_sec = second_time * 60
+    restart_time = random.randint(from_time_sec, before_time_sec)
+    m = (restart_time // 60) % 60
+    s = restart_time % 60
+    activity_monitor.emit('Цикл перезапустится через {} мин. и {} сек.'.format(m, s), 4)
+    logger.info('Цикл перезапустится через {} мин. и {} сек.'.format(m, s))
+
+    end_time = time.time() - start_time
+    activity_monitor.emit('Время выполнение цикла: {} сек'.format(end_time), 4)
+    logger.critical('Время выполнениецикла: {} сек'.format(end_time))
+    logger.debug(restart_time)
+    for _ in range(restart_time):
+        if not gui.check_stop:
+            time.sleep(1)
+        else:
+            break
+
+
+def get_key_dict(dict, value):
+    for k, v in dict.items():
+        if v == value:
+            return k
+
+
+
+
+
+
+
+
+

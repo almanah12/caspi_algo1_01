@@ -844,39 +844,44 @@
            </item>
            <item row="5" column="0">
             <widget class="QLabel" name="label_15">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="text">
-              <string>Обрабатывать только избранные товары</string>
+              <string>Исключить из парсинга определенные товары:</string>
              </property>
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="QComboBox" name="list_articulcomboBox">
-             <item>
-              <property name="text">
-               <string>Нет</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Да</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_24">
-             <property name="text">
-              <string>Список артикулов</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <widget class="QLineEdit" name="list_articullineEdit"/>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_24">
+               <property name="text">
+                <string>Список артикулов</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QPushButton" name="list_articulpushButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -910,26 +915,6 @@
              <property name="text">
               <string>Авт.загр. xml в локальный http-сервер:</string>
              </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="auto_downl_xml_comboBox">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="editable">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>Нет</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Да</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="1" column="0">
@@ -972,6 +957,46 @@
            </item>
            <item row="3" column="1">
             <widget class="QLineEdit" name="name_folder_lineEdit"/>
+           </item>
+           <item row="0" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QComboBox" name="auto_downl_xml_comboBox">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="editable">
+                <bool>false</bool>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Нет</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Да</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_cond_use_ngrok">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>

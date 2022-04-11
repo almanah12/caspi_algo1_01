@@ -1,15 +1,17 @@
+import loguru
 from PyQt5 import uic
 
 from caspi_pars.interface.resources_qtdesigner import add_data_to_base_rs
 from caspi_pars.helpers import resource_path
 from PyQt5.QtSql import QSqlDatabase, QSqlTableModel
 from PyQt5.QtWidgets import (QDataWidgetMapper, QDialog, QMainWindow, QMessageBox)
-from caspi_pars.enums import list_stores, list_cities, filter_for_goods_with_data, filter_for_goods_without_data, \
-    list_stores_ini
+from caspi_pars.enums import list_stores, list_cities, list_stores_ini
 from caspi_pars.interface.config_utils.user_config_utils import search_line_comboBox, add_comboBox, delete_comboBox, \
     get_list_comboBox
 from caspi_pars.db_QSqlDatabase import db
 from caspi_pars.db_tables import session, permanent_table, temporary_table
+from caspi_pars.enums import all_temp_data
+from caspi_pars.other_func.check_data_fill import ch_data_fill
 
 #
 # if not os.path.exists(resource_path('data_shop')):
@@ -117,9 +119,8 @@ class Add_Base_Data(QDialog):
         self.previousButton.clicked.connect(self.previous_button)
         self.nextButton.clicked.connect(self.next_button)
 
-
         # Проверяем КОРРЕкТНО Ли введеные данные
-        self.saveButton.clicked.connect(self.check_condition_save)
+        self.saveButton.clicked.connect(self.check_full_data_bool)
 
         # Проверяет есть ли ограничитель. Если да - огр:вкл
         self.check_limiter_comboBox.currentTextChanged.connect(self.check_limiter)
@@ -153,7 +154,7 @@ class Add_Base_Data(QDialog):
         self.max_price_spinBox_3.valueChanged.connect(lambda: self.calculate_min_max_price\
                                                       (self.first_cost_lineEdit_3, self.max_price_lineEdit_3, self.max_price_spinBox_3))
         self.first_cost_lineEdit_3.textChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.first_cost_lineEdit_3, self.min_price_lineEdit_3, self.max_price_spinBox_3))
+                                                      (self.first_cost_lineEdit_3, self.min_price_lineEdit_3, self.min_price_spinBox_3))
         self.first_cost_lineEdit_3.textChanged.connect(lambda: self.calculate_min_max_price\
                                                       (self.first_cost_lineEdit_3, self.max_price_lineEdit_3, self.max_price_spinBox_3))
 
@@ -164,7 +165,7 @@ class Add_Base_Data(QDialog):
         self.max_price_spinBox_4.valueChanged.connect(lambda: self.calculate_min_max_price\
                                                       (self.first_cost_lineEdit_4, self.max_price_lineEdit_4, self.max_price_spinBox_4))
         self.first_cost_lineEdit_4.textChanged.connect(lambda: self.calculate_min_max_price\
-                                                      (self.first_cost_lineEdit_4, self.min_price_lineEdit_4, self.max_price_spinBox_4))
+                                                      (self.first_cost_lineEdit_4, self.min_price_lineEdit_4, self.min_price_spinBox_4))
         self.first_cost_lineEdit_4.textChanged.connect(lambda: self.calculate_min_max_price\
                                                       (self.first_cost_lineEdit_4, self.max_price_lineEdit_4, self.max_price_spinBox_4))
         # self.tabWidget.itemClicked.connect(self.city_visible)
@@ -173,7 +174,7 @@ class Add_Base_Data(QDialog):
         self.model.setTable("permanent_table")
 
         # Упорядочивает данные по фильтру
-        self.filter_data()
+        # self.filter_data()
         self.search_articul(self.parent.search_table_articul_lineEdit.text())
 
         # Заполняет модель данными
@@ -197,24 +198,23 @@ class Add_Base_Data(QDialog):
             filter(permanent_table.c.Артикул == self.articul_lineEdit.text()).first()
         for i in range(self.tabWidget.count()):
             self.tabWidget.setTabEnabled(i, True)
-        for i in range(int(curr_row['Колич_г']), self.tabWidget.count()):
-            self.tabWidget.setTabEnabled(i, False)
-        for i in range(self.tabWidget.count()):
-            self.tabWidget.setTabText(i, 'Город {}'.format(i+1))
-        for i in range(int(curr_row['Колич_г'])):
-            self.tabWidget.setTabText(i, curr_row['Город_{}'.format(i+1)])
+            if not curr_row['Город_{}'.format(i+1)]:
+                self.tabWidget.setTabEnabled(i, False)
+                self.tabWidget.setTabText(i, 'Город {}'.format(i + 1))
+            else:
+                self.tabWidget.setTabText(i, curr_row['Город_{}'.format(i + 1)])
 
-    def filter_data(self):
-        """
-        Фильтрует данные на этой окошке
-        """
-        if self.parent.filter_comboBox.currentText() == 'Товары без данных':
-            self.model.setFilter(filter_for_goods_without_data)
-        elif self.parent.filter_comboBox.currentText() == 'Товары с данными':
-            self.model.setFilter(filter_for_goods_with_data)
-        else:
-            filter_str = 'Артикул LIKE "%%"'
-            self.model.setFilter(filter_str)
+    # def filter_data(self):
+    #     """
+    #     Фильтрует данные на этой окошке
+    #     """
+    #     if self.parent.filter_comboBox.currentText() == 'Товары без данных':
+    #         self.model.setFilter(filter_for_goods_without_data)
+    #     elif self.parent.filter_comboBox.currentText() == 'Товары с данными':
+    #         self.model.setFilter(filter_for_goods_with_data)
+    #     else:
+    #         filter_str = 'Артикул LIKE "%%"'
+    #         self.model.setFilter(filter_str)
 
     def search_articul(self, s):
         filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
@@ -223,18 +223,21 @@ class Add_Base_Data(QDialog):
     def calculate_min_max_price(self, first_cost, widget_lineEdit, widget_spinBox):
         """
         """
-        try:
+        if first_cost.text():
             min_max_price = int((int(first_cost.text()) * widget_spinBox.value())/100 + \
                                 int(first_cost.text()))
             widget_lineEdit.setText(str(min_max_price))
+        else:
+            widget_lineEdit.clear()
 
-        except Exception as ex:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Critical)
-            msg.setText("Ошибка")
-            msg.setText('Нужно записать целочисленное значение в Себестоимость!')
-            msg.setWindowTitle("Ошибка")
-            msg.exec_()
+        # except Exception as ex:
+        #     msg = QMessageBox()
+        #     loguru.logger.debug(ex)
+        #     msg.setIcon(QMessageBox.Critical)
+        #     msg.setText("Ошибка")
+        #     msg.setText('Нужно записать целочисленное значение в Себестоимость!')
+        #     msg.setWindowTitle("Ошибка")
+        #     msg.exec_()
 
     def check_limiter(self):
         if self.check_limiter_comboBox.currentText() == 'Нет':
@@ -247,40 +250,18 @@ class Add_Base_Data(QDialog):
             self.add_name_store_pushButton.setEnabled(True)
             self.remove_name_store_pushButton.setEnabled(True)
 
-    def check_condition_save(self):
-        """
-        Проверка условии на - правильность
-        введеных данных
-        """
-        curr_row = session.query(permanent_table). \
-            filter(permanent_table.c.Артикул == self.articul_lineEdit.text()).first()
-        if self.parent.configuration.different_price_citiesradioButton.isChecked():
-            full_data_bool = True
-            for i in range(1, int(curr_row['Колич_г']+1)):
-                full_data_bool *= bool(self.add_b_d_dict['first_cost_{}'.format(i)].text())* \
-                                  bool(self.add_b_d_dict['min_price_spinBox_{}'.format(i)].value())* \
-                                  bool(self.add_b_d_dict['max_price_spinBox_{}'.format(i)].value())
-
-            self.check_full_data_bool(full_data_bool)
-
-        else:
-            full_data_bool = bool(self.add_b_d_dict['first_cost_1'].text()) * \
-                              bool(self.add_b_d_dict['min_price_spinBox_1'].value()) * \
-                              bool(self.add_b_d_dict['max_price_spinBox_'].value())
-            self.check_full_data_bool(full_data_bool)
-
-    def check_full_data_bool(self, full_data_bool, ):
-        if full_data_bool==1:
-            self.mapper.submit()
-            self.parent.filter_data()
-        else:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Critical)
-            msg.setText("Условие: Разные цены для городов")
-            msg.setText('Заполните данные всех городов')
-            msg.setWindowTitle("Ошибка")
-            msg.exec_()
-
+    def check_full_data_bool(self):
+        # full_data_bool = ch_data_fill(self.parent)
+        # if full_data_bool[0]:
+        self.mapper.submit()
+        self.parent.update_table()
+    #     else:
+    #         msg = QMessageBox()
+    #         msg.setIcon(QMessageBox.Critical)
+    #         msg.setText("Условие: Разные цены для городов")
+    #         msg.setText('Заполните данные всех городов')
+    #         msg.setWindowTitle("Ошибка")
+    #         msg.exec_()
         # if not (int(self.current_price_lineEdit.text())/3 < int(self.first_cost_lineEdit.text()) < int(self.current_price_lineEdit.text())*3):
         #     msg = QMessageBox()
         #     msg.setIcon(QMessageBox.Critical)

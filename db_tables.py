@@ -1,6 +1,6 @@
 import os
 
-from sqlalchemy import create_engine, select, Table, Column, Integer, MetaData, ForeignKey, TEXT, Float
+from sqlalchemy import create_engine, select, Table, Column, Integer, MetaData, TEXT, Float, String
 from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 
@@ -15,6 +15,7 @@ temporary_table = Table('temporary_table', meta,
                         Column('Ссылка', TEXT),
                         Column('Доступность', TEXT),
                         Column('Колич_г', Integer),
+                        Column('Все_города', TEXT),
                         Column('Город_1', TEXT),
                         Column('Тек_ц1', Integer),
                         Column('Г_1_Конк', TEXT),
@@ -73,11 +74,17 @@ permanent_table = Table('permanent_table', meta,
                         Column('Мин_ц4', Integer),  # 35
                         Column('Макс_ц_проц4', Float),
                         Column('Макс_ц4', Integer),
-                        Column('Колич_г', Integer)
+                        Column('Колич_г', Integer),
+
+                        Column('ItemProp1', TEXT),
+                        Column('ItemProp2', TEXT),
+                        Column('ItemProp3', TEXT),
+                        Column('Comm', Integer),
                         )
 
 if not os.path.exists(resource_path('data_shop')):
     os.mkdir(resource_path('data_shop'))
+    open(resource_path('data_shop/cannot_be_parsed.txt'), 'a').close()
 
 res_path = resource_path(r'data_shop/dt_goods.sqlite')
 engine = create_engine(r"sqlite:///"+res_path, connect_args={'check_same_thread': False}, poolclass=StaticPool, echo=False)

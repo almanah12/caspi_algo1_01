@@ -40,9 +40,6 @@ class Configuration(QDialog):
         self.visible_useProxy()
         self.use_proxy_comboBox.currentTextChanged.connect(self.visible_useProxy)
 
-        self.visible_list_articul()
-        self.list_articulcomboBox.currentTextChanged.connect(self.visible_list_articul)
-
         self.visible_google_cloud()
         self.auto_downl_xml_to_google_comboBox.currentTextChanged.connect(self.visible_google_cloud)
 
@@ -87,8 +84,6 @@ class Configuration(QDialog):
         self.consider_deliver_times_comboBox.setCurrentText(self.setting_variables.value('deliver_times'))
         self.use_base_limit_comboBox.setCurrentText(self.setting_variables.value('use_base_limit'))
         self.up_price_to_competitor_comboBox.setCurrentText(self.setting_variables.value('up_price_to_competitor'))
-        self.list_articulcomboBox.setCurrentText(self.setting_variables.value('list_articul'))
-        self.list_articullineEdit.setText(self.setting_variables.value('path_list_articul'))
 
         # Файл
         # self.path_save_xml_lineEdit.setText(self.setting_variables.value('path_save_xml'))
@@ -134,8 +129,6 @@ class Configuration(QDialog):
         self.setting_variables.setValue('use_base_limit', self.use_base_limit_comboBox.currentText())
         self.setting_variables.setValue('deliver_times', self.consider_deliver_times_comboBox.currentText())
         self.setting_variables.setValue('up_price_to_competitor', self.up_price_to_competitor_comboBox.currentText())
-        self.setting_variables.setValue('list_articul', self.list_articulcomboBox.currentText())
-        self.setting_variables.setValue('path_list_articul', self.list_articullineEdit.text())
 
         # Файл
         # self.setting_variables.setValue('path_save_xml', self.path_save_xml_lineEdit.text())
@@ -165,18 +158,6 @@ class Configuration(QDialog):
 
             self.label_22.setVisible(True)
             self.label_23.setVisible(True)
-
-    def visible_list_articul(self):
-        if self.list_articulcomboBox.currentText() == 'Нет':
-            self.list_articulpushButton.setVisible(False)
-            self.list_articullineEdit.setVisible(False)
-            self.label_24.setVisible(False)
-
-        else:
-            self.list_articulpushButton.setVisible(True)
-            self.list_articullineEdit.setVisible(True)
-
-            self.label_24.setVisible(True)
 
     def visible_google_cloud(self):
         if self.auto_downl_xml_to_google_comboBox.currentText() == 'Нет':

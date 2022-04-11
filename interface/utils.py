@@ -6,13 +6,16 @@ from datetime import datetime
 from typing import List
 
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QColorConstants
-from PyQt5.QtWidgets import QComboBox, QDialog, QMessageBox, QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView
+from PyQt5.QtGui import QColorConstants, QStandardItemModel
+from PyQt5.QtWidgets import QComboBox, QDialog, QMessageBox, QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView, QSizePolicy
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QTableView)
 
-from caspi_pars.delegats import ButtonEditorDelegate, ButtonDeleteDelegate
+from caspi_pars.other_func.check_data_fill import ch_dt_fill_for_tableview
+
+from caspi_pars.delegats import ButtonEditorDelegate, ButtonDeleteDelegate, ReadOnlyDelegate
 from caspi_pars.helpers import logger
+from caspi_pars.enums import count_cities, all_perm_data
 
 def create_popup(parent, msg: str, title='Warning'):
     """
@@ -95,102 +98,68 @@ def add_to_table_widget(table, data: list, color,  insertDate=True):
             table.item(row_position, column).setBackground(QColorConstants.Svg.greenyellow)
 
 
-# class ColumnSwapProxy(QtCore.QSortFilterProxyModel):
-#     def data(self, index, role=QtCore.Qt.DisplayRole):
-#         logger.debug(index)
-#         return super().data(index.sibling(index.row(), index.column() + 1), role)
-#
-#     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-#         if orientation == QtCore.Qt.Horizontal and (section==10 or section==12):
-#             section += 1
-#         return super().headerData(section, orientation, role)
-
-
 def add_to_data_table_view(parent, model, name_table, table: QTableView):
     table.setSelectionBehavior(QAbstractItemView.SelectRows)
-    header = table.horizontalHeader()
+    # headmodel = QStandardItemModel()
+    # headmodel.setHorizontalHeaderLabels(['q1', 'q2', 'q3', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 'q16', 'q17', 'q18', 'q19'])
+    #
+    # headview1 = QHeaderView(Qt.Horizontal)
+    # headview1.setModel(headmodel)
+    # headview1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
+    header = table.horizontalHeader()
+    #
     table.setHorizontalHeader(header)
-    # proxy = ColumnSwapProxy()
-    # proxy.setSourceModel(model)
+
     table.setModel(model)
     if name_table == 'permanent_table':
         editor_delegate = ButtonEditorDelegate(parent)  # Была ошибка, передал self и проблема решилась
         delete_delegate = ButtonDeleteDelegate(parent)
+        read_only = ReadOnlyDelegate(parent)
 
         table.setItemDelegateForColumn(0, editor_delegate)
         table.setItemDelegateForColumn(1, delete_delegate)
-
+        for column in range(2, 43):
+            table.setItemDelegateForColumn(column, read_only)
     model.setTable(name_table)
     model.select()
     # Подгон размера столбца по содержанию
     table.resizeColumnsToContents()
-    # После долгих попыток получилось изменить ширину столбца табл.
-    # Нужно было поставить setColumn
-    # Width в конце метода
 
     # Показывать данные остальных городов
-    if parent.comboBox_show_data_other_city.currentText() == '1':
-        # Город 2
-        table.setColumnWidth(14, 0)
-        table.setColumnWidth(15, 0)
-        table.setColumnWidth(16, 0)  # Скрывает столбец
-        table.setColumnWidth(17, 0)
-        table.setColumnWidth(19, 0)
-        table.setColumnWidth(21, 0)
-        # Город 3
-        table.setColumnWidth(22, 0)
-        table.setColumnWidth(23, 0)
-        table.setColumnWidth(24, 0)
-        table.setColumnWidth(25, 0)
-        table.setColumnWidth(27, 0)
-        table.setColumnWidth(29, 0)
-        # Город 4
-        table.setColumnWidth(30, 0)
-        table.setColumnWidth(31, 0)
-        table.setColumnWidth(32, 0)
-        table.setColumnWidth(33, 0)
-        table.setColumnWidth(35, 0)
-        table.setColumnWidth(37, 0)
-    elif parent.comboBox_show_data_other_city.currentText() == '2':
-        # Город 3
-        table.setColumnWidth(22, 0)
-        table.setColumnWidth(23, 0)
-        table.setColumnWidth(24, 0)
-        table.setColumnWidth(25, 0)
-        table.setColumnWidth(27, 0)
-        table.setColumnWidth(29, 0)
-        # Город 4
-        table.setColumnWidth(30, 0)
-        table.setColumnWidth(31, 0)
-        table.setColumnWidth(32, 0)
-        table.setColumnWidth(33, 0)
-        table.setColumnWidth(35, 0)
-        table.setColumnWidth(37, 0)
-    elif parent.comboBox_show_data_other_city.currentText() == '3':
-        # Город 4
-        table.setColumnWidth(30, 0)
-        table.setColumnWidth(31, 0)
-        table.setColumnWidth(32, 0)
-        table.setColumnWidth(33, 0)
-        table.setColumnWidth(35, 0)
-        table.setColumnWidth(37, 0)
-
-    else:
-        table.resizeColumnsToContents()
-
     if name_table == 'permanent_table':
-        table.setColumnWidth(4, 0)
-        table.setColumnWidth(5, 0)
-        table.setColumnWidth(10, 0)  # Скрывает столбец
-        table.setColumnWidth(12, 0)
-        table.setColumnWidth(18, 0)
-        table.setColumnWidth(20, 0)
-        table.setColumnWidth(26, 0)
-        table.setColumnWidth(28, 0)
-        table.setColumnWidth(34, 0)
-        table.setColumnWidth(36, 0)
-        table.setColumnWidth(38, 0)
+
+        if parent.comboBox_show_data_other_city.currentText() == '1':
+            # Город 2
+            ch_dt_fill_for_tableview(parent, table)
+            list_column_1 = [14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
+            for colum in list_column_1:
+                table.setColumnWidth(colum, 0)
+
+        elif parent.comboBox_show_data_other_city.currentText() == '2':
+            ch_dt_fill_for_tableview(parent, table)
+
+            list_column_2 = [22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
+            for colum in list_column_2:
+                table.setColumnWidth(colum, 0)
+
+        elif parent.comboBox_show_data_other_city.currentText() == '3':
+            ch_dt_fill_for_tableview(parent, table)
+
+            list_column_3 = [30, 31, 32, 33, 35, 37]
+            for colum in list_column_3:
+                table.setColumnWidth(colum, 0)
+
+        else:
+            ch_dt_fill_for_tableview(parent, table)
+
+            table.resizeColumnsToContents()
+
+        # Скрывает столбец
+        list_column = [4, 5, 10, 12, 18, 20, 26, 28, 34, 36, 38]
+        for colum in list_column:
+            table.setColumnWidth(colum, 0)
+    return table
 
 
 def clear_table(table: QTableWidget):

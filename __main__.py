@@ -5,8 +5,6 @@ Main caspi_algo_mix application.
 import os
 import sys
 from datetime import datetime
-
-import ntplib
 import requests
 
 from PyQt5 import uic
@@ -16,10 +14,10 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog
 from cryptocode import decrypt
 
 from sqlalchemy import select, inspect, MetaData
-
+from threading import Thread
 from caspi_pars.interface.resources_qtdesigner import main_rs
 from caspi_pars.db_QSqlDatabase import model_temp, model_perm
-from caspi_pars.enums import filter_for_goods_with_data, filter_for_goods_without_data, filter_all_data, _AppName_, curr_uuid
+from caspi_pars.enums import filter_all_data, _AppName_, curr_uuid, all_perm_data, all_temp_data, count_cities
 from caspi_pars.slots import initiate_slots
 from caspi_pars.helpers import resource_path, get_current_version, logger
 from caspi_pars.threads import runThread
@@ -29,7 +27,7 @@ from caspi_pars.interface.add_base_data import Add_Base_Data
 
 from caspi_pars.interface.update import Update
 from caspi_pars.interface.license import License
-from caspi_pars.db_tables import temporary_table, engine
+from caspi_pars.db_tables import temporary_table, engine, session, permanent_table
 
 
 app = QApplication(sys.argv)
@@ -181,18 +179,19 @@ class Interface(QMainWindow):
         model_temp.setFilter(filter_all_data)
         model_perm.setFilter(filter_all_data)
 
-    def filter_data(self):
-        """
-        Фильтрует данные
-        """
-        if self.filter_comboBox.currentText() == 'Товары без данных':
-            model_perm.setFilter(filter_for_goods_without_data)
-
-        elif self.filter_comboBox.currentText() == 'Товары с данными':
-            model_perm.setFilter(filter_for_goods_with_data)
-
-        else:
-            model_perm.setFilter(filter_all_data)
+    # def filter_data(self):
+    #     """
+    #     Фильтрует данные
+    #     """
+    #     if self.filter_comboBox.currentText() == 'Товары без данных':
+    #         # session.query(permanent_table).filter(permanent_table.c.Тек_ц1 > 150000)
+    #         model_perm.setFilter(filter_for_goods_without_data)
+    #
+    #     elif self.filter_comboBox.currentText() == 'Товары с данными':
+    #         model_perm.setFilter(filter_for_goods_with_data)
+    #
+    #     else:
+    #         model_perm.setFilter(filter_all_data)
 
     def delete_row_data(self):
         links = []
@@ -229,16 +228,26 @@ class Interface(QMainWindow):
         except Exception as ex:
             QMessageBox.critical(self, 'Ошибка', f'Ошибка {ex}')
 
-#
-# def find_data_file(filename):
-#     if getattr(sys, "frozen", False):
-#         # The application is frozen
-#         datadir = os.path.dirname(sys.executable)
-#     else:
-#         # The application is not frozen
-#         # Change this bit to match where you store your data files:
-#         datadir = os.path.dirname(__file__)
-#     return os.path.join(datadir, filename)
+
+    def thread_func(self, func):
+        th = Thread(target=func)
+        th.start()
+
+    def fill_data(self):
+        for row_d in all_perm_data:
+            print(row_d)
+            for city_c in range(count_cities):
+                if row_d['Город_'+str(city_c+1)]:
+                    session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                        {'Сбстоимость' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*0.75)}, synchronize_session=False)
+                    session.commit()
+                    session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                        {'Мин_ц' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*0.96)}, synchronize_session=False)
+                    session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                        {'Макс_ц' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*2)}, synchronize_session=False)
+                    session.commit()
+
+        self.update_table()
 
 
 def main():

@@ -10,8 +10,9 @@ from caspi_pars.webdriver_options import get_driver
 from caspi_pars.helpers import logger, ngrok_public_url, enter_caspi_seller
 
 
-def set_http_adress(gui, signals):
-    for _ in range(5):
+def set_http_adress(gui, signals, ngrok_url):
+    page_load = 0
+    for _ in range(10):
         try:
             driver = get_driver(False)
 
@@ -52,7 +53,7 @@ def set_http_adress(gui, signals):
             url_xml = driver.find_element_by_xpath(
                 '/html/body/div[4]/div[3]/div/div[3]/div[5]/div/div[2]/form/div[1]/input')
             url_xml.clear()
-            url_xml.send_keys(ngrok_public_url()+'/alash.xml')
+            url_xml.send_keys(ngrok_url)
 
             time.sleep(1)
 
@@ -74,15 +75,18 @@ def set_http_adress(gui, signals):
 
         except TimeoutException:
             logger.error('Превышение ожидание загрузки страницы(30 сек.) или проблема в xml файле')
+            page_load = 'Timeout'
             driver.close()
             continue
         except Exception as ex:
             logger.error(ex)
+            page_load = ex
             driver.close()
             continue
 
         else:
-            # driver.close()
+            page_load = 'Good'
             driver.close()
             break
+    return page_load
 

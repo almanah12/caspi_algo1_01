@@ -6,8 +6,9 @@ import uuid
 import pandas
 
 from caspi_pars.helpers import resource_path
+from caspi_pars.db_tables import temporary_table, session, permanent_table
 
-
+count_cities = 4
 _AppName_ = 'AlashPars'
 
 list_stores_ini = resource_path(r'data_shop/list_stores.ini')
@@ -43,6 +44,7 @@ list_PP = ('', 'PP1', 'PP2', 'PP3', 'PP4', 'PP5', 'PP6', 'PP7')
 list_number_cities = ('', 'Основной город', 'Город 2', 'Город 3', 'Город 4')
 filter_all_data = 'Артикул LIKE "%%"'
 
+
 list_user_agents = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
                     'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
                     'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
@@ -51,19 +53,24 @@ list_user_agents = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
                     'Mozilla/5.0 (Macintosh; Intel Mac OS X 12.3; rv:98.0) Gecko/20100101 Firefox/98.0',
                     )
 
-filter_for_goods_without_data = "Тек_ц1 is NULL  or Тек_ц1 is '' or " \
-                "Сбстоимость1 is NULL  or Сбстоимость1 is '' or " \
-                "Есть_огрч is NULL  or Есть_огрч is '' or " \
-                "Город_1 is NULL  or Город_1 is '' or " \
-                "Мин_ц1 is NULL  or Мин_ц1 is '' or " \
-                "Макс_ц1 is NULL  or Макс_ц1 is ''"
+dict_month = {1: 'января', 2: 'февраля', 3: 'марта',  4: 'апреля', 5: 'мая',  6: 'июня',  7: 'июля',  8: 'августа', 9: 'сентября',  10: 'октября',  11: 'ноября',  12: 'декабря'}
 
-filter_for_goods_with_data = "Тек_ц1 LIKE '%%' AND Тек_ц1 is not '' AND " \
-                "Сбстоимость1 LIKE '%%' AND Сбстоимость1 is not '' AND " \
-                "Есть_огрч LIKE '%%' AND Есть_огрч is not '' AND " \
-                "Город_1 LIKE '%%' AND Город_1 is not '' AND " \
-                "Мин_ц1 LIKE '%%' AND Мин_ц1 is not '' AND " \
-                "Макс_ц1 LIKE '%%' AND Макс_ц1 is not ''"
+list_column_for_tableview = [14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
+
+# filter_for_goods_without_data = "Тек_ц1 is NULL  or Тек_ц1 is '' or " \
+#                 "Сбстоимость1 is NULL  or Сбстоимость1 is '' or " \
+#                 "Город_1 is NULL  or Город_1 is '' or " \
+#                 "Мин_ц1 is NULL  or Мин_ц1 is '' or " \
+#                 "Макс_ц1 is NULL  or Макс_ц1 is ''"
+#
+# filter_for_goods_with_data = "Тек_ц1 LIKE '%%' AND Тек_ц1 is not '' AND " \
+#                 "Сбстоимость1 LIKE '%%' AND Сбстоимость1 is not '' AND " \
+#                 "Город_1 LIKE '%%' AND Город_1 is not '' AND " \
+#                 "Мин_ц1 LIKE '%%' AND Мин_ц1 is not '' AND " \
+#                 "Макс_ц1 LIKE '%%' AND Макс_ц1 is not ''"
+
+all_perm_data = session.query(permanent_table)
+all_temp_data = session.query(temporary_table)
 
 curr_uuid = str(uuid.uuid1()).split('-')[4]
 

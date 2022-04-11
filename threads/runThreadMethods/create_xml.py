@@ -2,12 +2,12 @@ import xml.etree.ElementTree as xml
 
 
 from caspi_pars.db_tables import conn_engine, temp_table_select
-from caspi_pars.enums import code_cities
+from caspi_pars.enums import code_cities, all_temp_data
 from caspi_pars.helpers import resource_path
 
 
 def create_xml(gui):
-    data_temp_table = conn_engine.execute(temp_table_select)
+    # data_temp_table = conn_engine.execute(temp_table_select)
     xmlns = "kaspiShopping"
     xmlns_xsi = "http://www.w3.org/2001/XMLSchema-instance"
     xsi_schemaLocation = "kaspiShopping http://kaspi.kz/kaspishopping.xsd"
@@ -23,7 +23,7 @@ def create_xml(gui):
     offers = xml.Element("offers")
     kaspi_catalog.append(offers)
 
-    for row in data_temp_table:
+    for row in all_temp_data:
         offer = xml.Element("offer", sku=str(row.Артикул))
         offers.append(offer)
 
@@ -39,29 +39,24 @@ def create_xml(gui):
         for i in range(len(list_availability)):
             availabilites.append(xml.Element('availability', available='yes', storeId=list_availability[i]))
 
+        cities_c = len(row['Все_города'].split(', '))
         # Если цена одна для всех городов
         if gui.configuration.same_price_citiesradioButton.isChecked():
             price = xml.SubElement(offer, 'price')
-            price.text = str(row.Г_1_новая_ц)
+            for city_n in range(cities_c):
+                if row['Город_'+str(city_n+1)]:
+                    price.text = str(row['Г_{}_новая_ц'.format(str(city_n+1))])
+                    break
 
         # Если цена разные для всех городов
         else:
-
             cityprices = xml.Element('cityprices')
             offer.append(cityprices)
-            # дОБАВЛЯЕТСЯ СУБЭЛЕменты пока условие истинно
-            if row.Колич_городов > 0:
-                cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_1])
-                cityprice.text = str(row.Г_1_новая_ц)
-            if row.Колич_городов > 1:
-                cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_2])
-                cityprice.text = str(row.Г_2_новая_ц)
-            if row.Колич_городов > 2:
-                cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_3])
-                cityprice.text = str(row.Г_3_новая_ц)
-            if row.Колич_городов > 3:
-                cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row.Город_4])
-                cityprice.text = str(row.Г_4_новая_ц)
+            for city_n in range(cities_c):
+                # дОБАВЛЯЕТСЯ СУБЭЛЕменты пока условие истинно
+                if row['Город_'+str(city_n+1)]:
+                    cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row['Город_'+str(city_n+1)]])
+                    cityprice.text = str(row['Г_{}_новая_ц'.format(str(city_n+1))])
 
     tree = xml.ElementTree(kaspi_catalog)
     tree.write(resource_path(r'data_shop/alash.xml'))
