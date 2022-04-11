@@ -11,7 +11,6 @@ from caspi_pars.webdriver_options import get_driver, get_driver_parser
 from caspi_pars.db_tables import temporary_table, permanent_table, engine
 from caspi_pars.helpers import resource_path, logger
 from sqlalchemy.orm import sessionmaker
-from multiprocessing_on_dill import pool
 
 
 class Parser:

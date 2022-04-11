@@ -37,8 +37,6 @@ class ProcessingData:
             self.price_shops = d_sh['Price'].tolist()
             self.curr_artikul = i.split('#')[1].split('.')[0]
             self.city_number = i.split('_')[0]
-            print(self.city_number)
-            print(self.curr_artikul)
             self.curr_row = session.query(permanent_table).filter(
                 permanent_table.c.Артикул == self.curr_artikul).one()
             self.limiter = self.curr_row['Есть_огрч']
@@ -241,9 +239,6 @@ class ProcessingData:
             self.price_shops = d_sh['Price'].tolist()
             self.curr_artikul = i.split('#')[1].split('.')[0]
             self.city_number = i.split('_')[0]
-            print(self.curr_artikul)
-            print(self.city_number)
-
             self.curr_row = session.query(permanent_table).filter(
                 permanent_table.c.Артикул == self.curr_artikul).one()
             # Для опредления положения магаза в продаже и занесения его в базу
