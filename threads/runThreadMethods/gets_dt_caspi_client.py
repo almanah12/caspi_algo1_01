@@ -2,7 +2,7 @@ import os
 import pickle
 import shutil
 import time
-
+import random
 import pandas as pd
 
 from collections import OrderedDict
@@ -14,10 +14,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from sqlalchemy import MetaData
 from selenium.common.exceptions import TimeoutException
 
-from caspi_pars.helpers import resource_path
+from caspi_pars.helpers import resource_path, logger, enter_caspi_seller
 from caspi_pars.webdriver_options import get_driver
 from caspi_pars.db_tables import temporary_table, permanent_table, engine, session
-from caspi_pars.helpers import logger, enter_caspi_seller
+from caspi_pars.enums import active_goods
 
 
 class GetDataKaspiSeller:
@@ -39,7 +39,7 @@ class GetDataKaspiSeller:
         #  Создаем папку занова для excel файлов
         os.mkdir(resource_path(r'data_files/data_shops'))
 
-        for _ in range(5):
+        for _ in range(3):
             try:
                 meta = MetaData()
                 meta.create_all(engine)  # или books.create(engine), authors.create(engine)
@@ -47,6 +47,8 @@ class GetDataKaspiSeller:
                 # Удаляем врем.табл перед записем новых данных
                 session.query(temporary_table).delete()
                 session.commit()
+
+                active_goods = []
 
                 # Заходит на стр. каспи клиент
                 url = 'https://kaspi.kz/merchantcabinet/login?logout=true'
@@ -70,8 +72,6 @@ class GetDataKaspiSeller:
 
                 if self.gui.check_stop:
                     break
-                # time.sleep(3)
-
                 # Если стр. занова заходит на  логинацию
                 # Время задержки для загрузки стр. и всплывающего окна
                 # Если нет текста 'Seller center' выводится ошибка и мы выходим из цикла(это значит что мы зашли в кабинет продавца)
@@ -93,8 +93,6 @@ class GetDataKaspiSeller:
                 # else:
                 #     break
                 self.run_page(driver)
-                # count_gds = run_page(driver)
-                # return count_gds
 
             except TimeoutException:
                 logger.error('Превышено ожидание загрузки страницы(30 сек.)')
@@ -103,7 +101,7 @@ class GetDataKaspiSeller:
                 continue
             except Exception as ex:
                 logger.error(ex)
-                self.signal_monitor.emit(ex, 3)
+                self.signal_monitor.emit("{}".format(ex), 3)
                 driver.close()
                 continue
             else:
@@ -111,13 +109,33 @@ class GetDataKaspiSeller:
                 break
 
     def run_page(self, driver):
-        products_btn = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
-        products_btn.click()
+        for _ in range(3):
+            try:
+                delay = random.randint(4, 8)
+                products_btn = WebDriverWait(driver, delay).until(
+                    EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
+                driver.execute_script("arguments[0].click();", products_btn)
+            except:
+                driver.refresh()
+                continue
+            else:
+                break
+
+        fol_column = driver.find_element(By.XPATH, '//select[@class="form__col _12-12"]')
+
+        fol_column.click()
+        processing_count = driver.find_element(
+            By.XPATH, '//option[@value="PROCESSING"]').text.split('(')[1].split(')')[0]
+        logger.debug(int(processing_count))
 
         # Цикл работает пока кнопка 'след' доступна
         while True:
         # for j in range(1):
+            # Вычисляет есть ли товары которые ожидают применение изменение
+            # if int(processing_count):
+            #     GetDataKaspiSeller.count_gds = 0.5
+            #     break
+
             if self.gui.check_stop:
                 break
             # Ждем пока стр загрузится
@@ -144,7 +162,6 @@ class GetDataKaspiSeller:
             else:
                 break
 
-
     def gets_dt_good(self, driver, i):
         try:
             vendor_code_goods = driver.find_elements_by_xpath('//div[@title="Артикул в системе продавца"]')[i].text
@@ -158,6 +175,7 @@ class GetDataKaspiSeller:
             GetDataKaspiSeller.count_gds -= 1
 
         else:
+            active_goods.append(vendor_code_goods)
             try:
                 name_goods = driver.find_elements_by_xpath('//div[@title="Название в системе продавца"]')[i].text
                 logger.debug(name_goods)

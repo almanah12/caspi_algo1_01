@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>866</width>
-    <height>670</height>
+    <height>659</height>
    </rect>
   </property>
   <property name="font">
@@ -41,7 +41,7 @@
         <x>0</x>
         <y>0</y>
         <width>846</width>
-        <height>650</height>
+        <height>639</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -57,7 +57,7 @@
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <property name="usesScrollButtons">
           <bool>false</bool>
@@ -385,8 +385,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>802</width>
-                <height>583</height>
+                <width>335</width>
+                <height>502</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -855,26 +855,6 @@
            <item row="5" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_24">
-               <property name="text">
-                <string>Список артикулов</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QPushButton" name="list_articulpushButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -890,6 +870,19 @@
                  <normaloff>:/icons/folder.ico</normaloff>:/icons/folder.ico</iconset>
                </property>
               </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </item>

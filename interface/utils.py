@@ -5,17 +5,15 @@ File containing utility functions for the GUI.
 from datetime import datetime
 from typing import List
 
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QColorConstants, QStandardItemModel
-from PyQt5.QtWidgets import QComboBox, QDialog, QMessageBox, QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView, QSizePolicy
+from PyQt5.QtGui import QColorConstants
+from PyQt5.QtWidgets import QComboBox, QDialog, QMessageBox, QTableWidget, QTableWidgetItem, QAbstractItemView
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QTableView)
 
 from caspi_pars.other_func.check_data_fill import ch_dt_fill_for_tableview
 
 from caspi_pars.delegats import ButtonEditorDelegate, ButtonDeleteDelegate, ReadOnlyDelegate
-from caspi_pars.helpers import logger
-from caspi_pars.enums import count_cities, all_perm_data
+
 
 def create_popup(parent, msg: str, title='Warning'):
     """
@@ -128,7 +126,7 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
 
     # Показывать данные остальных городов
     if name_table == 'permanent_table':
-
+        # active_goods_table(table)
         if parent.comboBox_show_data_other_city.currentText() == '1':
             # Город 2
             ch_dt_fill_for_tableview(parent, table)
@@ -159,6 +157,16 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
         list_column = [4, 5, 10, 12, 18, 20, 26, 28, 34, 36, 38]
         for colum in list_column:
             table.setColumnWidth(colum, 0)
+
+        # if parent.filter_comboBox.currentText() == 'Товары без данных':
+        #     model.setFilter(filter_for_goods_without_data)
+        #
+        # elif parent.filter_comboBox.currentText() == 'Товары с данными':
+        #     model.setFilter(filter_for_goods_with_data)
+        #
+        # else:
+        #     model.setFilter(filter_all_data)
+
     return table
 
 

@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import datetime
+import random
 
 from caspi_pars.webdriver_options import get_driver
 from caspi_pars.enums import dict_month
@@ -20,20 +21,21 @@ class MerchantInfo:
 
     def __init__(self, gui):
         self.gui = gui
+
         self.thread()
 
     def thread(self):
+        # self.gui.check_stop = False
         t1 = threading.Thread(target=self.merchant_info)
         t1.start()
 
     def merchant_info(self):
         logger.info('Загрузка всех акции(рассрочек)')
-        for _ in range(8):
+        for _ in range(3):
             try:
                 if self.gui.check_stop:
                     break
                 driver = get_driver(False)
-                print(1234324)
                 url = 'https://marketing.kaspi.kz/sign-in'
 
                 # Заходит на стр. каспи мерч
@@ -57,10 +59,22 @@ class MerchantInfo:
                 enter_btn.click()
                 time.sleep(1)
 
-                all_promotions = driver.find_element(By.XPATH, '//a[@href="/promotions/all"]')
-                driver.implicitly_wait(10)
-                all_promotions.click()
-                time.sleep(1)
+                for _ in range(3):
+                    try:
+                        delay = random.randint(4, 8)
+                        all_promotions = WebDriverWait(driver, delay).until(
+                            EC.presence_of_element_located((By.XPATH, '//a[@href="/promotions/all"]')))
+                        driver.execute_script('arguments[0].click();', all_promotions)
+                    except:
+                        driver.refresh()
+                        continue
+                    else:
+                        break
+
+
+                # count_all_promotion = driver.find_element(By.XPATH, '//a[@href="/promotions/all"]')
+                # count_all_promotion = WebDriverWait(driver, delay).until(
+                #     EC.presence_of_element_located((By.XPATH, '//div[@class="promotion ddl_product segmentstream_product_link"]')))
                 count_all_promotion = driver.find_elements(By.XPATH, '//div[@class='
                                                                      '"promotion ddl_product segmentstream_product_link"]')
 

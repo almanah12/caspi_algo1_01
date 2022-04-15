@@ -45,6 +45,7 @@ class ButtonEditorDelegate(QStyledItemDelegate):
             if self._pressed == (index.row(), index.column()):
                 self.buttonClicked.emit(*self._pressed)
                 self.add_base_data = Add_Base_Data(self.parent)
+                self.add_base_data.filter_data()
                 self.add_base_data.init_delegate(index.row())
                 self.add_base_data.exec_()
 

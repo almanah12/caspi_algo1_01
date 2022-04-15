@@ -4,15 +4,13 @@ from PyQt5 import uic
 from caspi_pars.interface.resources_qtdesigner import add_data_to_base_rs
 from caspi_pars.helpers import resource_path
 from PyQt5.QtSql import QSqlDatabase, QSqlTableModel
-from PyQt5.QtWidgets import (QDataWidgetMapper, QDialog, QMainWindow, QMessageBox)
-from caspi_pars.enums import list_stores, list_cities, list_stores_ini
+from PyQt5.QtWidgets import (QDataWidgetMapper, QDialog, QMainWindow)
 from caspi_pars.interface.config_utils.user_config_utils import search_line_comboBox, add_comboBox, delete_comboBox, \
     get_list_comboBox
-from caspi_pars.db_QSqlDatabase import db
+from caspi_pars.db_QSqlDatabase import db, model_perm
 from caspi_pars.db_tables import session, permanent_table, temporary_table
-from caspi_pars.enums import all_temp_data
+from caspi_pars.enums import filter_for_goods_with_data, filter_for_goods_without_data,list_stores, list_stores_ini
 from caspi_pars.other_func.check_data_fill import ch_data_fill
-
 #
 # if not os.path.exists(resource_path('data_shop')):
 #     os.mkdir(resource_path('data_shop'))
@@ -114,13 +112,14 @@ class Add_Base_Data(QDialog):
         # # (1) Добавляет список в виджет, (2) Поиск выбора в виджете comboBox
         # self.city_1_comboBox.addItems(list_cities)
         # search_line_comboBox(list_cities, self.city_1_comboBox)
+        # Проверяем КОРРЕкТНО Ли введеные данные
+        self.saveButton.clicked.connect(self.check_full_data_bool)
 
         # Кнопки управления
         self.previousButton.clicked.connect(self.previous_button)
         self.nextButton.clicked.connect(self.next_button)
 
-        # Проверяем КОРРЕкТНО Ли введеные данные
-        self.saveButton.clicked.connect(self.check_full_data_bool)
+
 
         # Проверяет есть ли ограничитель. Если да - огр:вкл
         self.check_limiter_comboBox.currentTextChanged.connect(self.check_limiter)
@@ -174,7 +173,8 @@ class Add_Base_Data(QDialog):
         self.model.setTable("permanent_table")
 
         # Упорядочивает данные по фильтру
-        # self.filter_data()
+        self.filter_data()
+
         self.search_articul(self.parent.search_table_articul_lineEdit.text())
 
         # Заполняет модель данными
@@ -204,17 +204,17 @@ class Add_Base_Data(QDialog):
             else:
                 self.tabWidget.setTabText(i, curr_row['Город_{}'.format(i + 1)])
 
-    # def filter_data(self):
-    #     """
-    #     Фильтрует данные на этой окошке
-    #     """
-    #     if self.parent.filter_comboBox.currentText() == 'Товары без данных':
-    #         self.model.setFilter(filter_for_goods_without_data)
-    #     elif self.parent.filter_comboBox.currentText() == 'Товары с данными':
-    #         self.model.setFilter(filter_for_goods_with_data)
-    #     else:
-    #         filter_str = 'Артикул LIKE "%%"'
-    #         self.model.setFilter(filter_str)
+    def filter_data(self):
+        """
+        Фильтрует данные на этой окошке
+        """
+        if self.parent.filter_comboBox.currentText() == 'Товары без данных':
+            self.model.setFilter(filter_for_goods_without_data)
+        elif self.parent.filter_comboBox.currentText() == 'Товары с данными':
+            self.model.setFilter(filter_for_goods_with_data)
+        else:
+            filter_str = 'Артикул LIKE "%%"'
+            self.model.setFilter(filter_str)
 
     def search_articul(self, s):
         filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
@@ -255,7 +255,7 @@ class Add_Base_Data(QDialog):
         # if full_data_bool[0]:
         self.mapper.submit()
         self.parent.update_table()
-    #     else:
+        #     else:
     #         msg = QMessageBox()
     #         msg.setIcon(QMessageBox.Critical)
     #         msg.setText("Условие: Разные цены для городов")

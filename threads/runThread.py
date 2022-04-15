@@ -12,7 +12,7 @@ import time
 from caspi_pars.threads.runThreadMethods import run_autodownload_xml, auto_loading_xml
 from caspi_pars.db_QSqlDatabase import model_perm
 from caspi_pars.db_tables import temporary_table, engine, session
-from caspi_pars.enums import filter_all_data, all_perm_data, all_temp_data
+from caspi_pars.enums import filter_all_data, all_perm_data, all_temp_data, active_goods
 from caspi_pars.db_tables import permanent_table
 from caspi_pars.helpers import resource_path, logger, server_http_ngrok, download_proxy_list, restart_time, Server_Http_Ngrok, ngrok_public_url
 from caspi_pars.other_func.check_data_fill import ch_data_fill
@@ -62,22 +62,22 @@ class RunThread(QRunnable):
                     MerchantInfo(self.gui)
 
                 # сбор товаров с маг. клиента
-                if self.gui.check_stop:
-                    break
-                self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
-                self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" check demo-version', 4)
+                if not self.gui.check_stop:
+                    self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
+                    self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" check demo-version', 4)
 
-                logger.info('Сбор данных с "Кабинета продавца"')
-                gets_data = GetDataKaspiSeller(self.gui, self.signals.activity_monitor)
-                gets_data.gets_data()
-                self.signals.activity_table.emit()
-                self.signals.restore.emit(True, 0)
-                self.signals.activity_monitor.emit(
-                    'С "Каб.продавца" взята данных на {} товаров'.format(GetDataKaspiSeller.count_gds), 1)
-                logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(GetDataKaspiSeller.count_gds))
-                logger.info(GetDataKaspiSeller.count_other_city)
+                    logger.info('Сбор данных с "Кабинета продавца"')
+                    gets_data = GetDataKaspiSeller(self.gui, self.signals.activity_monitor)
+                    gets_data.gets_data()
+                    self.signals.activity_table.emit()
+                    self.signals.restore.emit(True, 0)
+                    self.signals.activity_monitor.emit(
+                        'С "Каб.продавца" взята данных на {} товаров'.format(GetDataKaspiSeller.count_gds), 1)
+                    logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(GetDataKaspiSeller.count_gds))
+                    logger.info(GetDataKaspiSeller.count_other_city)
+
+                logger.debug(active_goods)
                 # Парсинг товаров
-                # # download_proxy_list()
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit("Сбор данных с сайта товара", 1)
                     logger.info('Сбор данных с сайта товара')
@@ -99,6 +99,8 @@ class RunThread(QRunnable):
 
                     num_city = 1
                     for city in all_cities:
+                        if self.gui.check_stop:
+                            break
                         filter_links = session.query(temporary_table).filter(temporary_table.c.Все_города.contains(city)).all()
                         if filter_links:
                             links = []
@@ -109,6 +111,8 @@ class RunThread(QRunnable):
                             Parser.first_request = 0
                             num_city += 1
                             session.commit()
+                            if self.gui.check_stop:
+                                break
 
                     if self.gui.configuration.same_price_citiesradioButton.isChecked():
                         self.signals.activity_monitor.emit(
@@ -125,19 +129,21 @@ class RunThread(QRunnable):
                             'сделано {} запросов'.format(GetDataKaspiSeller.count_gds, Parser.count_requests))
 
                 # Обработка данных товаров
-                ch_dt_fill = ch_data_fill(self.gui)
+                if not self.gui.check_stop:
+                    ch_dt_fill = ch_data_fill(self.gui)
+                    logger.debug(ch_dt_fill)
 
-                logger.debug(ch_dt_fill[0])
-                proc_dt = ProcessingData(self.gui, self.signals.activity_monitor)
-                proc_dt.write_perm_table_data()
-                if ch_dt_fill[0]:
-                    self.signals.activity_monitor.emit("Запуск обработки данных", 1)
-                    logger.info('Запуск обработки данных')
-                    proc_dt.processing_dt()
-                else:
-                    self.signals.activity_monitor.emit(ch_dt_fill[1], 2)
-                    logger.error('Данные товаров не заполнено, заполните таблицу')
-                    break
+                    logger.debug(ch_dt_fill[0])
+                    proc_dt = ProcessingData(self.gui, self.signals.activity_monitor)
+                    proc_dt.write_perm_table_data()
+                    if ch_dt_fill[0]:
+                        self.signals.activity_monitor.emit("Запуск обработки данных", 1)
+                        logger.info('Запуск обработки данных')
+                        proc_dt.processing_dt()
+                    else:
+                        self.signals.activity_monitor.emit(ch_dt_fill[1], 2)
+                        logger.error('Данные товаров не заполнено, заполните таблицу')
+                        break
 
                 # # Собрать данные в xml файл
                 if not self.gui.check_stop:
@@ -158,7 +164,8 @@ class RunThread(QRunnable):
                 # запись xml файла в локальный http сервер через ngrok
                 if not self.gui.check_stop:
                     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
-                            and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False:
+                            and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False\
+                            and GetDataKaspiSeller.count_gds > 0.6:
                         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
                         ngrok_thread = threading.Thread(target=server_http_ngrok)
                         ngrok_thread.start()
@@ -191,12 +198,16 @@ class RunThread(QRunnable):
                     th_end_installment.start()
 
                 # Запуск программы через х время
-                if GetDataKaspiSeller.count_gds == 0 and GetDataKaspiSeller.count_gds*0.8 <= Parser.count_requests:
-                    restart_time(4, 6, start_time, self.signals.activity_monitor, self.gui)
+                if not self.gui.check_stop:
+                    if GetDataKaspiSeller.count_gds == 0.5:
+                        restart_time(25, 35, start_time, self.signals.activity_monitor, self.gui)
 
-                else:
-                    restart_time(self.gui.configuration.interval_from_spinBox.value(), self.gui.configuration.interval_before_spinBox.value(),
-                                 start_time, self.signals.activity_monitor, self.gui)
+                    elif GetDataKaspiSeller.count_gds == 0 and GetDataKaspiSeller.count_gds*0.8 <= Parser.count_requests:
+                        restart_time(4, 6, start_time, self.signals.activity_monitor, self.gui)
+
+                    else:
+                        restart_time(self.gui.configuration.interval_from_spinBox.value(), self.gui.configuration.interval_before_spinBox.value(),
+                                     start_time, self.signals.activity_monitor, self.gui)
 
                 # Обнуления переменых
                 GetDataKaspiSeller.count_gds = 0

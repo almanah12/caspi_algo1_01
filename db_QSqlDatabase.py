@@ -12,7 +12,6 @@ model_perm = QSqlTableModel(db=db)
 model_perm.setTable("permanent_table") # указываем таблицу из БД для модели
 model_perm.select()
 
-
 model_temp = QSqlTableModel(db=db)
 model_temp.setTable("temporary_table")  # указываем таблицу из БД для модели
 model_temp.select()

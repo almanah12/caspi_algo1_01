@@ -2,28 +2,25 @@
 CREATE NEW VERSION
 Main caspi_algo_mix application.
 """
-import os
 import sys
-from datetime import datetime
 import requests
 
 from PyQt5 import uic
 from PyQt5.QtCore import QThreadPool
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from cryptocode import decrypt
 
-from sqlalchemy import select, inspect, MetaData
+from sqlalchemy import select, inspect
 from threading import Thread
 from caspi_pars.interface.resources_qtdesigner import main_rs
 from caspi_pars.db_QSqlDatabase import model_temp, model_perm
-from caspi_pars.enums import filter_all_data, _AppName_, curr_uuid, all_perm_data, all_temp_data, count_cities
+from caspi_pars.enums import filter_all_data, _AppName_, curr_uuid, all_perm_data, count_cities,filter_for_goods_without_data, filter_for_goods_with_data
 from caspi_pars.slots import initiate_slots
 from caspi_pars.helpers import resource_path, get_current_version, logger
 from caspi_pars.threads import runThread
 from caspi_pars.interface.utils import add_to_table_widget, show_and_bring_window_to_front, add_to_data_table_view
 from caspi_pars.interface.configuration import Configuration
-from caspi_pars.interface.add_base_data import Add_Base_Data
 
 from caspi_pars.interface.update import Update
 from caspi_pars.interface.license import License
@@ -63,7 +60,7 @@ class Interface(QMainWindow):
         uic.loadUi(resource_path(r'UI/parsingMain.ui'), self)  # Loading the main UI
 
         self.configuration = Configuration(parent=self)  # Loading configuration
-        self.add_data_base = Add_Base_Data(parent=self)  # Loading
+        # self.add_data_base = Add_Base_Data(parent=self)  # Loading
 
         # Initiating threading pool
         self.threadCount = self.configuration.number_thread_spinBox.value()
@@ -163,11 +160,11 @@ class Interface(QMainWindow):
         add_to_table_widget(self.activityMonitor, [message], color)
         # self.simulationActivityMonitor.scrollToBottom()
 
-    def choice_table(self):
-        if self.comboBox.currentText() == 'Временная табл.':
-            add_to_data_table_view(self, model_temp, 'temporary_table', self.tableView)
-        else:
-            add_to_data_table_view(self, model_temp, 'permanent_table', self.tableView)
+    # def choice_table(self):
+    #     if self.comboBox.currentText() == 'Временная табл.':
+    #         add_to_data_table_view(self, model_temp, 'temporary_table', self.tableView)
+    #     else:
+    #         add_to_data_table_view(self, model_perm, 'permanent_table', self.tableView)
 
     def search_articul(self, s):
         filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
@@ -176,22 +173,31 @@ class Interface(QMainWindow):
         model_temp.setFilter(filter_str_term)
 
     def update_table(self):
-        model_temp.setFilter(filter_all_data)
-        model_perm.setFilter(filter_all_data)
 
-    # def filter_data(self):
-    #     """
-    #     Фильтрует данные
-    #     """
-    #     if self.filter_comboBox.currentText() == 'Товары без данных':
-    #         # session.query(permanent_table).filter(permanent_table.c.Тек_ц1 > 150000)
-    #         model_perm.setFilter(filter_for_goods_without_data)
-    #
-    #     elif self.filter_comboBox.currentText() == 'Товары с данными':
-    #         model_perm.setFilter(filter_for_goods_with_data)
-    #
-    #     else:
-    #         model_perm.setFilter(filter_all_data)
+        model_temp.setFilter(filter_all_data)
+        add_to_data_table_view(self, model_perm, 'permanent_table', self.permanent_tableView)
+
+        if self.filter_comboBox.currentText() == 'Товары без данных':
+            model_perm.setFilter(filter_for_goods_without_data)
+
+        elif self.filter_comboBox.currentText() == 'Товары с данными':
+            model_perm.setFilter(filter_for_goods_with_data)
+
+        else:
+            model_perm.setFilter(filter_all_data)
+
+    def filter_data(self):
+        """
+        Фильтрует данные
+        """
+        if self.filter_comboBox.currentText() == 'Товары без данных':
+            model_perm.setFilter(filter_for_goods_without_data)
+
+        elif self.filter_comboBox.currentText() == 'Товары с данными':
+            model_perm.setFilter(filter_for_goods_with_data)
+
+        else:
+            model_perm.setFilter(filter_all_data)
 
     def delete_row_data(self):
         links = []

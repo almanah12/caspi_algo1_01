@@ -8,6 +8,8 @@ import pandas
 from caspi_pars.helpers import resource_path
 from caspi_pars.db_tables import temporary_table, session, permanent_table
 
+active_goods = []
+
 count_cities = 4
 _AppName_ = 'AlashPars'
 
@@ -57,17 +59,9 @@ dict_month = {1: 'января', 2: 'февраля', 3: 'марта',  4: 'ап
 
 list_column_for_tableview = [14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
 
-# filter_for_goods_without_data = "Тек_ц1 is NULL  or Тек_ц1 is '' or " \
-#                 "Сбстоимость1 is NULL  or Сбстоимость1 is '' or " \
-#                 "Город_1 is NULL  or Город_1 is '' or " \
-#                 "Мин_ц1 is NULL  or Мин_ц1 is '' or " \
-#                 "Макс_ц1 is NULL  or Макс_ц1 is ''"
-#
-# filter_for_goods_with_data = "Тек_ц1 LIKE '%%' AND Тек_ц1 is not '' AND " \
-#                 "Сбстоимость1 LIKE '%%' AND Сбстоимость1 is not '' AND " \
-#                 "Город_1 LIKE '%%' AND Город_1 is not '' AND " \
-#                 "Мин_ц1 LIKE '%%' AND Мин_ц1 is not '' AND " \
-#                 "Макс_ц1 LIKE '%%' AND Макс_ц1 is not ''"
+filter_for_goods_without_data = "Filter is NULL or Filter is ''"
+
+filter_for_goods_with_data = "Filter LIKE 1"
 
 all_perm_data = session.query(permanent_table)
 all_temp_data = session.query(temporary_table)

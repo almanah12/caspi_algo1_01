@@ -4,6 +4,7 @@ Saving, loading, and copying settings helper functions for configuration.py can 
 
 import os
 
+import win32api
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QCompleter, QMessageBox
 from qtpy import QtCore
@@ -150,3 +151,7 @@ def add_city(config):
     elif config.comboBox_number_cities.currentText() == 'Город 4':
         config.lineEdit_city_name_4.setText(config.comboBox_name_city.currentText())
         config.lineEdit_seller_points_4.setText(config.lineEdit_list_PP.text())
+
+
+def open_cannot_be_parsed_list():
+    win32api.ShellExecute(0, 'open', resource_path(r'data_shop/cannot_be_parsed.txt'), None, None, 10)

@@ -34,10 +34,11 @@ class Parser:
         pool.restart()
 
     def parser(self, url):
-        articul = url.split('/')[5].split('-')[-1] + '_' + \
-                  self.gui.configuration.id_partner_lineEdit.text()
+        if not self.gui.check_stop:
+            articul = url.split('/')[5].split('-')[-1] + '_' + \
+                      self.gui.configuration.id_partner_lineEdit.text()
 
-        self.signals.emit('Парсинг товара {}'.format(url.split('/')[5]), 1)
+            self.signals.emit('Парсинг товара {}'.format(url.split('/')[5]), 1)
         for _ in range(3):
             if self.gui.check_stop:
                 break

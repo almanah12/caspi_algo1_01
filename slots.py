@@ -4,11 +4,9 @@ Slots for Algobot GUI.
 
 from caspi_pars.interface.utils import clear_table, add_to_data_table_view
 from caspi_pars.themes import set_bear_mode, set_dark_mode, set_light_mode
-from caspi_pars.interface.utils import add_to_data_table_view
 from caspi_pars.db_QSqlDatabase import model_perm
 from caspi_pars.threads.runThreadMethods.kaspi_merchant import MerchantInfo
-from caspi_pars.other_func.filter_data import filter_data
-
+# from caspi_pars.other_func.update_table import update_table
 
 def initiate_slots(app, gui):
     """
@@ -42,10 +40,13 @@ def create_simulation_slots(gui):
 
     gui.search_table_articul_lineEdit.textChanged.connect(gui.search_articul)
     gui.pushButton_update.clicked.connect(gui.update_table)
-    gui.pushButton_downlodad_installment.clicked.connect(lambda: MerchantInfo(gui=gui))
+
+    gui.pushButton_downlodad_installment.clicked.connect(lambda: MerchantInfo(gui=gui).merchant_info)
     gui.pushButton_fill_table_data.clicked.connect(lambda: gui.thread_func(gui.fill_data))
 
     gui.filter_comboBox.currentTextChanged.connect(lambda: add_to_data_table_view(gui, model_perm, 'permanent_table', gui.permanent_tableView))
+    gui.filter_comboBox.currentTextChanged.connect(gui.filter_data)
+
     gui.clearMessageTableButton.clicked.connect(lambda: clear_table(gui.activityMonitor))
 
     gui.endButton.clicked.connect(lambda: gui.end_bot_thread())

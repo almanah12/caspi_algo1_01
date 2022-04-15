@@ -1,10 +1,10 @@
 import time
+import random
 
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
 from caspi_pars.webdriver_options import get_driver
 
 from caspi_pars.helpers import logger, ngrok_public_url, enter_caspi_seller
@@ -30,12 +30,17 @@ def set_http_adress(gui, signals, ngrok_url):
             enter_caspi_seller(driver, gui.configuration.email_login_lineEdit.text(),
                                gui.configuration.password_lineEdit.text())
 
-            if gui.check_stop:
-                break
-
-            products_btn = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
-            products_btn.click()
+            for _ in range(3):
+                try:
+                    delay = random.randint(4, 8)
+                    products_btn = WebDriverWait(driver, delay).until(
+                        EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Товары")))
+                    products_btn.click()
+                except:
+                    driver.refresh()
+                    continue
+                else:
+                    break
 
             products_btn2 = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, 'Загрузить прайс-лист')))
