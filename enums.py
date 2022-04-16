@@ -8,7 +8,6 @@ import pandas
 from caspi_pars.helpers import resource_path
 from caspi_pars.db_tables import temporary_table, session, permanent_table
 
-active_goods = []
 
 count_cities = 4
 _AppName_ = 'AlashPars'
@@ -44,7 +43,6 @@ list_cities = sorted(list_cities)
 
 list_PP = ('', 'PP1', 'PP2', 'PP3', 'PP4', 'PP5', 'PP6', 'PP7')
 list_number_cities = ('', 'Основной город', 'Город 2', 'Город 3', 'Город 4')
-filter_all_data = 'Артикул LIKE "%%"'
 
 
 list_user_agents = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36',
@@ -59,12 +57,17 @@ dict_month = {1: 'января', 2: 'февраля', 3: 'марта',  4: 'ап
 
 list_column_for_tableview = [14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
 
-filter_for_goods_without_data = "Filter is NULL or Filter is ''"
+filter_all_active_data = 'Active_g LIKE 1'
+filter_all_data = 'Артикул LIKE "%%"'
 
-filter_for_goods_with_data = "Filter LIKE 1"
+filter_for_goods_without_data = "(Filter is NULL or Filter is '') AND Active_g LIKE 1"
+
+filter_for_goods_with_data = "Filter LIKE 1 AND Active_g LIKE 1"
 
 all_perm_data = session.query(permanent_table)
 all_temp_data = session.query(temporary_table)
+active_vendor_code_list = [i['Артикул'] for i in all_temp_data.filter(temporary_table.c.Артикул).all()]
+
 
 curr_uuid = str(uuid.uuid1()).split('-')[4]
 

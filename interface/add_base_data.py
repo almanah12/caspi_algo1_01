@@ -9,8 +9,10 @@ from caspi_pars.interface.config_utils.user_config_utils import search_line_comb
     get_list_comboBox
 from caspi_pars.db_QSqlDatabase import db, model_perm
 from caspi_pars.db_tables import session, permanent_table, temporary_table
-from caspi_pars.enums import filter_for_goods_with_data, filter_for_goods_without_data,list_stores, list_stores_ini
+from caspi_pars.enums import filter_for_goods_with_data, filter_for_goods_without_data, list_stores, list_stores_ini, \
+    filter_all_active_data, filter_all_data
 from caspi_pars.other_func.check_data_fill import ch_data_fill
+
 #
 # if not os.path.exists(resource_path('data_shop')):
 #     os.mkdir(resource_path('data_shop'))
@@ -212,9 +214,10 @@ class Add_Base_Data(QDialog):
             self.model.setFilter(filter_for_goods_without_data)
         elif self.parent.filter_comboBox.currentText() == 'Товары с данными':
             self.model.setFilter(filter_for_goods_with_data)
+        elif self.parent.filter_comboBox.currentText() == 'Активные':
+            self.model.setFilter(filter_all_active_data)
         else:
-            filter_str = 'Артикул LIKE "%%"'
-            self.model.setFilter(filter_str)
+            model_perm.setFilter(filter_all_data)
 
     def search_articul(self, s):
         filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
@@ -255,6 +258,7 @@ class Add_Base_Data(QDialog):
         # if full_data_bool[0]:
         self.mapper.submit()
         self.parent.update_table()
+
         #     else:
     #         msg = QMessageBox()
     #         msg.setIcon(QMessageBox.Critical)

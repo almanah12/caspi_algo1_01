@@ -12,7 +12,7 @@ import time
 from caspi_pars.threads.runThreadMethods import run_autodownload_xml, auto_loading_xml
 from caspi_pars.db_QSqlDatabase import model_perm
 from caspi_pars.db_tables import temporary_table, engine, session
-from caspi_pars.enums import filter_all_data, all_perm_data, all_temp_data, active_goods
+from caspi_pars.enums import filter_all_active_data, all_perm_data, all_temp_data
 from caspi_pars.db_tables import permanent_table
 from caspi_pars.helpers import resource_path, logger, server_http_ngrok, download_proxy_list, restart_time, Server_Http_Ngrok, ngrok_public_url
 from caspi_pars.other_func.check_data_fill import ch_data_fill
@@ -60,7 +60,6 @@ class RunThread(QRunnable):
                     self.signals.activity_monitor.emit("Сбор данных с 'Kaspi Marketing'", 1)
                     logger.info("Сбор данных с 'Kaspi Marketing'")
                     MerchantInfo(self.gui)
-
                 # сбор товаров с маг. клиента
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
@@ -76,7 +75,6 @@ class RunThread(QRunnable):
                     logger.debug('С "Каб.продавца" взята данных на {} товаров.'.format(GetDataKaspiSeller.count_gds))
                     logger.info(GetDataKaspiSeller.count_other_city)
 
-                logger.debug(active_goods)
                 # Парсинг товаров
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit("Сбор данных с сайта товара", 1)
@@ -131,9 +129,7 @@ class RunThread(QRunnable):
                 # Обработка данных товаров
                 if not self.gui.check_stop:
                     ch_dt_fill = ch_data_fill(self.gui)
-                    logger.debug(ch_dt_fill)
 
-                    logger.debug(ch_dt_fill[0])
                     proc_dt = ProcessingData(self.gui, self.signals.activity_monitor)
                     proc_dt.write_perm_table_data()
                     if ch_dt_fill[0]:
@@ -165,7 +161,7 @@ class RunThread(QRunnable):
                 if not self.gui.check_stop:
                     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
                             and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False\
-                            and GetDataKaspiSeller.count_gds > 0.6:
+                            and GetDataKaspiSeller.count_gds > 0:
                         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
                         ngrok_thread = threading.Thread(target=server_http_ngrok)
                         ngrok_thread.start()
@@ -190,20 +186,18 @@ class RunThread(QRunnable):
                     self.signals.activity_monitor.emit('Проверка рассрочек', 1)
                     logger.info('Проверка рассрочек')
                     th_start_installment = threading.Thread(target=check_promotion('data_cat_comm_start'))
-                    print(f"thread status: {th_start_installment.is_alive()}")
                     th_start_installment.start()
 
                     th_end_installment = threading.Thread(target=check_promotion('data_cat_comm_end'))
-                    print(f"thread status: {th_end_installment.is_alive()}")
                     th_end_installment.start()
 
                 # Запуск программы через х время
                 if not self.gui.check_stop:
-                    if GetDataKaspiSeller.count_gds == 0.5:
-                        restart_time(25, 35, start_time, self.signals.activity_monitor, self.gui)
+                    # if GetDataKaspiSeller.count_gds == 0.5:
+                    #     restart_time(25, 35, start_time, self.signals.activity_monitor, self.gui)
 
-                    elif GetDataKaspiSeller.count_gds == 0 and GetDataKaspiSeller.count_gds*0.8 <= Parser.count_requests:
-                        restart_time(4, 6, start_time, self.signals.activity_monitor, self.gui)
+                    if GetDataKaspiSeller.count_gds == 0 and GetDataKaspiSeller.count_gds*0.8 <= Parser.count_requests:
+                        restart_time(4, 8, start_time, self.signals.activity_monitor, self.gui)
 
                     else:
                         restart_time(self.gui.configuration.interval_from_spinBox.value(), self.gui.configuration.interval_before_spinBox.value(),

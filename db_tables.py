@@ -81,6 +81,7 @@ permanent_table = Table('permanent_table', meta,
                         Column('ItemProp3', TEXT),
                         Column('Comm', Integer),
                         Column('Filter', Integer),
+                        Column('Active_g', Integer),
                         )
 
 if not os.path.exists(resource_path('data_shop')):

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1022</width>
-    <height>624</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="font">
@@ -19,7 +19,7 @@
    <string>AlashPars</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../media/main_rs.qrc">
+   <iconset>
     <normaloff>:/logo/parsing.ico</normaloff>:/logo/parsing.ico</iconset>
   </property>
   <property name="autoFillBackground">
@@ -50,7 +50,7 @@
          <x>0</x>
          <y>0</y>
          <width>1002</width>
-         <height>584</height>
+         <height>581</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -75,7 +75,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="movable">
            <bool>true</bool>
@@ -85,7 +85,7 @@
           </property>
           <widget class="QWidget" name="simulationTab">
            <attribute name="icon">
-            <iconset resource="../media/main_rs.qrc">
+            <iconset>
              <normaloff>:/logo/internet.ico</normaloff>:/logo/internet.ico</iconset>
            </attribute>
            <attribute name="title">
@@ -150,7 +150,7 @@
                 <string>Время исполнения </string>
                </property>
                <property name="icon">
-                <iconset resource="../media/main_rs.qrc">
+                <iconset>
                  <normaloff>:/logo/time.ico</normaloff>:/logo/time.ico</iconset>
                </property>
               </column>
@@ -159,7 +159,7 @@
                 <string>Сообщение</string>
                </property>
                <property name="icon">
-                <iconset resource="../media/main_rs.qrc">
+                <iconset>
                  <normaloff>:/logo/comment.ico</normaloff>:/logo/comment.ico</iconset>
                </property>
               </column>
@@ -227,7 +227,7 @@
                <string>Очистить</string>
               </property>
               <property name="icon">
-               <iconset resource="../media/main_rs.qrc">
+               <iconset>
                 <normaloff>:/logo/clear.ico</normaloff>:/logo/clear.ico</iconset>
               </property>
              </widget>
@@ -271,7 +271,7 @@
                   <string>Настройки</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../media/main_rs.qrc">
+                  <iconset>
                    <normaloff>:/logo/settings2.ico</normaloff>:/logo/settings2.ico</iconset>
                  </property>
                 </widget>
@@ -293,7 +293,7 @@
                   <string>Запуск</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../media/main_rs.qrc">
+                  <iconset>
                    <normaloff>:/logo/run.ico</normaloff>:/logo/run.ico</iconset>
                  </property>
                 </widget>
@@ -318,7 +318,7 @@
                   <string>Прервать</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../media/main_rs.qrc">
+                  <iconset>
                    <normaloff>:/logo/stop.ico</normaloff>:/logo/stop.ico</iconset>
                  </property>
                  <property name="checkable">
@@ -333,7 +333,7 @@
           </widget>
           <widget class="QWidget" name="newsTab">
            <attribute name="icon">
-            <iconset resource="../media/main_rs.qrc">
+            <iconset>
              <normaloff>:/logo/base_data.ico</normaloff>:/logo/base_data.ico</iconset>
            </attribute>
            <attribute name="title">
@@ -347,7 +347,7 @@
               </property>
               <widget class="QWidget" name="tab_7">
                <attribute name="icon">
-                <iconset resource="../media/main_rs.qrc">
+                <iconset>
                  <normaloff>:/logo/perm_table.ico</normaloff>:/logo/perm_table.ico</iconset>
                </attribute>
                <attribute name="title">
@@ -394,7 +394,7 @@
                   </property>
                   <item>
                    <property name="text">
-                    <string>Все</string>
+                    <string>Активные</string>
                    </property>
                   </item>
                   <item>
@@ -405,6 +405,11 @@
                   <item>
                    <property name="text">
                     <string>Товары без данных</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Все товары</string>
                    </property>
                   </item>
                  </widget>
@@ -447,7 +452,7 @@
               </widget>
               <widget class="QWidget" name="tab_8">
                <attribute name="icon">
-                <iconset resource="../media/main_rs.qrc">
+                <iconset>
                  <normaloff>:/logo/temp_table.ico</normaloff>:/logo/temp_table.ico</iconset>
                </attribute>
                <attribute name="title">
@@ -498,8 +503,8 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../media/main_rs.qrc">
-                  <normaloff>:/logo/folder.ico</normaloff>:/logo/folder.ico</iconset>
+                 <iconset>
+                  <normaloff>:/logo/file_excel.ico</normaloff>:/logo/file_excel.ico</iconset>
                 </property>
                </widget>
               </item>
@@ -515,7 +520,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../media/main_rs.qrc">
+                 <iconset>
                   <normaloff>:/logo/update.ico</normaloff>:/logo/update.ico</iconset>
                 </property>
                </widget>
@@ -526,7 +531,7 @@
           </widget>
           <widget class="QWidget" name="tab">
            <attribute name="icon">
-            <iconset resource="../media/main_rs.qrc">
+            <iconset>
              <normaloff>:/logo/help (1).ico</normaloff>:/logo/help (1).ico</iconset>
            </attribute>
            <attribute name="title">
@@ -606,6 +611,10 @@
                  <property name="text">
                   <string>Загрузить</string>
                  </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/logo/download.ico</normaloff>:/logo/download.ico</iconset>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -632,7 +641,7 @@
                  <string>Обновление</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../media/main_rs.qrc">
+                 <iconset>
                   <normaloff>:/logo/update.ico</normaloff>:/logo/update.ico</iconset>
                 </property>
                </widget>
@@ -643,7 +652,7 @@
                  <string>О программе</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../media/main_rs.qrc">
+                 <iconset>
                   <normaloff>:/logo/about.ico</normaloff>:/logo/about.ico</iconset>
                 </property>
                </widget>

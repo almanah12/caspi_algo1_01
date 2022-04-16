@@ -15,7 +15,8 @@ from sqlalchemy import select, inspect
 from threading import Thread
 from caspi_pars.interface.resources_qtdesigner import main_rs
 from caspi_pars.db_QSqlDatabase import model_temp, model_perm
-from caspi_pars.enums import filter_all_data, _AppName_, curr_uuid, all_perm_data, count_cities,filter_for_goods_without_data, filter_for_goods_with_data
+from caspi_pars.enums import filter_all_active_data, _AppName_, curr_uuid, all_perm_data, count_cities, \
+    filter_for_goods_without_data, filter_for_goods_with_data, filter_all_data
 from caspi_pars.slots import initiate_slots
 from caspi_pars.helpers import resource_path, get_current_version, logger
 from caspi_pars.threads import runThread
@@ -183,6 +184,8 @@ class Interface(QMainWindow):
         elif self.filter_comboBox.currentText() == 'Товары с данными':
             model_perm.setFilter(filter_for_goods_with_data)
 
+        elif self.filter_comboBox.currentText() == 'Активные':
+            model_perm.setFilter(filter_all_active_data)
         else:
             model_perm.setFilter(filter_all_data)
 
@@ -190,12 +193,15 @@ class Interface(QMainWindow):
         """
         Фильтрует данные
         """
+
         if self.filter_comboBox.currentText() == 'Товары без данных':
             model_perm.setFilter(filter_for_goods_without_data)
 
         elif self.filter_comboBox.currentText() == 'Товары с данными':
             model_perm.setFilter(filter_for_goods_with_data)
 
+        elif self.filter_comboBox.currentText() == 'Активные':
+            model_perm.setFilter(filter_all_active_data)
         else:
             model_perm.setFilter(filter_all_data)
 
@@ -241,7 +247,6 @@ class Interface(QMainWindow):
 
     def fill_data(self):
         for row_d in all_perm_data:
-            print(row_d)
             for city_c in range(count_cities):
                 if row_d['Город_'+str(city_c+1)]:
                     session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(

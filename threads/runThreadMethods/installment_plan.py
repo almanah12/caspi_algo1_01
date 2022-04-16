@@ -8,7 +8,8 @@ from caspi_pars.db_tables import conn_engine, temp_table_select, session, tempor
 
 def check_promotion(path_to_folder):
     while True:
-        if len(os.listdir(resource_path(fr"data_files/{path_to_folder}"))) != 0:
+        if len(os.listdir(resource_path(fr"data_files/{path_to_folder}"))) != 0 \
+                and os.path.exists(resource_path(fr"data_files/{path_to_folder}")):
             for root, dir, files in os.walk(resource_path(fr"data_files/{path_to_folder}")):
                 logger.debug(files)
                 data_cat_comm_first_file = [file for file in files][0]

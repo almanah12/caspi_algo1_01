@@ -17,12 +17,12 @@ from selenium.common.exceptions import TimeoutException
 from caspi_pars.helpers import resource_path, logger, enter_caspi_seller
 from caspi_pars.webdriver_options import get_driver
 from caspi_pars.db_tables import temporary_table, permanent_table, engine, session
-from caspi_pars.enums import active_goods
 
 
 class GetDataKaspiSeller:
     count_gds = 0
     count_other_city = 0
+    active_goods = []
 
     def __init__(self, gui, signal_monitor):
         self.gui = gui
@@ -48,7 +48,7 @@ class GetDataKaspiSeller:
                 session.query(temporary_table).delete()
                 session.commit()
 
-                active_goods = []
+
 
                 # Заходит на стр. каспи клиент
                 url = 'https://kaspi.kz/merchantcabinet/login?logout=true'
@@ -121,12 +121,11 @@ class GetDataKaspiSeller:
             else:
                 break
 
-        fol_column = driver.find_element(By.XPATH, '//select[@class="form__col _12-12"]')
-
-        fol_column.click()
-        processing_count = driver.find_element(
-            By.XPATH, '//option[@value="PROCESSING"]').text.split('(')[1].split(')')[0]
-        logger.debug(int(processing_count))
+        # fol_column = driver.find_element(By.XPATH, '//select[@class="form__col _12-12"]')
+        #
+        # fol_column.click()
+        # processing_count = driver.find_element(
+        #     By.XPATH, '//option[@value="PROCESSING"]').text.split('(')[1].split(')')[0]
 
         # Цикл работает пока кнопка 'след' доступна
         while True:
@@ -170,12 +169,10 @@ class GetDataKaspiSeller:
         except:
             vendor_code_goods = "Нет артикула товара"
 
-        # не парсить выбранные товары(по артикулам)
+        # не парсить выбранные товары(по артикулам), добавляет только в постоянную табл.
+        # Берем цену самую высокую, и ставим в первый город(Тек ц1)
         if vendor_code_goods in self.vend_code:
             GetDataKaspiSeller.count_gds -= 1
-
-        else:
-            active_goods.append(vendor_code_goods)
             try:
                 name_goods = driver.find_elements_by_xpath('//div[@title="Название в системе продавца"]')[i].text
                 logger.debug(name_goods)
@@ -188,17 +185,47 @@ class GetDataKaspiSeller:
             except:
                 link_goods = "Нет ссылки товара"
 
-            # try:
-            #     price_goods = driver.find_elements_by_xpath('//div[@class="offer-managment__price-cell-price"]')[i].text
-            #     if len(price_goods) > 10:
-            #         price_goods = price_goods.split('...')[1]
-            #     word_list = price_goods.split()
-            #     # Преобразование текста в число. напр '100 123 т' в 100123
-            #     num_list = filter(lambda word: word.isnumeric(), word_list)
-            #     price_goods = int(''.join(map(str, num_list)))
-            #
-            # except:
-            #     price_goods = "Нет цены за товар"
+            try:
+                price_goods = driver.find_elements_by_xpath('//div[@class="offer-managment__price-cell-price"]')[i].text
+                if len(price_goods) > 10:
+                    price_goods = price_goods.split('...')[1]
+                word_list = price_goods.split()
+                # Преобразование текста в число. напр '100 123 т' в 100123
+                num_list = filter(lambda word: word.isnumeric(), word_list)
+                price_goods = int(''.join(map(str, num_list)))
+            except:
+                price_goods = "Нет цены за товар"
+
+            # Переменая которая нужна для записи в данных в постоянную табл.
+            sql_insert_permanent_table = permanent_table.insert().values(
+                Артикул=vendor_code_goods, Модель=name_goods, Тек_ц1=price_goods)
+            sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
+                .values(Тек_ц1=price_goods)
+
+            condition_to_perm_table = session.query(permanent_table).filter(
+                permanent_table.c.Артикул == vendor_code_goods).first()
+
+            conn = engine.connect()
+            if not bool(condition_to_perm_table):
+                conn.execute(sql_insert_permanent_table)
+            else:
+                conn.execute(sql_permanent_update)
+            conn.close()
+
+        # Товары которые нужно парсить
+        else:
+            GetDataKaspiSeller.active_goods.append(vendor_code_goods)
+            try:
+                name_goods = driver.find_elements_by_xpath('//div[@title="Название в системе продавца"]')[i].text
+                logger.debug(name_goods)
+            except:
+                name_goods = "Нет название товара"
+
+            try:
+                link_goods = driver.find_elements_by_xpath('//a[@class="offer-managment__product-cell-link"]')[i].get_attribute('href')
+                logger.debug('link_goods: {}'.format(link_goods))
+            except:
+                link_goods = "Нет ссылки товара"
 
             try:
                 availability_in_stores = driver.find_elements_by_xpath(
@@ -209,9 +236,6 @@ class GetDataKaspiSeller:
                 availability_in_stores = "Нет доступных точек"
 
             try:
-                ######### РЕШИТЬ ВОПРОС В БУДУЩЕМ(9/15/21)
-                # ПРЕОБРОЗОВАТЬ STR В ИМЯ ЭКЗЕМПЛЯРА(ИСПОЛЬЗОВАТЬ STR ПОСЛЕ ОПЕАТОРА ТОЧКИ)(gui.configuration.PP1 -> gui.configuration.i)
-
                 list_cities = [None, None,None,None]
                 availability_in_stors = driver.find_elements_by_xpath(
                     '//div[@class="offer-managment__pickup-points-cell-point"]')[i].text

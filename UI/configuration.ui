@@ -57,7 +57,7 @@
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <property name="usesScrollButtons">
           <bool>false</bool>
@@ -385,8 +385,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>335</width>
-                <height>502</height>
+                <width>802</width>
+                <height>572</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -867,7 +867,7 @@
                </property>
                <property name="icon">
                 <iconset resource="../media/conf_rs.qrc">
-                 <normaloff>:/icons/folder.ico</normaloff>:/icons/folder.ico</iconset>
+                 <normaloff>:/icons/file_txt.ico</normaloff>:/icons/file_txt.ico</iconset>
                </property>
               </widget>
              </item>

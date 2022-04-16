@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QComboBox, QDialog, QMessageBox, QTableWidget, QTabl
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QTableView)
 
-from caspi_pars.other_func.check_data_fill import ch_dt_fill_for_tableview
+from caspi_pars.other_func.check_data_fill import ch_dt_fill_for_tableview, active_goods_table
 
 from caspi_pars.delegats import ButtonEditorDelegate, ButtonDeleteDelegate, ReadOnlyDelegate
 
@@ -111,6 +111,7 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
 
     table.setModel(model)
     if name_table == 'permanent_table':
+        active_goods_table()
         editor_delegate = ButtonEditorDelegate(parent)  # Была ошибка, передал self и проблема решилась
         delete_delegate = ButtonDeleteDelegate(parent)
         read_only = ReadOnlyDelegate(parent)
@@ -126,30 +127,29 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
 
     # Показывать данные остальных городов
     if name_table == 'permanent_table':
-        # active_goods_table(table)
         if parent.comboBox_show_data_other_city.currentText() == '1':
             # Город 2
-            ch_dt_fill_for_tableview(parent, table)
+            ch_dt_fill_for_tableview(parent)
             list_column_1 = [14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
             for colum in list_column_1:
                 table.setColumnWidth(colum, 0)
 
         elif parent.comboBox_show_data_other_city.currentText() == '2':
-            ch_dt_fill_for_tableview(parent, table)
+            ch_dt_fill_for_tableview(parent)
 
             list_column_2 = [22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
             for colum in list_column_2:
                 table.setColumnWidth(colum, 0)
 
         elif parent.comboBox_show_data_other_city.currentText() == '3':
-            ch_dt_fill_for_tableview(parent, table)
+            ch_dt_fill_for_tableview(parent)
 
             list_column_3 = [30, 31, 32, 33, 35, 37]
             for colum in list_column_3:
                 table.setColumnWidth(colum, 0)
 
         else:
-            ch_dt_fill_for_tableview(parent, table)
+            ch_dt_fill_for_tableview(parent)
 
             table.resizeColumnsToContents()
 
