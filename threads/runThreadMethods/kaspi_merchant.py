@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import pandas as pd
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -71,18 +74,32 @@ class MerchantInfo:
                     else:
                         break
 
+                count_all_promotion = driver.find_elements(
+                    By.XPATH, '//div[@class="promotion ddl_product segmentstream_product_link"]')
 
-                # count_all_promotion = driver.find_element(By.XPATH, '//a[@href="/promotions/all"]')
-                # count_all_promotion = WebDriverWait(driver, delay).until(
-                #     EC.presence_of_element_located((By.XPATH, '//div[@class="promotion ddl_product segmentstream_product_link"]')))
-                count_all_promotion = driver.find_elements(By.XPATH, '//div[@class='
-                                                                     '"promotion ddl_product segmentstream_product_link"]')
+                # delete folder
+                if os.path.exists(resource_path(r'data_files/data_cat_comm_start')) or os.path.exists(
+                        resource_path(r'data_files/data_cat_comm_end')):
+                    path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                        resource_path(r'data_files/data_cat_comm_start'))
+                    shutil.rmtree(path)
+                    path_end = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                        resource_path(r'data_files/data_cat_comm_end'))
+                    shutil.rmtree(path_end)
+
+                #  Создаем папку занова для  файлов рассрочки
+                os.mkdir(resource_path(r'data_files/data_cat_comm_start'))
+                os.mkdir(resource_path(r'data_files/data_cat_comm_end'))
 
                 for i in range(len(count_all_promotion)):
                     if self.gui.check_stop:
                         break
-                    if driver.find_element(By.XPATH,
-                                           f'//div[{i + 1}]/div[@class="promotion-img__container"]').text == "0·0·6":
+                    inst_plan_tx = driver.find_element(By.XPATH,
+                                        f'//div[{i + 1}]/div[@class="promotion-img__container"]').text
+                    # if inst_plan_tx == "0·0·6" or "0·0·12" or "0·0·18" or "0·0·24":
+                    if inst_plan_tx == "0·0·6" or inst_plan_tx == "0·0·12" or inst_plan_tx == "0·0·18" or inst_plan_tx \
+                            == "0·0·24":
+
                         lead = driver.find_element(By.XPATH, f'//div[{i + 1}]/div[2]/p[1]').text
                         # lead = lead.split()[0]
                         year_curr = datetime.datetime.now().year
@@ -92,10 +109,14 @@ class MerchantInfo:
                         start_data = interval_data.split('-')[0]
                         end_data = interval_data.split('-')[1].split('(')[0]
                         day_s_d = start_data.split()[0]
+                        if int(day_s_d) < 10:
+                            day_s_d = '0' + day_s_d
                         month_s_d = start_data.split()[1]
                         month_s_d = get_key_dict(dict_month, month_s_d)
 
                         day_e_d = end_data.split()[0]
+                        if int(day_e_d) < 10:
+                            day_e_d = '0' + day_e_d
                         month_e_d = end_data.split()[1]
                         month_e_d = get_key_dict(dict_month, month_e_d)
 

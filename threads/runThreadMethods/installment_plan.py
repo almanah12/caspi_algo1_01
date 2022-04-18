@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 import pandas as pd
-from caspi_pars.enums import all_temp_data
+from caspi_pars.enums import all_temp_data, all_perm_data
 from caspi_pars.helpers import resource_path, logger
 from caspi_pars.db_tables import conn_engine, temp_table_select, session, temporary_table, permanent_table
 
@@ -12,6 +12,9 @@ def check_promotion(path_to_folder):
                 and os.path.exists(resource_path(fr"data_files/{path_to_folder}")):
             for root, dir, files in os.walk(resource_path(fr"data_files/{path_to_folder}")):
                 logger.debug(files)
+                files = sorted(files)
+                logger.debug(files)
+
                 data_cat_comm_first_file = [file for file in files][0]
 
             print(path_to_folder, data_cat_comm_first_file)
@@ -25,18 +28,17 @@ def check_promotion(path_to_folder):
             # res = ntpCllient.request('pool.ntp.org')
 
             # date_6 = datetime(2022, 4, 9)
-            # date_7 = datetime(2022, 4, 10, 18, 30, 00)
+            # date_7 = datetime(2022, 4, 8, 23, 00, 00)
             #
             # print(date_6.timestamp() - date_7.timestamp())
-            # logger.debug(date_6 - date_7)
-            # break
+
             def change_price():
                 d_pr = pd.read_excel(resource_path(
                     fr'data_files/{path_to_folder}/{data_cat_comm_first_file}'),
                     sheet_name=0)
                 name_category = d_pr['Name category'].tolist()
                 value_comm = d_pr['Value commission'].tolist()
-                articuls = [row.Артикул for row in all_temp_data]
+                articuls = [row.Артикул for row in all_perm_data]
 
                 for i in range(len(articuls)):
                     curr_row = session.query(permanent_table).filter(permanent_table.c.Артикул == articuls[i]).one()
@@ -46,7 +48,7 @@ def check_promotion(path_to_folder):
 
                         # Проверят если категория определеннго товара в рассрочке
                         for itemprop_n in range(1, 4):
-                            if curr_row['ItemProp' + str(itemprop_n)] in name_category:
+                            if curr_row['Категория' + str(itemprop_n)] in name_category:
                                 for city_i in range(count_cities):
                                     if curr_row['Тек_ц' + str(city_i + 1)]:
                                         logger.debug(curr_row['Тек_ц' + str(city_i + 1)])
@@ -59,19 +61,19 @@ def check_promotion(path_to_folder):
             logger.debug(is_time_change_price)
 
             if path_to_folder == 'data_cat_comm_start':
-                if 0 <= is_time_change_price <= 21600:
+                if 3600 <= is_time_change_price <= 21600: # от 18:00 до 23:00 наступающего.дня
                     change_price()
 
-                elif is_time_change_price < 0:
+                elif is_time_change_price < 3600:
                     logger.debug('delete file ')
                     path = resource_path(fr'data_files/{path_to_folder}/{data_cat_comm_first_file}')
                     os.remove(path)
                 else:
                     break
             else:
-                if -153000 <= is_time_change_price <= -91800: # от 1:10 до 18:30 след.дня
+                if -138600 <= is_time_change_price <= -109800: # от 6:30 до 14:30 след.дня
                     change_price()
-                elif is_time_change_price < -154000:
+                elif is_time_change_price < -138600:
                     path = resource_path(fr'data_files/{path_to_folder}/{data_cat_comm_first_file}')
                     os.remove(path)
                 else:

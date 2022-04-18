@@ -45,7 +45,8 @@ class ButtonEditorDelegate(QStyledItemDelegate):
             if self._pressed == (index.row(), index.column()):
                 self.buttonClicked.emit(*self._pressed)
                 self.add_base_data = Add_Base_Data(self.parent)
-                self.add_base_data.filter_data()
+                self.add_base_data.filter_data(self.parent.search_table_articul_lineEdit.text())
+                # self.add_base_data.search_articul(self.parent.search_table_articul_lineEdit.text())
                 self.add_base_data.init_delegate(index.row())
                 self.add_base_data.exec_()
 
@@ -115,6 +116,44 @@ class ButtonDeleteDelegate(QStyledItemDelegate):
             return True
 
         return False
+
+
+# class CheckBoxDelegate(QtGui.QItemDelegate):
+#     """
+#     A delegate that places a fully functioning QCheckBox in every
+#     cell of the column to which it's applied
+#     """
+#     def __init__(self, parent):
+#         QtGui.QItemDelegate.__init__(self, parent)
+#
+#     def createEditor(self, parent, option, index):
+#         cb = MyCheckBox(parent)
+#         cb.clicked.connect(self.stateChanged)
+#         return cb
+#
+#     def paint(self, painter, option, index):
+#         value = index.data()
+#         if value:
+#             value = QtCore.Qt.Checked
+#         else:
+#             value = QtCore.Qt.Unchecked
+#         self.drawCheck(painter, option, option.rect, value)
+#         self.drawFocus(painter, option, option.rect)
+#
+#     def setEditorData(self, editor, index):
+#         """ Update the value of the editor """
+#         editor.blockSignals(True)
+#         editor.setChecked(index.model().checked_state(index))
+#         editor.blockSignals(False)
+#
+#     def setModelData(self, editor, model, index):
+#         """ Send data to the model """
+#         model.setData(index, editor.isChecked(), QtCore.Qt.EditRole)
+#
+#     @QtCore.Slot()
+#     def stateChanged(self):
+#         print("sender"), self.sender()
+#         self.commitData.emit(self.sender())
 
 
 class ReadOnlyDelegate(QStyledItemDelegate):

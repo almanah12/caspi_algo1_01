@@ -180,12 +180,6 @@ class GetDataKaspiSeller:
                 name_goods = "Нет название товара"
 
             try:
-                link_goods = driver.find_elements_by_xpath('//a[@class="offer-managment__product-cell-link"]')[i].get_attribute('href')
-                logger.debug('link_goods: {}'.format(link_goods))
-            except:
-                link_goods = "Нет ссылки товара"
-
-            try:
                 price_goods = driver.find_elements_by_xpath('//div[@class="offer-managment__price-cell-price"]')[i].text
                 if len(price_goods) > 10:
                     price_goods = price_goods.split('...')[1]
@@ -196,20 +190,48 @@ class GetDataKaspiSeller:
             except:
                 price_goods = "Нет цены за товар"
 
-            # Переменая которая нужна для записи в данных в постоянную табл.
-            sql_insert_permanent_table = permanent_table.insert().values(
-                Артикул=vendor_code_goods, Модель=name_goods, Тек_ц1=price_goods)
-            sql_permanent_update = permanent_table.update().where(permanent_table.c.Артикул==vendor_code_goods)\
-                .values(Тек_ц1=price_goods)
+            try:
+                availability_in_stores = driver.find_elements_by_xpath(
+                    '//div[@class="offer-managment__pickup-points-cell-point"]')[i].text
+                logger.debug(availability_in_stores)
 
-            condition_to_perm_table = session.query(permanent_table).filter(
-                permanent_table.c.Артикул == vendor_code_goods).first()
+            except:
+                availability_in_stores = "Нет доступных точек"
+
+            try:
+                list_cities = [None, None,None,None]
+                availability_in_stors = driver.find_elements_by_xpath(
+                    '//div[@class="offer-managment__pickup-points-cell-point"]')[i].text
+                for pp in availability_in_stors.split(', '):
+                    if pp in self.gui.configuration.lineEdit_seller_points_1.text().split(';'):
+                        list_cities[0] = self.gui.configuration.lineEdit_city_name_1.text()
+                    elif pp in self.gui.configuration.lineEdit_seller_points_2.text().split(';'):
+                        list_cities[1] = self.gui.configuration.lineEdit_city_name_2.text()
+                    elif pp in self.gui.configuration.lineEdit_seller_points_3.text().split(';'):
+                        list_cities[2] = self.gui.configuration.lineEdit_city_name_3.text()
+                    elif pp in self.gui.configuration.lineEdit_seller_points_4.text().split(';'):
+                        list_cities[3] = self.gui.configuration.lineEdit_city_name_4.text()
+
+                # Отфильтровывает убирает повт. города
+                sort_list_cities = list(OrderedDict.fromkeys(list_cities))
+
+                if None in sort_list_cities:
+                    count_cities = len(sort_list_cities) - 1
+                else:
+                    count_cities = len(sort_list_cities)
+
+                logger.debug('list_cities {} {} {} {}'.format(list_cities[0], list_cities[1], list_cities[2], list_cities[3]))
+
+            except:
+                availability_in_stores = "Нет доступных точек"
+            all_cities = '{}, {}, {}, {}'.format(list_cities[0], list_cities[1], list_cities[2], list_cities[3])
+            sql_insert_temporary_table = temporary_table.insert().values(
+                Артикул=vendor_code_goods, Модель=name_goods, Брэнд=name_goods.split(' ')[0],
+                Доступность=availability_in_stores, Колич_г=count_cities, Все_города=all_cities, Город_1=list_cities[0],
+                Тек_ц1=price_goods, Город_2=list_cities[1], Город_3=list_cities[2], Город_4=list_cities[3], Scrap_st=1)
 
             conn = engine.connect()
-            if not bool(condition_to_perm_table):
-                conn.execute(sql_insert_permanent_table)
-            else:
-                conn.execute(sql_permanent_update)
+            conn.execute(sql_insert_temporary_table)
             conn.close()
 
         # Товары которые нужно парсить

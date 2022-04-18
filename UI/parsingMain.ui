@@ -19,7 +19,7 @@
    <string>AlashPars</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../media/main_rs.qrc">
     <normaloff>:/logo/parsing.ico</normaloff>:/logo/parsing.ico</iconset>
   </property>
   <property name="autoFillBackground">
@@ -75,7 +75,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="movable">
            <bool>true</bool>
@@ -85,7 +85,7 @@
           </property>
           <widget class="QWidget" name="simulationTab">
            <attribute name="icon">
-            <iconset>
+            <iconset resource="../media/main_rs.qrc">
              <normaloff>:/logo/internet.ico</normaloff>:/logo/internet.ico</iconset>
            </attribute>
            <attribute name="title">
@@ -150,7 +150,7 @@
                 <string>Время исполнения </string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../media/main_rs.qrc">
                  <normaloff>:/logo/time.ico</normaloff>:/logo/time.ico</iconset>
                </property>
               </column>
@@ -159,7 +159,7 @@
                 <string>Сообщение</string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../media/main_rs.qrc">
                  <normaloff>:/logo/comment.ico</normaloff>:/logo/comment.ico</iconset>
                </property>
               </column>
@@ -227,7 +227,7 @@
                <string>Очистить</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="../media/main_rs.qrc">
                 <normaloff>:/logo/clear.ico</normaloff>:/logo/clear.ico</iconset>
               </property>
              </widget>
@@ -271,7 +271,7 @@
                   <string>Настройки</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../media/main_rs.qrc">
                    <normaloff>:/logo/settings2.ico</normaloff>:/logo/settings2.ico</iconset>
                  </property>
                 </widget>
@@ -293,7 +293,7 @@
                   <string>Запуск</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../media/main_rs.qrc">
                    <normaloff>:/logo/run.ico</normaloff>:/logo/run.ico</iconset>
                  </property>
                 </widget>
@@ -318,7 +318,7 @@
                   <string>Прервать</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../media/main_rs.qrc">
                    <normaloff>:/logo/stop.ico</normaloff>:/logo/stop.ico</iconset>
                  </property>
                  <property name="checkable">
@@ -333,7 +333,7 @@
           </widget>
           <widget class="QWidget" name="newsTab">
            <attribute name="icon">
-            <iconset>
+            <iconset resource="../media/main_rs.qrc">
              <normaloff>:/logo/base_data.ico</normaloff>:/logo/base_data.ico</iconset>
            </attribute>
            <attribute name="title">
@@ -347,7 +347,7 @@
               </property>
               <widget class="QWidget" name="tab_7">
                <attribute name="icon">
-                <iconset>
+                <iconset resource="../media/main_rs.qrc">
                  <normaloff>:/logo/perm_table.ico</normaloff>:/logo/perm_table.ico</iconset>
                </attribute>
                <attribute name="title">
@@ -427,16 +427,6 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="1" column="0" colspan="5">
-                 <widget class="QTableView" name="permanent_tableView">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background-color: rgb(217, 236, 255);</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="3">
                  <widget class="QPushButton" name="pushButton_fill_table_data">
                   <property name="text">
@@ -448,11 +438,21 @@
                   </property>
                  </widget>
                 </item>
+                <item row="1" column="0" colspan="5">
+                 <widget class="QTableView" name="permanent_tableView">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: rgb(217, 236, 255);</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
               <widget class="QWidget" name="tab_8">
                <attribute name="icon">
-                <iconset>
+                <iconset resource="../media/main_rs.qrc">
                  <normaloff>:/logo/temp_table.ico</normaloff>:/logo/temp_table.ico</iconset>
                </attribute>
                <attribute name="title">
@@ -475,8 +475,37 @@
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
-                 <string>Поиск по атрибуту:</string>
+                 <string>Поиск по :</string>
                 </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_search_name">
+                <item>
+                 <property name="text">
+                  <string>Артикул</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Модель</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Категория1</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Категория2</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Категория3</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item>
@@ -503,7 +532,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../media/main_rs.qrc">
                   <normaloff>:/logo/file_excel.ico</normaloff>:/logo/file_excel.ico</iconset>
                 </property>
                </widget>
@@ -520,7 +549,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../media/main_rs.qrc">
                   <normaloff>:/logo/update.ico</normaloff>:/logo/update.ico</iconset>
                 </property>
                </widget>
@@ -531,7 +560,7 @@
           </widget>
           <widget class="QWidget" name="tab">
            <attribute name="icon">
-            <iconset>
+            <iconset resource="../media/main_rs.qrc">
              <normaloff>:/logo/help (1).ico</normaloff>:/logo/help (1).ico</iconset>
            </attribute>
            <attribute name="title">
@@ -571,7 +600,7 @@
                 </spacer>
                </item>
                <item row="0" column="1">
-                <widget class="QComboBox" name="comboBox">
+                <widget class="QComboBox" name="comboBox_auto_confirm_order">
                  <item>
                   <property name="text">
                    <string>Нет</string>
@@ -612,7 +641,7 @@
                   <string>Загрузить</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../media/main_rs.qrc">
                    <normaloff>:/logo/download.ico</normaloff>:/logo/download.ico</iconset>
                  </property>
                 </widget>
@@ -641,7 +670,7 @@
                  <string>Обновление</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../media/main_rs.qrc">
                   <normaloff>:/logo/update.ico</normaloff>:/logo/update.ico</iconset>
                 </property>
                </widget>
@@ -652,7 +681,7 @@
                  <string>О программе</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../media/main_rs.qrc">
                   <normaloff>:/logo/about.ico</normaloff>:/logo/about.ico</iconset>
                 </property>
                </widget>

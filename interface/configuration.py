@@ -97,6 +97,8 @@ class Configuration(QDialog):
         self.darkModeRadioButton.setChecked(self.setting_variables.value('darkMode', type=bool))
         self.bearModeRadioButton.setChecked(self.setting_variables.value('bearMode', type=bool))
 
+        self.parent.comboBox_auto_confirm_order.setCurrentText(self.setting_variables.value('auto_confirm_order'))
+
     def closeEvent(self, event):
 
         save_comboBox(list_stores_ini, self.name_store_comboBox)
@@ -141,6 +143,8 @@ class Configuration(QDialog):
         self.setting_variables.setValue('lightMode', self.lightModeRadioButton.isChecked())
         self.setting_variables.setValue('darkMode', self.darkModeRadioButton.isChecked())
         self.setting_variables.setValue('bearMode', self.bearModeRadioButton.isChecked())
+
+        self.setting_variables.setValue('auto_confirm_order', self.parent.comboBox_auto_confirm_order.currentText())
 
     def visible_useProxy(self):
         if self.use_proxy_comboBox.currentText() == 'Нет':

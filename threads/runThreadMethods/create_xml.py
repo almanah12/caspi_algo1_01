@@ -40,23 +40,29 @@ def create_xml(gui):
             availabilites.append(xml.Element('availability', available='yes', storeId=list_availability[i]))
 
         cities_c = len(row['Все_города'].split(', '))
-        # Если цена одна для всех городов
-        if gui.configuration.same_price_citiesradioButton.isChecked():
-            price = xml.SubElement(offer, 'price')
-            for city_n in range(cities_c):
-                if row['Город_'+str(city_n+1)]:
-                    price.text = str(row['Г_{}_новая_ц'.format(str(city_n+1))])
-                    break
+        if not row['Scrap_st']:
+            # Если цена одна для всех городов
+            if gui.configuration.same_price_citiesradioButton.isChecked():
+                price = xml.SubElement(offer, 'price')
+                for city_n in range(cities_c):
+                    if row['Город_'+str(city_n+1)]:
+                        price.text = str(row['Г_{}_новая_ц'.format(str(city_n+1))])
+                        break
 
-        # Если цена разные для всех городов
+            # Если цена разные для всех городов
+            else:
+                cityprices = xml.Element('cityprices')
+                offer.append(cityprices)
+                for city_n in range(cities_c):
+                    # дОБАВЛЯЕТСЯ СУБЭЛЕменты пока условие истинно
+                    if row['Город_'+str(city_n+1)]:
+                        cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row['Город_'+str(city_n+1)]])
+                        cityprice.text = str(row['Г_{}_новая_ц'.format(str(city_n+1))])
+
+        # товар который не парсился. вСЕГДА ОДНА ЦЕНА ДЛЯ ВСЕХ ГОРОДОВ
         else:
-            cityprices = xml.Element('cityprices')
-            offer.append(cityprices)
-            for city_n in range(cities_c):
-                # дОБАВЛЯЕТСЯ СУБЭЛЕменты пока условие истинно
-                if row['Город_'+str(city_n+1)]:
-                    cityprice = xml.SubElement(cityprices, 'cityprice', cityId=code_cities[row['Город_'+str(city_n+1)]])
-                    cityprice.text = str(row['Г_{}_новая_ц'.format(str(city_n+1))])
+            price = xml.SubElement(offer, 'price')
+            price.text = str(row['Тек_ц1'])
 
     tree = xml.ElementTree(kaspi_catalog)
     tree.write(resource_path(r'data_shop/alash.xml'))

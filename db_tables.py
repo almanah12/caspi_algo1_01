@@ -31,7 +31,8 @@ temporary_table = Table('temporary_table', meta,
                         Column('Город_4', TEXT),
                         Column('Тек_ц4', Integer),
                         Column('Г_4_Конк', TEXT),
-                        Column('Г_4_новая_ц', Integer)
+                        Column('Г_4_новая_ц', Integer),
+                        Column('Scrap_st', Integer),
                         )
 
 # Постояная таблица куда сохраним данные товаров магаза
@@ -76,9 +77,9 @@ permanent_table = Table('permanent_table', meta,
                         Column('Макс_ц4', Integer),
                         Column('Колич_г', Integer),
 
-                        Column('ItemProp1', TEXT),
-                        Column('ItemProp2', TEXT),
-                        Column('ItemProp3', TEXT),
+                        Column('Категория1', TEXT),
+                        Column('Категория2', TEXT),
+                        Column('Категория3', TEXT),
                         Column('Comm', Integer),
                         Column('Filter', Integer),
                         Column('Active_g', Integer),

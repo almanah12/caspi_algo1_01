@@ -56,11 +56,11 @@ class RunThread(QRunnable):
                 start_time = time.time()
                 curr_day = datetime.now().day
                 curr_hour = datetime.now().hour
-                if 0 < curr_day < 3 and 18 < curr_hour < 22:
+                if (curr_day == 1 or 10 or 15 or 20 or 25) and 18 < curr_hour < 22:
                     self.signals.activity_monitor.emit("Сбор данных с 'Kaspi Marketing'", 1)
                     logger.info("Сбор данных с 'Kaspi Marketing'")
                     MerchantInfo(self.gui)
-                # сбор товаров с маг. клиента
+                # # сбор товаров с маг. клиента
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
                     self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" check demo-version', 4)
@@ -99,12 +99,10 @@ class RunThread(QRunnable):
                     for city in all_cities:
                         if self.gui.check_stop:
                             break
-                        filter_links = session.query(temporary_table).filter(temporary_table.c.Все_города.contains(city)).all()
-                        if filter_links:
-                            links = []
-                            for link in filter_links:
-                                links.append(link['Ссылка'])
-                            parser_site = Parser(self.gui, links, city, num_city, self.signals.activity_monitor, use_proxy)
+                        active_links_list = [i['Ссылка'] for i in all_temp_data.filter(temporary_table.c.Все_города.contains(city)).all() if not i['Scrap_st']]
+                        logger.debug(active_links_list)
+                        if active_links_list:
+                            parser_site = Parser(self.gui, active_links_list, city, num_city, self.signals.activity_monitor, use_proxy)
                             parser_site.parse()
                             Parser.first_request = 0
                             num_city += 1
@@ -184,12 +182,14 @@ class RunThread(QRunnable):
                 # Проверка рассрочек
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit('Проверка рассрочек', 1)
-                    logger.info('Проверка рассрочек')
-                    th_start_installment = threading.Thread(target=check_promotion('data_cat_comm_start'))
-                    th_start_installment.start()
-
-                    th_end_installment = threading.Thread(target=check_promotion('data_cat_comm_end'))
-                    th_end_installment.start()
+                    if 6 <= curr_hour <= 22:
+                        logger.info('Проверка рассрочек "Начало"')
+                        th_start_installment = threading.Thread(target=check_promotion('data_cat_comm_start'))
+                        th_start_installment.start()
+                    if 6 <= curr_hour <= 22:
+                        logger.info('Проверка рассрочек "Конец"')
+                        th_end_installment = threading.Thread(target=check_promotion('data_cat_comm_end'))
+                        th_end_installment.start()
 
                 # Запуск программы через х время
                 if not self.gui.check_stop:

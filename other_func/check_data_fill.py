@@ -32,7 +32,7 @@ def ch_data_fill(gui):
 
 def ch_dt_fill_for_tableview(gui):
     filter_data_write(gui)
-    gui.filter_data()
+    gui.filter_data(gui.search_table_articul_lineEdit.text())
 
 
 def filter_data_write(gui):
@@ -74,7 +74,7 @@ def filter_data_write(gui):
 
 
 def active_goods_table():
-    active_vendor_code_list = [i['Артикул'] for i in all_temp_data.filter(temporary_table.c.Артикул).all()]
+    active_vendor_code_list = [i['Артикул'] for i in all_temp_data.filter(temporary_table.c.Артикул).all() if not i['Scrap_st']]
     for row_d in all_perm_data:
         session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update({'Active_g': 1},
                                                                                                      synchronize_session=False)

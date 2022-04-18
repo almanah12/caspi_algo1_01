@@ -170,7 +170,7 @@ class Parser:
         session = Session()
         curr_row = session.query(permanent_table).filter(
             permanent_table.c.Артикул == articul).one()
-        if not curr_row['ItemProp1']:
+        if not curr_row['Категория1']:
             count_itempromp = len(driver.find_elements(By.XPATH, '//div[3]/div/div/div/a/span'))
             logger.debug(count_itempromp)
             d_pr = pd.read_excel(resource_path(
@@ -185,10 +185,10 @@ class Parser:
                 if i == 4:
                     categ = driver.find_element(By.XPATH, f'//div[3]/div/div/div[{i + 1}]/a/span').text
                     session.query(permanent_table).filter(permanent_table.c.Артикул == articul).update(
-                        {'ItemProp' + str(i-1): categ})
+                        {'Категория' + str(i-1): categ})
                 else:
                     session.query(permanent_table).filter(permanent_table.c.Артикул == articul).update(
-                        {'ItemProp'+str(i): categ})
+                        {'Категория'+str(i): categ})
                 for count_categ in range(len(categ1)):
                     if categ == categ1[count_categ]:
                         session.query(permanent_table).filter(permanent_table.c.Артикул == articul).update(

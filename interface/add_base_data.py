@@ -175,9 +175,9 @@ class Add_Base_Data(QDialog):
         self.model.setTable("permanent_table")
 
         # Упорядочивает данные по фильтру
-        self.filter_data()
+        self.filter_data(self.parent.search_table_articul_lineEdit.text())
 
-        self.search_articul(self.parent.search_table_articul_lineEdit.text())
+        # self.search_articul(self.parent.search_table_articul_lineEdit.text())
 
         # Заполняет модель данными
         self.model.select()
@@ -206,22 +206,21 @@ class Add_Base_Data(QDialog):
             else:
                 self.tabWidget.setTabText(i, curr_row['Город_{}'.format(i + 1)])
 
-    def filter_data(self):
+    def filter_data(self, s):
         """
         Фильтрует данные на этой окошке
         """
+        type_search = self.parent.comboBox_search_name.currentText()
         if self.parent.filter_comboBox.currentText() == 'Товары без данных':
-            self.model.setFilter(filter_for_goods_without_data)
-        elif self.parent.filter_comboBox.currentText() == 'Товары с данными':
-            self.model.setFilter(filter_for_goods_with_data)
-        elif self.parent.filter_comboBox.currentText() == 'Активные':
-            self.model.setFilter(filter_all_active_data)
-        else:
-            model_perm.setFilter(filter_all_data)
+            self.model.setFilter(filter_for_goods_without_data.format(type_search, s))
 
-    def search_articul(self, s):
-        filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
-        self.model.setFilter(filter_str)
+        elif self.parent.filter_comboBox.currentText() == 'Товары с данными':
+            self.model.setFilter(filter_for_goods_with_data.format(type_search, s))
+
+        elif self.parent.filter_comboBox.currentText() == 'Активные':
+            self.model.setFilter(filter_all_active_data.format(type_search, s))
+        else:
+            self.model.setFilter(filter_all_data)
 
     def calculate_min_max_price(self, first_cost, widget_lineEdit, widget_spinBox):
         """
