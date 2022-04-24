@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as xml
 
 
-from caspi_pars.db_tables import conn_engine, temp_table_select
 from caspi_pars.enums import code_cities, all_temp_data
 from caspi_pars.helpers import resource_path
 

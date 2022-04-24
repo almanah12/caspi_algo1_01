@@ -44,12 +44,12 @@ def set_http_adress(gui, signals, ngrok_url):
 
             products_btn2 = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, 'Загрузить прайс-лист')))
-            products_btn2.click()
+            driver.execute_script('arguments[0].click();', products_btn2)
 
             auto_loading_xml_btn = WebDriverWait(driver, 5).until(
                 EC.element_to_be_clickable(
                     (By.XPATH, '/html/body/div[4]/div[3]/div/div[3]/div[4]/h4/label[1]')))
-            auto_loading_xml_btn.click()
+            driver.execute_script('arguments[0].click();', auto_loading_xml_btn)
 
             if gui.check_stop:
                 break

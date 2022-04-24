@@ -59,8 +59,6 @@ class Configuration(QDialog):
         self.interval_before_spinBox.setValue(self.setting_variables.value('interval_before', type=int))
         self.number_thread_spinBox.setValue(self.setting_variables.value('number_thread', type=int))
         self.use_proxy_comboBox.setCurrentText(self.setting_variables.value('use_proxy'))
-        self.list_proxy_path_lineEdit.setText(self.setting_variables.value('list_proxy_path'))
-        self.type_proxy_comboBox.setCurrentText(self.setting_variables.value('type_proxy'))
 
         # Точки доступа
         self.lineEdit_city_name_1.setText(self.setting_variables.value('city_name_1'))
@@ -76,26 +74,17 @@ class Configuration(QDialog):
         # Наценка
         self.same_price_citiesradioButton.setChecked(self.setting_variables.value('same_price_cities', type=bool))
         self.different_price_citiesradioButton.setChecked(self.setting_variables.value('different_price_cities', type=bool))
-        # self.same_price_cities_checkBox.setCheckState(
-        #     self.setting_variables.value('same_price_cities', QtCore.Qt.Checked, QtCore.Qt.CheckState))
-        # self.different_price_cities_checkBox.setCheckState(
-        #     self.setting_variables.value('different_price_cities', QtCore.Qt.Checked, QtCore.Qt.CheckState))
         self.interval_change_price_spinBox.setValue(self.setting_variables.value('interval_change_price', type=int))
         self.consider_deliver_times_comboBox.setCurrentText(self.setting_variables.value('deliver_times'))
-        self.use_base_limit_comboBox.setCurrentText(self.setting_variables.value('use_base_limit'))
         self.up_price_to_competitor_comboBox.setCurrentText(self.setting_variables.value('up_price_to_competitor'))
 
         # Файл
-        # self.path_save_xml_lineEdit.setText(self.setting_variables.value('path_save_xml'))
         self.auto_downl_xml_comboBox.setCurrentText(self.setting_variables.value('auto_downl_xml'))
         self.auto_downl_xml_to_google_comboBox.setCurrentText(self.setting_variables.value('auto_downl_xml_to_google_comboBox'))
         self.name_xml_file_lineEdit.setText(self.setting_variables.value('name_xml_file'))
         self.name_folder_lineEdit.setText(self.setting_variables.value('name_folder'))
 
-        # Настройки приложения
-        self.lightModeRadioButton.setChecked(self.setting_variables.value('lightMode', type=bool))
-        self.darkModeRadioButton.setChecked(self.setting_variables.value('darkMode', type=bool))
-        self.bearModeRadioButton.setChecked(self.setting_variables.value('bearMode', type=bool))
+
 
         self.parent.comboBox_auto_confirm_order.setCurrentText(self.setting_variables.value('auto_confirm_order'))
 
@@ -111,8 +100,6 @@ class Configuration(QDialog):
         self.setting_variables.setValue('interval_before', self.interval_before_spinBox.value())
         self.setting_variables.setValue('number_thread', self.number_thread_spinBox.value())
         self.setting_variables.setValue('use_proxy', self.use_proxy_comboBox.currentText())
-        self.setting_variables.setValue('list_proxy_path', self.list_proxy_path_lineEdit.text())
-        self.setting_variables.setValue('type_proxy', self.type_proxy_comboBox.currentText())
 
         # Точки доступа
         self.setting_variables.setValue('city_name_1', self.lineEdit_city_name_1.text())
@@ -128,40 +115,27 @@ class Configuration(QDialog):
         self.setting_variables.setValue('same_price_cities', self.same_price_citiesradioButton.isChecked())
         self.setting_variables.setValue('different_price_cities', self.different_price_citiesradioButton.isChecked())
         self.setting_variables.setValue('interval_change_price', self.interval_change_price_spinBox.value())
-        self.setting_variables.setValue('use_base_limit', self.use_base_limit_comboBox.currentText())
         self.setting_variables.setValue('deliver_times', self.consider_deliver_times_comboBox.currentText())
         self.setting_variables.setValue('up_price_to_competitor', self.up_price_to_competitor_comboBox.currentText())
 
         # Файл
-        # self.setting_variables.setValue('path_save_xml', self.path_save_xml_lineEdit.text())
         self.setting_variables.setValue('auto_downl_xml', self.auto_downl_xml_comboBox.currentText())
         self.setting_variables.setValue('auto_downl_xml_to_google_comboBox', self.auto_downl_xml_to_google_comboBox.currentText())
         self.setting_variables.setValue('name_xml_file', self.name_xml_file_lineEdit.text())
         self.setting_variables.setValue('name_folder', self.name_folder_lineEdit.text())
 
-        # Настройки приложения
-        self.setting_variables.setValue('lightMode', self.lightModeRadioButton.isChecked())
-        self.setting_variables.setValue('darkMode', self.darkModeRadioButton.isChecked())
-        self.setting_variables.setValue('bearMode', self.bearModeRadioButton.isChecked())
-
-        self.setting_variables.setValue('auto_confirm_order', self.parent.comboBox_auto_confirm_order.currentText())
-
     def visible_useProxy(self):
         if self.use_proxy_comboBox.currentText() == 'Нет':
             self.list_proxy_path_lineEdit.setVisible(False)
             self.load_list_proxy_pushButton.setVisible(False)
-            self.type_proxy_comboBox.setVisible(False)
 
             self.label_22.setVisible(False)
-            self.label_23.setVisible(False)
 
         else:
             self.list_proxy_path_lineEdit.setVisible(True)
             self.load_list_proxy_pushButton.setVisible(True)
-            self.type_proxy_comboBox.setVisible(True)
 
             self.label_22.setVisible(True)
-            self.label_23.setVisible(True)
 
     def visible_google_cloud(self):
         if self.auto_downl_xml_to_google_comboBox.currentText() == 'Нет':

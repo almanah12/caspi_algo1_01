@@ -22,6 +22,7 @@ from caspi_pars.threads.runThreadMethods.kaspi_merchant import MerchantInfo
 from caspi_pars.threads.runThreadMethods.parser_urls import Parser
 from caspi_pars.threads.runThreadMethods.processing_data import ProcessingData
 from caspi_pars.threads.runThreadMethods.installment_plan import check_promotion
+from caspi_pars.webdriver_options import get_driver_parser
 
 
 class BotSignals(QObject):
@@ -56,14 +57,14 @@ class RunThread(QRunnable):
                 start_time = time.time()
                 curr_day = datetime.now().day
                 curr_hour = datetime.now().hour
-                if (curr_day == 1 or 10 or 15 or 20 or 25) and 18 < curr_hour < 22:
+                if (curr_day == 1 or curr_day == 10 or curr_day == 15 or curr_day == 18 or curr_day == 25) and 6 < curr_hour < 22:
                     self.signals.activity_monitor.emit("Сбор данных с 'Kaspi Marketing'", 1)
                     logger.info("Сбор данных с 'Kaspi Marketing'")
                     MerchantInfo(self.gui)
                 # # сбор товаров с маг. клиента
                 if not self.gui.check_stop:
                     self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца"', 4)
-                    self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" check demo-version', 4)
+                    # self.signals.activity_monitor.emit('Сбор данных с "Кабинета продавца" check demo-version', 4)
 
                     logger.info('Сбор данных с "Кабинета продавца"')
                     gets_data = GetDataKaspiSeller(self.gui, self.signals.activity_monitor)
@@ -109,6 +110,7 @@ class RunThread(QRunnable):
                             session.commit()
                             if self.gui.check_stop:
                                 break
+                        get_driver_parser(use_proxy).quit()
 
                     if self.gui.configuration.same_price_citiesradioButton.isChecked():
                         self.signals.activity_monitor.emit(
@@ -150,16 +152,16 @@ class RunThread(QRunnable):
                     logger.info('Запуск записи xml файла в сервер')
 
                 # запись xml файла в сервер google cloud storage
-                # if not self.gui.check_stop:
-                #     run_autodownload_xml.upload_to_bucket_xml(self.gui.configuration.name_xml_file_lineEdit.text(),
-                #                                               resource_path(r"data_shop/alash.xml"),
-                #                                               self.gui.configuration.name_folder_lineEdit.text())
+                if not self.gui.check_stop:
+                    run_autodownload_xml.upload_to_bucket_xml(self.gui.configuration.name_xml_file_lineEdit.text(),
+                                                              resource_path(r"data_shop/alash.xml"),
+                                                              self.gui.configuration.name_folder_lineEdit.text())
 
                 # запись xml файла в локальный http сервер через ngrok
                 if not self.gui.check_stop:
                     if self.gui.configuration.auto_downl_xml_comboBox.currentText() == 'Да' \
                             and self.gui.configuration.radioButton_cond_use_ngrok.isChecked() == False\
-                            and GetDataKaspiSeller.count_gds > 0:
+                            :
                         self.signals.activity_monitor.emit('Поставлена автоматическая загрузка xml файла http-сервер', 1)
                         ngrok_thread = threading.Thread(target=server_http_ngrok)
                         ngrok_thread.start()

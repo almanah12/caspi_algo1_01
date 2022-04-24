@@ -31,7 +31,7 @@ def get_driver(use_proxy):
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--no-sandbox")
     options.add_argument('--window-size=1920,1080')
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     # ser = Service(resource_path(r"driver_browser/chromedriver.exe"))
 
     driver = selenium.webdriver.Chrome(
@@ -52,7 +52,11 @@ def get_driver_parser(use_proxy):
         options.add_argument("user-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0")
         # for ChromeDriver version 79.0.3945.16 or over
         options.add_argument("--disable-blink-features=AutomationControlled")
-        # options.add_argument("--headless")
+        # options.add_argument("--ignore-certificate-errors-spki-list")
+        # options.add_argument("--ignore-ssl-errors")
+
+        options.add_argument("--headless")
+
         if use_proxy:
             proxies = open(resource_path('data_shop/test_proxy')).read().split('\n')
             proxy = proxies[randint(0, 4)]

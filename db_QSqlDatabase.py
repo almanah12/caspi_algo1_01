@@ -6,7 +6,6 @@ db = QSqlDatabase("QSQLITE")
 db.setDatabaseName(resource_path(r"data_shop/dt_goods.sqlite"))
 db.open()
 
-# model_perm12 = FreezeTableWidget(db)
 
 model_perm = QSqlTableModel(db=db)
 model_perm.setTable("permanent_table") # указываем таблицу из БД для модели

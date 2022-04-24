@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 from caspi_pars.enums import all_temp_data, all_perm_data
 from caspi_pars.helpers import resource_path, logger
-from caspi_pars.db_tables import conn_engine, temp_table_select, session, temporary_table, permanent_table
+from caspi_pars.db_tables import session, permanent_table
 
 
 def check_promotion(path_to_folder):

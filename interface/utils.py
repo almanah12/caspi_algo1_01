@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QTableView)
 
 from caspi_pars.other_func.check_data_fill import ch_dt_fill_for_tableview, active_goods_table
 
-from caspi_pars.delegats import ButtonEditorDelegate, ButtonDeleteDelegate, ReadOnlyDelegate
+from caspi_pars.delegats import ButtonEditorDelegate, ButtonDeleteDelegate, ReadOnlyDelegate, CheckBoxDelegate
 
 
 def create_popup(parent, msg: str, title='Warning'):
@@ -114,11 +114,16 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
         active_goods_table()
         editor_delegate = ButtonEditorDelegate(parent)  # Была ошибка, передал self и проблема решилась
         delete_delegate = ButtonDeleteDelegate(parent)
+        check_delegate = CheckBoxDelegate(parent)
+
         read_only = ReadOnlyDelegate(parent)
 
-        table.setItemDelegateForColumn(0, editor_delegate)
-        table.setItemDelegateForColumn(1, delete_delegate)
-        for column in range(2, 43):
+        table.setItemDelegateForColumn(0, check_delegate)
+        table.setItemDelegateForColumn(1, editor_delegate)
+        table.setItemDelegateForColumn(2, delete_delegate)
+
+        # Нельзя редактировать, только чтение
+        for column in range(3, 44):
             table.setItemDelegateForColumn(column, read_only)
     model.setTable(name_table)
     model.select()
@@ -130,21 +135,21 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
         if parent.comboBox_show_data_other_city.currentText() == '1':
             # Город 2
             ch_dt_fill_for_tableview(parent)
-            list_column_1 = [14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
+            list_column_1 = [15, 16, 17, 18, 20, 22, 23, 24, 25, 26, 28, 30, 31, 32, 33, 34, 36, 38, 44, 45, 46]
             for colum in list_column_1:
                 table.setColumnWidth(colum, 0)
 
         elif parent.comboBox_show_data_other_city.currentText() == '2':
             ch_dt_fill_for_tableview(parent)
 
-            list_column_2 = [22, 23, 24, 25, 27, 29, 30, 31, 32, 33, 35, 37]
+            list_column_2 = [23, 24, 25, 26, 28, 30, 31, 32, 33, 34, 36, 38, 44, 45, 46]
             for colum in list_column_2:
                 table.setColumnWidth(colum, 0)
 
         elif parent.comboBox_show_data_other_city.currentText() == '3':
             ch_dt_fill_for_tableview(parent)
 
-            list_column_3 = [30, 31, 32, 33, 35, 37]
+            list_column_3 = [31, 32, 33, 34, 36, 38, 44, 45, 46]
             for colum in list_column_3:
                 table.setColumnWidth(colum, 0)
 
@@ -154,7 +159,7 @@ def add_to_data_table_view(parent, model, name_table, table: QTableView):
             table.resizeColumnsToContents()
 
         # Скрывает столбец
-        list_column = [4, 5, 10, 12, 18, 20, 26, 28, 34, 36, 38]
+        list_column = [5, 6, 11, 13, 19, 21, 27, 29, 35, 37, 39, 43, 44, 45, ]
         for colum in list_column:
             table.setColumnWidth(colum, 0)
 

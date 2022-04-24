@@ -37,52 +37,52 @@ temporary_table = Table('temporary_table', meta,
 
 # Постояная таблица куда сохраним данные товаров магаза
 permanent_table = Table('permanent_table', meta,
+                        Column('C', Integer),
                         Column('E', Integer),
                         Column('D', Integer),
                         Column('Артикул', Integer),
                         Column('Модель', TEXT),
-                        Column('Есть_огрч', TEXT),
-                        Column('Ограничитель', TEXT),  # 5
+                        Column('Есть_огрч', TEXT),  # 5
+                        Column('Ограничитель', TEXT),
                         Column('Город_1', TEXT),
                         Column('Т_п1', Integer),
                         Column('Тек_ц1', Integer),
-                        Column('Сбстоимость1', Integer),
-                        Column('Мин_ц_проц1', Float),  # 10
+                        Column('Сбстоимость1', Integer),  # 10
+                        Column('Мин_ц_проц1', Float),
                         Column('Мин_ц1', Integer),
                         Column('Макс_ц_проц1', Float),
                         Column('Макс_ц1', Integer),
-                        Column('Город_2', TEXT),
-                        Column('Т_п2', Integer),  # 15
+                        Column('Город_2', TEXT),  # 15
+                        Column('Т_п2', Integer),
                         Column('Тек_ц2', Integer),
                         Column('Сбстоимость2', Integer),
                         Column('Мин_ц_проц2', Float),
-                        Column('Мин_ц2', Integer),
-                        Column('Макс_ц_проц2', Float),  # 20
+                        Column('Мин_ц2', Integer),  # 20
+                        Column('Макс_ц_проц2', Float),
                         Column('Макс_ц2', Integer),
                         Column('Город_3', TEXT),
                         Column('Т_п3', Integer),
-                        Column('Тек_ц3', Integer),
-                        Column('Сбстоимость3', Integer),  # 25
+                        Column('Тек_ц3', Integer),  # 25
+                        Column('Сбстоимость3', Integer),
                         Column('Мин_ц_проц3', Float),
                         Column('Мин_ц3', Integer),
                         Column('Макс_ц_проц3', Float),
-                        Column('Макс_ц3', Integer),
-                        Column('Город_4', TEXT),  # 30
+                        Column('Макс_ц3', Integer),  # 30
+                        Column('Город_4', TEXT),
                         Column('Т_п4', Integer),
                         Column('Тек_ц4', Integer),
                         Column('Сбстоимость4', Integer),
-                        Column('Мин_ц_проц4', Float),
-                        Column('Мин_ц4', Integer),  # 35
+                        Column('Мин_ц_проц4', Float),  # 35
+                        Column('Мин_ц4', Integer),
                         Column('Макс_ц_проц4', Float),
                         Column('Макс_ц4', Integer),
                         Column('Колич_г', Integer),
-
-                        Column('Категория1', TEXT),
+                        Column('Категория1', TEXT),   # 40
                         Column('Категория2', TEXT),
                         Column('Категория3', TEXT),
                         Column('Comm', Integer),
                         Column('Filter', Integer),
-                        Column('Active_g', Integer),
+                        Column('Active_g', Integer),  # 45
                         )
 
 if not os.path.exists(resource_path('data_shop')):
@@ -94,7 +94,7 @@ engine = create_engine(r"sqlite:///"+res_path, connect_args={'check_same_thread'
 
 meta.create_all(engine)  # или books.create(engine), authors.create(engine)
 conn_engine = engine.connect()
-temp_table_select = select(temporary_table)
-perm_table_select = select(permanent_table)
+# temp_table_select = select(temporary_table)
+# perm_table_select = select(permanent_table)
 Session = sessionmaker(bind=engine)
 session = Session()

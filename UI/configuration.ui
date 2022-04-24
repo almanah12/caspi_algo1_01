@@ -345,25 +345,6 @@
              </item>
             </layout>
            </item>
-           <item row="12" column="0">
-            <widget class="QLabel" name="label_23">
-             <property name="text">
-              <string>Тип прокси:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="1">
-            <widget class="QComboBox" name="type_proxy_comboBox">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>socks5</string>
-              </property>
-             </item>
-            </widget>
-           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="tab_2">
@@ -372,7 +353,7 @@
             <normaloff>:/icons/availability.ico</normaloff>:/icons/availability.ico</iconset>
           </attribute>
           <attribute name="title">
-           <string>Точки доступа</string>
+           <string>Точки продаж</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
@@ -801,34 +782,13 @@
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QLabel" name="label_14">
-             <property name="text">
-              <string>Применить базу лимитов переоценки</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QComboBox" name="use_base_limit_comboBox">
-             <item>
-              <property name="text">
-               <string>Нет</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Да</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="4" column="0">
             <widget class="QLabel" name="label_28">
              <property name="text">
               <string>Поднятие цены к цене конкурента:</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="3" column="1">
             <widget class="QComboBox" name="up_price_to_competitor_comboBox">
              <item>
               <property name="text">
@@ -842,7 +802,7 @@
              </item>
             </widget>
            </item>
-           <item row="5" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_15">
              <property name="enabled">
               <bool>true</bool>
@@ -852,7 +812,7 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
+           <item row="4" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
               <widget class="QPushButton" name="list_articulpushButton">
@@ -919,6 +879,12 @@
            </item>
            <item row="1" column="1">
             <widget class="QComboBox" name="auto_downl_xml_to_google_comboBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="editable">
+              <bool>false</bool>
+             </property>
              <item>
               <property name="text">
                <string>Нет</string>
@@ -961,6 +927,9 @@
                <property name="editable">
                 <bool>false</bool>
                </property>
+               <property name="currentText">
+                <string>Да</string>
+               </property>
                <item>
                 <property name="text">
                  <string>Нет</string>
@@ -990,83 +959,6 @@
               </widget>
              </item>
             </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tab_5">
-          <attribute name="icon">
-           <iconset resource="../media/conf_rs.qrc">
-            <normaloff>:/icons/settings_app.ico</normaloff>:/icons/settings_app.ico</iconset>
-          </attribute>
-          <attribute name="title">
-           <string>Приложения</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
-            <widget class="QTabWidget" name="tabWidget_2">
-             <property name="tabPosition">
-              <enum>QTabWidget::West</enum>
-             </property>
-             <property name="currentIndex">
-              <number>0</number>
-             </property>
-             <widget class="QWidget" name="tab_6">
-              <attribute name="title">
-               <string>Темы</string>
-              </attribute>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
-               <item>
-                <layout class="QVBoxLayout" name="verticalLayout">
-                 <item>
-                  <widget class="QRadioButton" name="lightModeRadioButton">
-                   <property name="text">
-                    <string>Light</string>
-                   </property>
-                   <property name="checkable">
-                    <bool>true</bool>
-                   </property>
-                   <property name="checked">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QRadioButton" name="darkModeRadioButton">
-                   <property name="text">
-                    <string>Dark</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QRadioButton" name="bearModeRadioButton">
-                   <property name="text">
-                    <string>Bear</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="verticalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="tab_7">
-              <attribute name="title">
-               <string>Другие</string>
-              </attribute>
-             </widget>
-            </widget>
            </item>
           </layout>
          </widget>

@@ -19,8 +19,8 @@ from threading import Thread
 from caspi_pars.interface.resources_qtdesigner import main_rs
 from caspi_pars.db_QSqlDatabase import model_temp, model_perm
 from caspi_pars.enums import filter_all_active_data, _AppName_, curr_uuid, all_perm_data, count_cities, \
-    filter_for_goods_without_data, filter_for_goods_with_data, filter_all_data
-from caspi_pars.slots import initiate_slots
+    filter_for_goods_without_data, filter_for_goods_with_data, filter_all_data, filter_all_data_for_temp_t
+from caspi_pars.slots import initiate_slots, init_other_comm
 from caspi_pars.helpers import resource_path, get_current_version, logger
 from caspi_pars.threads import runThread
 from caspi_pars.interface.utils import add_to_table_widget, show_and_bring_window_to_front, add_to_data_table_view
@@ -76,20 +76,14 @@ class Interface(QMainWindow):
         self.threadPool.setMaxThreadCount(self.threadCount) # задаем число потоков
 
         initiate_slots(app=app, gui=self)  # Initiating slots.
-
+        init_other_comm(gui=self)
         self.check_stop = False  # Для проверки нажался ли кнопка 'End simulition' , true - нажат
-
 
         if self.table_exists(engine, 'permanent_table'):
             add_to_data_table_view(self, model_perm, 'permanent_table', self.permanent_tableView)
 
         if self.table_exists(engine, 'temporary_table'):
             add_to_data_table_view(self, model_temp, 'temporary_table', self.temporary_tableView)
-
-        self.comboBox_show_data_other_city.setToolTip("Показывает данные для определеннго числа городов")
-        self.filter_comboBox.setToolTip("Фильтр данных")
-        self.pushButton_path_to_excel_1c.setToolTip("Путь к файлу Excel(1С) для обн. данных")
-        self.pushButton_update.setToolTip("Обновить данные")
 
         self.CONFIG_FILE_NAME = resource_path(r'data_shop/config.ini')
         self.setting_variables = QSettings(self.CONFIG_FILE_NAME, QSettings.IniFormat)
@@ -128,6 +122,7 @@ class Interface(QMainWindow):
         #     event.ignore()
         self.stop_threads = True
         self.setting_variables.setValue('auto_confirm_order', self.comboBox_auto_confirm_order.currentText())
+        self.checkbox(0)
 
     def show_simulation(self, qdialog):
         """
@@ -205,7 +200,7 @@ class Interface(QMainWindow):
 
     def update_table(self):
 
-        model_temp.setFilter(filter_all_data)
+        model_temp.setFilter(filter_all_data_for_temp_t)
         add_to_data_table_view(self, model_perm, 'permanent_table', self.permanent_tableView)
 
         self.filter_data(self.search_table_articul_lineEdit.text())
@@ -224,11 +219,8 @@ class Interface(QMainWindow):
         elif self.filter_comboBox.currentText() == 'Активные':
             model_perm.setFilter(filter_all_active_data.format(type_search, s))
         else:
-            model_perm.setFilter(filter_all_data)
-        #
-        # filter_str = 'Артикул LIKE "%{}%"'.format(s)  # s это текст вводимый в поле поиска
-        # model_perm.setFilter(filter_str)
-        # model_temp.setFilter(filter_str_term)
+            model_perm.setFilter(filter_all_data.format(type_search, s))
+        return model_perm
 
     def delete_row_data(self):
         links = []
@@ -270,18 +262,66 @@ class Interface(QMainWindow):
         th.start()
 
     def fill_data(self):
-        for row_d in all_perm_data:
-            for city_c in range(count_cities):
-                if row_d['Город_'+str(city_c+1)]:
-                    session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
-                        {'Сбстоимость' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*0.75)}, synchronize_session=False)
-                    session.commit()
-                    session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
-                        {'Мин_ц' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*0.96)}, synchronize_session=False)
-                    session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
-                        {'Макс_ц' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*2)}, synchronize_session=False)
-                    session.commit()
+        if self.comboBox_fill_data_table.currentText() == 'Заполнить данные':
+            model_perm_filter = self.filter_data(self.search_table_articul_lineEdit.text())
+            count_row_curr_table = model_perm_filter.rowCount()
 
+            for i in range(count_row_curr_table):
+                curr_vend_code = str(model_perm_filter.index(i, 3).data())
+                row_d = all_perm_data.filter(permanent_table.c.Артикул == curr_vend_code).one()
+                if row_d['C']:
+                    for city_c in range(count_cities):
+                        if row_d['Город_'+str(city_c+1)]:
+                            session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                                {'Сбстоимость' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*self.doubleSpinBox_first_price_caf.value())})
+                            session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                                {'Мин_ц' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*self.doubleSpinBox_min_price_caf.value())})
+                            session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                                {'Макс_ц' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*self.doubleSpinBox_max_price_caf.value())})
+                            session.commit()
+        else:
+            model_perm_filter = self.filter_data(self.search_table_articul_lineEdit.text())
+            count_row_curr_table = model_perm_filter.rowCount()
+
+            for i in range(count_row_curr_table):
+                curr_vend_code = str(model_perm_filter.index(i, 3).data())
+                row_d = all_perm_data.filter(permanent_table.c.Артикул == curr_vend_code).one()
+                if row_d['C']:
+                    for city_c in range(count_cities):
+                        if row_d['Город_'+str(city_c+1)]:
+                            if self.checkBox_curr_price.isChecked():
+                                session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                                    {'Тек_ц' + str(city_c+1): int(int(row_d['Тек_ц' + str(city_c+1)])*self.doubleSpinBox_change_price_caf.value())})
+                            if self.checkBox_first_price.isChecked():
+                                session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                                    {'Сбстоимость' + str(city_c+1): int(int(row_d['Сбстоимость' + str(city_c+1)])*self.doubleSpinBox_change_price_caf.value())})
+                            if self.checkBox_min_price.isChecked():
+                                session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                                    {'Мин_ц' + str(city_c+1): int(int(row_d['Мин_ц' + str(city_c+1)])*self.doubleSpinBox_change_price_caf.value())})
+                            if self.checkBox_max_price.isChecked():
+                                session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                                    {'Макс_ц' + str(city_c+1): int(int(row_d['Макс_ц' + str(city_c+1)])*self.doubleSpinBox_change_price_caf.value())})
+                            session.commit()
+
+        self.update_table()
+
+    def checkbox(self, cb_st):
+        model_perm_filter = self.filter_data(self.search_table_articul_lineEdit.text())
+        count_row_curr_table = model_perm_filter.rowCount()
+
+        for i in range(count_row_curr_table):
+            curr_vend_code = str(model_perm_filter.index(i, 3).data())
+            row_d = all_perm_data.filter(permanent_table.c.Артикул == curr_vend_code).one()
+            session.query(permanent_table).filter(permanent_table.c.Артикул == row_d['Артикул']).update(
+                {'C': cb_st})
+
+        session.commit()
+
+    def check_box_table(self):
+        if self.checkBox_tableview.isChecked():
+            self.checkbox(1)
+        else:
+             self.checkbox(0)
         self.update_table()
 
     def auto_confirm_order_cond(self):

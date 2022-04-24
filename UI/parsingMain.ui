@@ -75,7 +75,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="movable">
            <bool>true</bool>
@@ -340,136 +340,6 @@
             <string>База</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_6">
-            <item row="1" column="0">
-             <widget class="QTabWidget" name="tabWidget">
-              <property name="currentIndex">
-               <number>0</number>
-              </property>
-              <widget class="QWidget" name="tab_7">
-               <attribute name="icon">
-                <iconset resource="../media/main_rs.qrc">
-                 <normaloff>:/logo/perm_table.ico</normaloff>:/logo/perm_table.ico</iconset>
-               </attribute>
-               <attribute name="title">
-                <string>Постоянная таблица</string>
-               </attribute>
-               <layout class="QGridLayout" name="gridLayout">
-                <item row="0" column="2">
-                 <widget class="QComboBox" name="comboBox_show_data_other_city">
-                  <property name="contextMenuPolicy">
-                   <enum>Qt::NoContextMenu</enum>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>1</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>2</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>3</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Все города</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QComboBox" name="filter_comboBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="toolTip">
-                   <string extracomment="Фильтр данных"/>
-                  </property>
-                  <property name="toolTipDuration">
-                   <number>-1</number>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Активные</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Товары с данными</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Товары без данных</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Все товары</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>679</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QPushButton" name="pushButton_fill_table_data">
-                  <property name="text">
-                   <string>Авт. заполение данных</string>
-                  </property>
-                  <property name="icon">
-                   <iconset theme="чсм">
-                    <normaloff>.</normaloff>.</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="5">
-                 <widget class="QTableView" name="permanent_tableView">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background-color: rgb(217, 236, 255);</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="tab_8">
-               <attribute name="icon">
-                <iconset resource="../media/main_rs.qrc">
-                 <normaloff>:/logo/temp_table.ico</normaloff>:/logo/temp_table.ico</iconset>
-               </attribute>
-               <attribute name="title">
-                <string extracomment="Для хранения промежуточных данных">Временная таблица</string>
-               </attribute>
-               <layout class="QGridLayout" name="gridLayout_7">
-                <item row="0" column="0">
-                 <widget class="QTableView" name="temporary_tableView">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
             <item row="0" column="0">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
@@ -555,6 +425,278 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item row="1" column="0">
+             <widget class="QTabWidget" name="tabWidget">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="tab_7">
+               <attribute name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/perm_table.ico</normaloff>:/logo/perm_table.ico</iconset>
+               </attribute>
+               <attribute name="title">
+                <string>Постоянная таблица</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout">
+                <item row="0" column="2">
+                 <widget class="QComboBox" name="comboBox_show_data_other_city">
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::NoContextMenu</enum>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>3</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Все города</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="filter_comboBox">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="toolTip">
+                   <string extracomment="Фильтр данных"/>
+                  </property>
+                  <property name="toolTipDuration">
+                   <number>-1</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Активные</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Товары с данными</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Товары без данных</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Все товары</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="2" column="0" colspan="9">
+                 <widget class="QTableView" name="permanent_tableView">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: rgb(217, 236, 255);</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="8">
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>679</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox_tableview">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3" colspan="2">
+                 <widget class="QComboBox" name="comboBox_fill_data_table">
+                  <item>
+                   <property name="text">
+                    <string>Заполнить данные</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Изменить цены</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="7">
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="5">
+                 <layout class="QVBoxLayout" name="verticalLayout">
+                  <item>
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>Заполняет данные  от текущей цены на %</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_7">
+                    <property name="text">
+                     <string>Изменяеть цену на %</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QFormLayout" name="formLayout_2">
+                    <property name="labelAlignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                    <item row="0" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_first_price_caf"/>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_3">
+                      <property name="text">
+                       <string>Мин. цена(%):</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_min_price_caf"/>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_6">
+                      <property name="text">
+                       <string>Макс. цена(%):</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_max_price_caf"/>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_2">
+                      <property name="text">
+                       <string>Себестоимость(%):</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QFormLayout" name="formLayout">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_5">
+                      <property name="text">
+                       <string>%</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_change_price_caf"/>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QFormLayout" name="formLayout_3">
+                    <item row="0" column="0">
+                     <widget class="QCheckBox" name="checkBox_curr_price">
+                      <property name="text">
+                       <string>Текущая цена</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QCheckBox" name="checkBox_first_price">
+                      <property name="text">
+                       <string>Себестоимость</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QCheckBox" name="checkBox_min_price">
+                      <property name="text">
+                       <string>Мин. цена</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QCheckBox" name="checkBox_max_price">
+                      <property name="text">
+                       <string>Макс. цена</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_hide_fill_data_t">
+                      <property name="text">
+                       <string>Скрыть</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_execute_fill_data_t">
+                      <property name="text">
+                       <string>Выполнить</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="tab_8">
+               <attribute name="icon">
+                <iconset resource="../media/main_rs.qrc">
+                 <normaloff>:/logo/temp_table.ico</normaloff>:/logo/temp_table.ico</iconset>
+               </attribute>
+               <attribute name="title">
+                <string extracomment="Для хранения промежуточных данных">Временная таблица</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_7">
+                <item row="0" column="0">
+                 <widget class="QTableView" name="temporary_tableView">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
             </item>
            </layout>
           </widget>
